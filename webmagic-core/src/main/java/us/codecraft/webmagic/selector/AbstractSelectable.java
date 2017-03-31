@@ -1,9 +1,11 @@
 package us.codecraft.webmagic.selector;
 
-import org.apache.commons.collections.CollectionUtils;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  * @author code4crafer@gmail.com
@@ -35,12 +37,14 @@ public abstract class AbstractSelectable implements Selectable {
     }
 
     protected Selectable selectList(Selector selector, List<String> strings) {
-        List<String> results = new ArrayList<String>();
+        Set<String> results = new HashSet<String>();
         for (String string : strings) {
             List<String> result = selector.selectList(string);
             results.addAll(result);
         }
-        return new PlainText(results);
+        List<String> returnList = new ArrayList<String>();
+        returnList.addAll(results);
+        return new PlainText(returnList);
     }
 
     @Override

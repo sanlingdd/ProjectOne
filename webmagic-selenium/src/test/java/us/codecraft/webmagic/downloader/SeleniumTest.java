@@ -19,10 +19,17 @@ import java.util.Map;
  */
 public class SeleniumTest {
 
-    @Ignore("need chrome driver")
+    private String chromeDriverPath = "/Users/i071944/chromedriver/chromedriver.exe";
+
+//    @Test
+//    public void test() {
+//        System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
+	
     @Test
     public void testSelenium() {
-        System.getProperties().setProperty("webdriver.chrome.driver", "/Users/yihua/Downloads/chromedriver");
+        System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
+
+//        System.getProperties().setProperty("webdriver.chrome.driver",  "/Users/i071944/chromedriver");
         Map<String, Object> contentSettings = new HashMap<String, Object>();
         contentSettings.put("images", 2);
 
@@ -31,7 +38,7 @@ public class SeleniumTest {
 
         DesiredCapabilities caps = DesiredCapabilities.chrome();
         caps.setCapability("chrome.prefs", preferences);
-        caps.setCapability("chrome.switches", Arrays.asList("--user-data-dir=/Users/yihua/temp/chrome"));
+        caps.setCapability("chrome.switches", Arrays.asList("--user-data-dir=/Users/i071944/temp/chrome"));
         WebDriver webDriver = new ChromeDriver(caps);
         webDriver.get("http://huaban.com/");
         WebElement webElement = webDriver.findElement(By.xpath("/html"));

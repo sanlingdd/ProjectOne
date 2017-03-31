@@ -14,9 +14,8 @@ import us.codecraft.webmagic.Task;
  */
 public class SeleniumDownloaderTest {
 
-	private String chromeDriverPath = "/Users/yihua/Downloads/chromedriver";
+	private String chromeDriverPath = "/Users/i071944/chromedriver";
 
-	@Ignore("need chrome driver")
 	@Test
 	public void test() {
 		SeleniumDownloader seleniumDownloader = new SeleniumDownloader(chromeDriverPath);
@@ -38,7 +37,6 @@ public class SeleniumDownloaderTest {
 		System.out.println(System.currentTimeMillis() - time1);
 	}
 
-    @Ignore
 	@Test
 	public void testBaiduWenku() {
 		SeleniumDownloader seleniumDownloader = new SeleniumDownloader(chromeDriverPath);

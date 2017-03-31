@@ -65,4 +65,10 @@ public class PlainText extends AbstractSelectable {
     protected List<String> getSourceTexts() {
         return sourceTexts;
     }
+
+	@Override
+	public Selectable codes(String xpathString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

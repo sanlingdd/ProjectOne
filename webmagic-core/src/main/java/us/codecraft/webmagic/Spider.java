@@ -67,7 +67,7 @@ public class Spider implements Runnable, Task {
 
     protected List<Request> startRequests;
 
-    protected Site site;
+	protected Site site;
 
     protected String uuid;
 

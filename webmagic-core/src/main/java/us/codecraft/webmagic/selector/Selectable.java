@@ -65,6 +65,8 @@ public interface Selectable {
      * @return all links
      */
     public Selectable links();
+    
+    public Selectable codes(String xpathString);
 
     /**
      * select list with regex, default group is group 1

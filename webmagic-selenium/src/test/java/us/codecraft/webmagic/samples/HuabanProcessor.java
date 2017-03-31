@@ -40,7 +40,7 @@ public class HuabanProcessor implements PageProcessor {
         Spider.create(new HuabanProcessor()).thread(5)
                 .addPipeline(new FilePipeline("/data/webmagic/test/"))
                 .setDownloader(new SeleniumDownloader("/Users/yihua/Downloads/chromedriver"))
-                .addUrl("http://huaban.com/")
+                .addUrl("https://www.facebook.com/profile.php?id=100001181648364")
                 .runAsync();
     }
 }

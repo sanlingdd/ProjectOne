@@ -1,13 +1,15 @@
 package us.codecraft.webmagic;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
+
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.UrlUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Object storing extracted result and urls to fetch.<br>
@@ -42,7 +44,7 @@ public class Page {
 
     private boolean needCycleRetry;
 
-    private List<Request> targetRequests = new ArrayList<Request>();
+    private Set<Request> targetRequests = new HashSet<Request>();
 
     public Page() {
     }
@@ -97,7 +99,7 @@ public class Page {
         this.html = html;
     }
 
-    public List<Request> getTargetRequests() {
+    public Set<Request> getTargetRequests() {
         return targetRequests;
     }
 

@@ -29,10 +29,6 @@ public class Request implements Serializable {
      * Store additional information in extras.
      */
     private Map<String, Object> extras;
-    /**
-     * POST/GET param set
-     * */
-    private Map<String,String> params=new HashMap<String, String>();
 
     /**
      * Priority of the request.<br>
@@ -111,27 +107,14 @@ public class Request implements Serializable {
         this.method = method;
     }
 
-    public Map<String, String> getParams() {
-        return params;
-    }
-    /**
-     * set params for request
-     * <br>
-     * DO NOT set this for request already has params, like 'https://github.com/search?q=webmagic'
-     * @param params params
-     * */
-    public void setParams(Map<String, String> params) {
-        this.params = params;
-    }
-    /**
-     * set params for request
-     * <br>
-     * DO NOT set this for request already has params, like 'https://github.com/search?q=webmagic'
-     * @param key key
-     * @param value value
-     * */
-    public void putParams(String key,String value) {
-        params.put(key,value);
+    @Override
+    public String toString() {
+        return "Request{" +
+                "url='" + url + '\'' +
+                ", method='" + method + '\'' +
+                ", extras=" + extras +
+                ", priority=" + priority +
+                '}';
     }
 
     @Override
@@ -142,26 +125,13 @@ public class Request implements Serializable {
         Request request = (Request) o;
 
         if (url != null ? !url.equals(request.url) : request.url != null) return false;
-        if (method != null ? !method.equals(request.method) : request.method != null) return false;
-        return params != null ? params.equals(request.params) : request.params == null;
+        return method != null ? method.equals(request.method) : request.method == null;
     }
 
     @Override
     public int hashCode() {
         int result = url != null ? url.hashCode() : 0;
         result = 31 * result + (method != null ? method.hashCode() : 0);
-        result = 31 * result + (params != null ? params.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Request{" +
-                "url='" + url + '\'' +
-                ", method='" + method + '\'' +
-                ", extras=" + extras +
-                ", params=" + params +
-                ", priority=" + priority +
-                '}';
     }
 }

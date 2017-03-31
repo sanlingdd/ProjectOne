@@ -1,5 +1,14 @@
 package us.codecraft.webmagic.downloader;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -7,15 +16,14 @@ import org.apache.http.NameValuePair;
 import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -25,10 +33,6 @@ import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.WMCollections;
-
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.*;
 
 
 /**
@@ -63,6 +67,15 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
         return httpClient;
     }
+    
+    protected Page handleResponse(Request request, String charset, String content, Task task, int statueCode) throws IOException {
+        Page page = new Page();
+        page.setRawText(content);
+        page.setUrl(new PlainText(request.getUrl()));
+        page.setRequest(request);
+        page.setStatusCode(statueCode);
+        return page;
+    }
 
     @Override
     public Page download(Request request, Task task) {
@@ -82,16 +95,24 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
         logger.info("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
-        int statusCode = 0;
+        int statusCode=0;
         try {
             HttpHost proxyHost = null;
             Proxy proxy = null; //TODO
-            if (site != null && site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
+            if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
                 proxy = site.getHttpProxyFromPool();
                 proxyHost = proxy.getHttpHost();
-            } else if (site != null && site.getHttpProxy() != null){
+            } else if(site.getHttpProxy()!= null){
                 proxyHost = site.getHttpProxy();
             }
+            
+//            InputStream input = new FileInputStream(new File("/linkedin/sample/page.txt"));
+//            String str = IOUtils.toString(input, charset);
+//            str = str.replace("&quot;", "");
+//            logger.info(str);
+//            Page page = handleResponse(request, charset, str, task, 200);
+//            onSuccess(request);
+//            return page;
             
             HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers, proxyHost);
             httpResponse = getHttpClient(site, proxy).execute(httpUriRequest);
@@ -107,20 +128,24 @@ public class HttpClientDownloader extends AbstractDownloader {
             }
         } catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);
-            if (site != null && site.getCycleRetryTimes() > 0) {
+            if (site.getCycleRetryTimes() > 0) {
                 return addToCycleRetry(request, site);
             }
             onError(request);
             return null;
         } finally {
-            if (httpResponse != null) {
-                //ensure the connection is released back to pool
-                EntityUtils.consumeQuietly(httpResponse.getEntity());
-            }
         	request.putExtra(Request.STATUS_CODE, statusCode);
-            if (site != null && site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
+            if (site.getHttpProxyPool()!=null && site.getHttpProxyPool().isEnable()) {
                 site.returnHttpProxyToPool((HttpHost) request.getExtra(Request.PROXY), (Integer) request
                         .getExtra(Request.STATUS_CODE));
+            }
+            try {
+                if (httpResponse != null) {
+                    //ensure the connection is released back to pool
+                    EntityUtils.consume(httpResponse.getEntity());
+                }
+            } catch (IOException e) {
+                logger.warn("close response fail", e);
             }
         }
     }
@@ -134,23 +159,19 @@ public class HttpClientDownloader extends AbstractDownloader {
         return acceptStatCode.contains(statusCode);
     }
 
-    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers, HttpHost proxy) {
+    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers,HttpHost proxy) {
         RequestBuilder requestBuilder = selectRequestMethod(request).setUri(request.getUrl());
         if (headers != null) {
             for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
                 requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
             }
         }
-
-        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
-        if (site != null) {
-            requestConfigBuilder.setConnectionRequestTimeout(site.getTimeOut())
-                    .setSocketTimeout(site.getTimeOut())
-                    .setConnectTimeout(site.getTimeOut())
-                    .setCookieSpec(CookieSpecs.BEST_MATCH);
-        }
-
-        if (proxy != null) {
+        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom()
+                .setConnectionRequestTimeout(site.getTimeOut())
+                .setSocketTimeout(site.getTimeOut())
+                .setConnectTimeout(site.getTimeOut())
+                .setCookieSpec(CookieSpecs.BEST_MATCH);
+        if (proxy !=null) {
 			requestConfigBuilder.setProxy(proxy);
 			request.putExtra(Request.PROXY, proxy);
 		}
@@ -162,42 +183,24 @@ public class HttpClientDownloader extends AbstractDownloader {
         String method = request.getMethod();
         if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
             //default get
-            return addQueryParams(RequestBuilder.get(),request.getParams());
+            return RequestBuilder.get();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
-            return addFormParams(RequestBuilder.post(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
+            RequestBuilder requestBuilder = RequestBuilder.post();
+            NameValuePair[] nameValuePair = (NameValuePair[]) request.getExtra("nameValuePair");
+            if (nameValuePair != null && nameValuePair.length > 0) {
+                requestBuilder.addParameters(nameValuePair);
+            }
+            return requestBuilder;
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
-            return addQueryParams(RequestBuilder.head(),request.getParams());
+            return RequestBuilder.head();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {
-            return addFormParams(RequestBuilder.put(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
+            return RequestBuilder.put();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.DELETE)) {
-            return addQueryParams(RequestBuilder.delete(),request.getParams());
+            return RequestBuilder.delete();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.TRACE)) {
-            return addQueryParams(RequestBuilder.trace(),request.getParams());
+            return RequestBuilder.trace();
         }
         throw new IllegalArgumentException("Illegal HTTP Method " + method);
-    }
-
-    private RequestBuilder addFormParams(RequestBuilder requestBuilder, NameValuePair[] nameValuePair, Map<String, String> params) {
-        List<NameValuePair> allNameValuePair=new ArrayList<NameValuePair>();
-        if (nameValuePair != null && nameValuePair.length > 0) {
-            allNameValuePair= Arrays.asList(nameValuePair);
-        }
-        if (params != null) {
-            for (String key : params.keySet()) {
-                allNameValuePair.add(new BasicNameValuePair(key, params.get(key)));
-            }
-        }
-        requestBuilder.setEntity(new UrlEncodedFormEntity(allNameValuePair, Charset.forName("utf8")));
-        return requestBuilder;
-    }
-
-    private RequestBuilder addQueryParams(RequestBuilder requestBuilder, Map<String, String> params) {
-        if (params != null) {
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                requestBuilder.addParameter(entry.getKey(), entry.getValue());
-            }
-        }
-        return requestBuilder;
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {

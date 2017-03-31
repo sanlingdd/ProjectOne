@@ -28,7 +28,8 @@ public class RegexSelector implements Selector {
         }
         // Check bracket for regex group. Add default group 1 if there is no group.
         // Only check if there exists the valid left parenthesis, leave regexp validation for Pattern.
-        if ( ! hasGroup(regexStr) ){
+        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
+                StringUtils.countMatches(regexStr, "(?:") - StringUtils.countMatches(regexStr, "\\(?:")) {
             regexStr = "(" + regexStr + ")";
         }
         this.regexStr = regexStr;
@@ -42,30 +43,6 @@ public class RegexSelector implements Selector {
 
     public RegexSelector(String regexStr) {
         this(regexStr, 1);
-    }
-
-    private boolean hasGroup(String regexStr) {
-        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
-                StringUtils.countMatches(regexStr, "(?:") - StringUtils.countMatches(regexStr, "\\(?:")){
-            return false;
-        }
-        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
-                StringUtils.countMatches(regexStr, "(?=") - StringUtils.countMatches(regexStr, "\\(?=") ) {
-            return false;
-        }
-        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
-                StringUtils.countMatches(regexStr, "(?<") - StringUtils.countMatches(regexStr, "\\(?<") ) {
-            return false;
-        }
-        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
-                StringUtils.countMatches(regexStr, "(?!") - StringUtils.countMatches(regexStr, "\\(?!") ) {
-            return false;
-        }
-        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
-                StringUtils.countMatches(regexStr, "(?#") - StringUtils.countMatches(regexStr, "\\(?#") ) {
-            return false;
-        }
-        return true;
     }
 
     @Override
