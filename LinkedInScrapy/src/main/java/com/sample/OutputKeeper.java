@@ -222,7 +222,7 @@ public class OutputKeeper extends Thread {
 			Sheet sheet2 = this.getSheet(workbook, "schools");
 			Sheet sheet3 = this.getSheet(workbook, "urls");
 
-			int start = sheet1.getLastRowNum();
+			int start = 1;
 			for (String str : SpiderConstants.companys.keySet()) {
 				row = this.getRow(sheet1, start++);
 				Cell cell = this.getCell(row, 0);
@@ -232,7 +232,7 @@ public class OutputKeeper extends Thread {
 
 			}
 
-			start = sheet2.getLastRowNum();
+			start = 1;
 			for (String str : SpiderConstants.schools.keySet()) {
 				row = this.getRow(sheet2, start++);
 				Cell cell = this.getCell(row, 0);
@@ -267,6 +267,16 @@ public class OutputKeeper extends Thread {
 					logger.debug(e.getLocalizedMessage());
 				}
 
+			}
+
+			start = 1;
+			Sheet sheet4 = this.getSheet(workbook, "thisTime");
+			for (String str : SpiderConstants.allProfileURLsThisExcution) {
+				if (!LinkedinPeopleProfilePageProcessor.downloadLinks.contains(str)) {
+					row = this.getRow(sheet4, start++);
+					Cell cell = this.getCell(row, 0);
+					cell.setCellValue((String) str);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

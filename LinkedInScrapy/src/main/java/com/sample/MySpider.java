@@ -15,7 +15,7 @@ public class MySpider extends Spider {
 		if (!SpiderConstants.terminate) {
 			super.processRequest(request);
 		} else {
-			new SpecialKeeper().start();
+			new SpecialKeeper().writeToExcelFile();
 			this.close();
 		}
 

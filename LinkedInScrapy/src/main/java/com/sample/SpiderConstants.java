@@ -25,5 +25,8 @@ public class SpiderConstants {
 	public static boolean terminate = false;
 	
 	public static Date startDate = new Date();
+	
+	public static Set<String> allProfileURLsThisExcution = new HashSet<String>();
+
 
 }

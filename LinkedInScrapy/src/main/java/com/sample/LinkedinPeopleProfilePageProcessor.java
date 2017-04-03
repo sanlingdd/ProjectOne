@@ -27,7 +27,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 	public static Set<String> downloadLinks = new HashSet<String>();
 	public static Set<String> companies = new HashSet<String>();
 	public static Set<String> schools = new HashSet<String>();
-	private Site site = Site.me().setRetryTimes(3).setSleepTime(10000).setTimeOut(10000);
+	private Site site = Site.me().setRetryTimes(3).setSleepTime(15000).setTimeOut(10000);
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	LinkedinPeopleProfilePageProcessor() {
@@ -42,14 +42,14 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		site.addHeader("avail-dictionary", "YFA7RCTS");
 		site.addHeader("authority", "www.linkedin.com");
 		site.addHeader("cookie",
-				"bcookie=\"v=2^&9fbee1ca-79a5-47cc-8810-eb18e753ff44\"; bscookie=\"v=1^&201610010831302ee66e54-22ff-4608-84ac-0f2f7511eea0AQHT-9IP6dXurZuyOFX72-6doqjLS_kN\"; visit=\"v=1^&M\"; PLAY_SESSION=1d7015caf51403846a8d7547384b8e8e62726d1a-chsInfo=bcd05c05-2007-4d33-b640-58399974402f+vsrp_people_facets_proposal_accepts; SID=4b5771bc-b4f9-4836-a8f4-74bcc65d9517; VID=V_2016_12_12_01_217755; _chartbeat2=B4SLZSCbyTk6B5AWo_.1479287732844.1487215892938.0000000100000001; share_setting=PUBLIC; hc_survey=true; sdsc=1^%^3A1SZM1shxDNbLt36wZwCgPgvN58iw^%^3D; lidc=\"b=SB94:g=24:u=89:i=1490925679:t=1490996423:s=AQGeBgXRaJUfW299g-LYBTdzJoWpxSrE\"; sl=\"v=1^&Qj7yJ\"; lang=\"v=2^&lang=en-us\"; li_at=AQEDARxstRYDBbJ3AAABWyJWtLcAAAFbJA4ot1EAh15cvBixLDyZHupuvPuQRybcAzaEUvg5TRN0mHLjcsYdwQgBuRBEaJ9Go3Bmkvmz7E-HAEljOXnjGqiRqQAUoQdXzyft_yAWUJmDHi27_GX5fq_C; liap=true; JSESSIONID=\"ajax:1462239234618800734\"; RT=s=1490929760104^&r=https^%^3A^%^2F^%^2Fwww.linkedin.com^%^2Fuas^%^2Fconsumer-captcha-v2^%^3FchallengeId^%^3DAQFFCOH5zS9UXQAAAVsiVlJjMUaBKPU8dkQFdfUHS2rsk82H8XqGwZcFUfn438v-uasdttmGH7KX3bUinaAcuOjUQe5tw8MK8w; _ga=GA1.2.1251577009.1475482809; _gat=1; _lipt=CwEAAAFbIlxlkDn0TkE00ClpVjTd1YYsdY1AeVa1ibHZe_zHDzKrRN1wZv_L2MBdUbJdDaGtES_M5r6UdQuNZdl9iShfo8lNVopntOUPU_czgQye_7UXtZoCapsPLEC3nnp5yXXkMkD7ASCdnO2fSGzh1q1IdC0yuQJbS8iXd-Oii2UhdKsvI0AMp2xWpfHzwkz7uOZqvyisImFMjy-FYHC4EiiI7m1Q6vvx7APDGOtWgSuuTnJ1FNPnam14M8yTpDRKxwOtUNfqGRmu2zOsQbzeCtvCJEKmtF1tNz6YP9Vy8-1h28bpb-TsHL4NxJ8PMrFZmB6sLZAn882iSH8gXYOSM1GHh3JaEMacc8U77uX4GKYYxP2pn_1zz-Pe8yfKTWgV5OpHIqAaVkN1GRlAKuEs7zKtInZUa1x49ysmvBgzqOCxc2coPYFlzrdL0gSYA9Hmcc4vEgrPGc6PlsRSlzgGLQunZhiTN3iBc_r_20QUuft0Gw90pszEpqqw5ztzJECB4Btw7a9a__Xm-CaXoAQEpIPTqOF6Y7SfcuKumSD7pFvWpbG1YYChquwvpz7R_hBB_K8OThn7drzPr5UP3XJXNY7Dwtz__WgStNg2Tb7aj4_dOPtkAWR2nK_tLiY");
+				"bcookie=\"v=2^&9fbee1ca-79a5-47cc-8810-eb18e753ff44\"; bscookie=\"v=1^&201610010831302ee66e54-22ff-4608-84ac-0f2f7511eea0AQHT-9IP6dXurZuyOFX72-6doqjLS_kN\"; visit=\"v=1^&M\"; PLAY_SESSION=1d7015caf51403846a8d7547384b8e8e62726d1a-chsInfo=bcd05c05-2007-4d33-b640-58399974402f+vsrp_people_facets_proposal_accepts; SID=4b5771bc-b4f9-4836-a8f4-74bcc65d9517; VID=V_2016_12_12_01_217755; _chartbeat2=B4SLZSCbyTk6B5AWo_.1479287732844.1487215892938.0000000100000001; share_setting=PUBLIC; hc_survey=true; sdsc=1^%^3A1SZM1shxDNbLt36wZwCgPgvN58iw^%^3D; lang=v=2^&lang=en-US; _ga=GA1.2.1251577009.1475482809; lidc=\"b=SB94:g=24:u=91:i=1491175400:t=1491261800:s=AQHwLfEDl5AP4b50I5SfTsTQm5v48f0O\"; li_at=AQEDARxstRYFQfKtAAABWyhgTrUAAAFbNFHrzlEALpJYaXkakAsh_sLEG3CmqAWdzAGvyfigGOkPp-EctXjFwG6YIVDCK8bqrNVGsfSoV0_W8j4YVcn6BYLXp76dl1lSv0wZAfBkXP8_ckshcLmR0hzy; liap=true; sl=\"v=1^&9M1hc\"; JSESSIONID=\"ajax:3029958654220249414\"; _gat=1; _lipt=CwEAAAFbMwlDe1hu2VtXsGDtbxFKQvi4LStGv75DNda2xs4vSNDczGeZEx0XRzkq_AbKv73KfSjJR_HNonh2rUalqxLLj652Ah3_SS9plc-cx3YSqEDC-kF5KheX6HIBGF7-N81U4MGaBOcpT6psGgOLXbSzhTMbiZsZKq3ncoWTeYY2rUqN0SSF4D_DjyvZQnrUKbVG6kDXh5gRn7W2dbJUmUE7zBOBkMPfzfrtUptrrUGsXu2TNd9vTIY52c2C5oJB5VQKXJtzhqV2J12Z79AUtPGeIZq_qmZ2A5mrF10e8aW4jOxaIaDOL-VYoS6D3J23Cvu485mk9UI6w3E2uZjEtBAVp74KnzPMRHg8bgDavER-bJf0hvyI0KKNCjf1bOVoRZtLCEowL8EraDohdZt9WF9IN1Fzo7997tcUTmUx9pxXjPebBMjPdRIILi792DJkElXhGq3ny9PwGGVsLVuQCVeBuqS_8gxw9btQ-C-dXPkr0E20HUxo87dtmwvk_iMfxfe2BXqprXRTueTqizgu6SS3McAJAn4Y6ccrOZlC_FxTU_i5BeExRQKj-u5Z_GyfcRg3w2l-RO2Wt5NeEPRsxsD8EZTzRK2qzEJxwBXai69ziI1uY-JW9ZxjbSg");
 
 		site.addHeader("referer", "https://www.linkedin.com/");
 		site.addHeader("origin", "https://www.linkedin.com");
 		site.setHttpProxy(new HttpHost("proxy.pal.sap.corp", 8080));
-//		site.setHttpProxy(new HttpHost("proxy.sin.sap.corp", 8080));
-//		site.setHttpProxy(new HttpHost("proxy.sha.sap.corp", 8080));
-//		site.setHttpProxy(new HttpHost("proxy.fra.sap.corp", 8080));
+		// site.setHttpProxy(new HttpHost("proxy.sin.sap.corp", 8080));
+		// site.setHttpProxy(new HttpHost("proxy.sha.sap.corp", 8080));
+		// site.setHttpProxy(new HttpHost("proxy.fra.sap.corp", 8080));
 
 	}
 
@@ -73,6 +73,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		// page.putField("html", page.getHtml());
 		// page.getHtml().links();
 		// https://www.linkedin.com/in/jessicajia/#
+		
 		if (SpiderConstants.targetRequests == null) {
 			SpiderConstants.targetRequests = page.getTargetRequests();
 		}
@@ -124,11 +125,12 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 					String newURL = String.format(format, publicIdentifier);
 					if (!downloadLinks.contains(newURL)) {
 						page.addTargetRequest(newURL);
-						count++;
+						SpiderConstants.allProfileURLsThisExcution.add(newURL);
 					}
 				}
 			}
 		}
+		
 
 		JSONObject totalNode = this.getElementInIncluded(included, "com.linkedin.voyager.search.SearchCluster");
 		int total = (Integer) totalNode.get("total");
@@ -145,7 +147,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 			url.setAllDownloaded(true);
 		} else if (total <= 10) {
 			url.setAllDownloaded(true);
-		} else if(currentPageNumber!=100){
+		} else if (currentPageNumber != 100) {
 			url.setCurrentPageNumber(currentPageNumber + 1);
 		}
 		logger.info("dowloaded profile number:" + SpiderConstants.profilesAccessedVector.size()
@@ -428,8 +430,8 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 					String companyLinkedInID = includeObj.getString("companyUrn").substring(splitIndex + 1);
 					company.setValue(companyLinkedInID);
 					SpiderConstants.companys.put(companyLinkedInID, includeObj.getString("companyName"));
-					if (!this.companies.contains(companyLinkedInID) && !SpiderConstants.stop && (experienceNumber == 1
-							|| isValuableCompany(includeObj.getString("companyName"), includeObj.getString("title")))) {
+					 //&& (experienceNumber == 1	|| isValuableCompany(includeObj.getString("companyName"), includeObj.getString("title")));
+					if (!this.companies.contains(companyLinkedInID) && !SpiderConstants.stop) {
 						companies.add(companyLinkedInID);
 						String baseURL = this.companyFormatPrefix + companyLinkedInID + this.companyFormatSurfix;
 						if (SpiderConstants.searchURLs.get(baseURL) == null) {

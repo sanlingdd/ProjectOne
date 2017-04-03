@@ -70,7 +70,13 @@ public class main {
 			Cell cell = POIHelper.getCell(row, 0);
 			String url = cell.getStringCellValue();
 			if (url != null && !url.isEmpty() && !url.matches("https://www.linkedin.com/in/[^/]+/")) {
-				SearchURL urlObj = new SearchURL();
+				SearchURL urlObj = null;
+				if (SpiderConstants.searchURLs.get(url) != null) {
+					urlObj = SpiderConstants.searchURLs.get(url);
+				} else {
+					urlObj = new SearchURL();
+				}
+
 				urlObj.setBaseURL(url);
 				Integer currentPageNumber = new Double(POIHelper.getCell(row, 1).getNumericCellValue()).intValue();
 				urlObj.setCurrentPageNumber(currentPageNumber);
@@ -92,6 +98,10 @@ public class main {
 					if (urlObj.getTotal() < ((urlObj.getCurrentPageNUmber() - 1) * 10)) {
 						urlObj.setAllDownloaded(true);
 					}
+
+					// if (urlObj.getTotal() < 10) {
+					// urlObj.setAllDownloaded(false);
+					// }
 				}
 				SpiderConstants.searchURLs.put(url, urlObj);
 				SpiderConstants.downloadedSearchLinks.put(url, urlObj);
@@ -127,6 +137,19 @@ public class main {
 		}
 		workbook.removeSheetAt(workbook.getSheetIndex("companies"));
 
+		Spider spider = MySpider.create(new LinkedinPeopleProfilePageProcessor());
+		// companies
+		Sheet thisTimeSheet = POIHelper.getSheet(workbook, "thisTime");
+		for (int rowNum = 0; rowNum <= thisTimeSheet.getLastRowNum(); rowNum++) {
+			Row row = POIHelper.getRow(thisTimeSheet, rowNum);
+			Cell cell = POIHelper.getCell(row, 0);
+			String newURL = cell.getStringCellValue();
+			if (!LinkedinPeopleProfilePageProcessor.downloadLinks.contains(newURL)) {
+				spider.addUrl(newURL);
+			}
+		}
+		workbook.removeSheetAt(workbook.getSheetIndex("thisTime"));
+
 		try {
 			inputStream.close();
 		} catch (IOException e) {
@@ -138,7 +161,6 @@ public class main {
 		keeper.start();
 		// String url =
 		// "https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%2262435%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%5D&facetNetwork=%5B%22F%22%5D&facetPastCompany=%5B%22166244%22%5D&origin=FACETED_SEARCH&page=1";
-		Spider spider = Spider.create(new LinkedinPeopleProfilePageProcessor());
 		// 从https://github.com/code4craft开始抓
 		// .addUrl("https://www.linkedin.com/in/xiaohaizixiaoyao/")
 		// .addUrl("https://www.linkedin.com/in/jessicajia/")
@@ -165,7 +187,7 @@ public class main {
 				// 设置Pipeline，将结果以json方式保存到文件
 				.addPipeline(new ExcelFilePipeLine())
 				// 开启5个线程同时执行
-				.thread(1)
+				.thread(3)
 				// 启动爬虫
 				.run();
 
