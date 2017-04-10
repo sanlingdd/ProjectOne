@@ -95,9 +95,9 @@ public class main {
 							&& urlObj.getTotal() > (urlObj.getCurrentPageNUmber() * 10)) {
 						urlObj.setAllDownloaded(false);
 					}
-					if (urlObj.getTotal() < ((urlObj.getCurrentPageNUmber() - 1) * 10)) {
-						urlObj.setAllDownloaded(true);
-					}
+//					if (urlObj.getTotal() < ((urlObj.getCurrentPageNUmber() - 1) * 10)) {
+//						urlObj.setAllDownloaded(true);
+//					}
 
 					// if (urlObj.getTotal() < 10) {
 					// urlObj.setAllDownloaded(false);
@@ -137,7 +137,21 @@ public class main {
 		}
 		workbook.removeSheetAt(workbook.getSheetIndex("companies"));
 
+//		for (String url : SpiderConstants.searchURLs.keySet()) {
+//			SearchURL ul = SpiderConstants.searchURLs.get(url);
+//			if (!ul.isAllDownloaded() && ul.getCurrentPageNUmber() == 1) {
+//				ul.setTotal(0);
+//			}
+//		}
+		
 		Spider spider = MySpider.create(new LinkedinPeopleProfilePageProcessor());
+		for (String baseURL : SpiderConstants.searchURLs.keySet()) {
+			SearchURL urlObj = SpiderConstants.searchURLs.get(baseURL);
+			if (!urlObj.isAllDownloaded()) {
+				spider.addUrl(urlObj.getTargetURL());
+			}
+		}
+
 		// companies
 		Sheet thisTimeSheet = POIHelper.getSheet(workbook, "thisTime");
 		for (int rowNum = 0; rowNum <= thisTimeSheet.getLastRowNum(); rowNum++) {
@@ -157,6 +171,8 @@ public class main {
 			e.printStackTrace();
 		}
 
+
+
 		OutputKeeper keeper = new OutputKeeper();
 		keeper.start();
 		// String url =
@@ -170,13 +186,6 @@ public class main {
 		// String url =
 		// "https://www.linkedin.com/search/results/people/?facetGeoRegion=%5B%22cn%3A8883%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetNetwork=%5B%22F%22%5D&origin=FACETED_SEARCH&page=6";
 		// LinkedinPeopleProfilePageProcessor.downloadLinks.add(url);
-
-		for (String baseURL : SpiderConstants.searchURLs.keySet()) {
-			SearchURL urlObj = SpiderConstants.searchURLs.get(baseURL);
-			if (!urlObj.isAllDownloaded()) {
-				spider.addUrl(urlObj.getTargetURL());
-			}
-		}
 		// mags associates 33
 		// https://www.linkedin.com/search/results/people/?facetNetwork=%5B%22F%22%5D&keywords=tai%20helen&origin=FACETED_SEARCH
 		// .addUrl("https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%221179160%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetNetwork=%5B%22F%22%2C%22S%22%2C%22O%22%5D&origin=FACETED_SEARCH&page=1")

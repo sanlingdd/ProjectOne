@@ -59,16 +59,16 @@ public class OutputKeeper extends Thread {
 			}
 			try {
 				if (tempCount - currentCount != 0) {
-					if (tempCount > currentCount + 100) {
+					if (tempCount > currentCount + 50) {
 						try {
 							this.writeToExcelFile();
 						} catch (Exception e) {
 							logger.debug(e.getMessage());
 						}
-						this.sleep(100000);
+						this.sleep(10000);
 						currentCount = tempCount;
 					} else {
-						this.sleep(100000);
+						this.sleep(10000);
 					}
 				} else if (SpiderConstants.profilesAccessedVector.isEmpty() && SpiderConstants.searchURLs.isEmpty()) {
 					this.sleep(100000);
@@ -78,7 +78,7 @@ public class OutputKeeper extends Thread {
 					} catch (Exception e) {
 						logger.debug(e.getMessage());
 					}
-					this.sleep(100000);
+					this.sleep(10000);
 					break;
 				}
 
@@ -270,7 +270,7 @@ public class OutputKeeper extends Thread {
 			}
 
 			start = 1;
-			Sheet sheet4 = this.getSheet(workbook, "thisTime");
+			Sheet sheet4 = this.getSheet(workbook, "thisTimecopy");
 			for (String str : SpiderConstants.allProfileURLsThisExcution) {
 				if (!LinkedinPeopleProfilePageProcessor.downloadLinks.contains(str)) {
 					row = this.getRow(sheet4, start++);

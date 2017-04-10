@@ -42,7 +42,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		site.addHeader("avail-dictionary", "YFA7RCTS");
 		site.addHeader("authority", "www.linkedin.com");
 		site.addHeader("cookie",
-				"bcookie=\"v=2^&9fbee1ca-79a5-47cc-8810-eb18e753ff44\"; bscookie=\"v=1^&201610010831302ee66e54-22ff-4608-84ac-0f2f7511eea0AQHT-9IP6dXurZuyOFX72-6doqjLS_kN\"; visit=\"v=1^&M\"; PLAY_SESSION=1d7015caf51403846a8d7547384b8e8e62726d1a-chsInfo=bcd05c05-2007-4d33-b640-58399974402f+vsrp_people_facets_proposal_accepts; SID=4b5771bc-b4f9-4836-a8f4-74bcc65d9517; VID=V_2016_12_12_01_217755; _chartbeat2=B4SLZSCbyTk6B5AWo_.1479287732844.1487215892938.0000000100000001; share_setting=PUBLIC; hc_survey=true; sdsc=1^%^3A1SZM1shxDNbLt36wZwCgPgvN58iw^%^3D; lang=v=2^&lang=en-US; _ga=GA1.2.1251577009.1475482809; lidc=\"b=SB94:g=24:u=91:i=1491175400:t=1491261800:s=AQHwLfEDl5AP4b50I5SfTsTQm5v48f0O\"; li_at=AQEDARxstRYFQfKtAAABWyhgTrUAAAFbNFHrzlEALpJYaXkakAsh_sLEG3CmqAWdzAGvyfigGOkPp-EctXjFwG6YIVDCK8bqrNVGsfSoV0_W8j4YVcn6BYLXp76dl1lSv0wZAfBkXP8_ckshcLmR0hzy; liap=true; sl=\"v=1^&9M1hc\"; JSESSIONID=\"ajax:3029958654220249414\"; _gat=1; _lipt=CwEAAAFbMwlDe1hu2VtXsGDtbxFKQvi4LStGv75DNda2xs4vSNDczGeZEx0XRzkq_AbKv73KfSjJR_HNonh2rUalqxLLj652Ah3_SS9plc-cx3YSqEDC-kF5KheX6HIBGF7-N81U4MGaBOcpT6psGgOLXbSzhTMbiZsZKq3ncoWTeYY2rUqN0SSF4D_DjyvZQnrUKbVG6kDXh5gRn7W2dbJUmUE7zBOBkMPfzfrtUptrrUGsXu2TNd9vTIY52c2C5oJB5VQKXJtzhqV2J12Z79AUtPGeIZq_qmZ2A5mrF10e8aW4jOxaIaDOL-VYoS6D3J23Cvu485mk9UI6w3E2uZjEtBAVp74KnzPMRHg8bgDavER-bJf0hvyI0KKNCjf1bOVoRZtLCEowL8EraDohdZt9WF9IN1Fzo7997tcUTmUx9pxXjPebBMjPdRIILi792DJkElXhGq3ny9PwGGVsLVuQCVeBuqS_8gxw9btQ-C-dXPkr0E20HUxo87dtmwvk_iMfxfe2BXqprXRTueTqizgu6SS3McAJAn4Y6ccrOZlC_FxTU_i5BeExRQKj-u5Z_GyfcRg3w2l-RO2Wt5NeEPRsxsD8EZTzRK2qzEJxwBXai69ziI1uY-JW9ZxjbSg");
+				"bcookie=\"v=2^&9fbee1ca-79a5-47cc-8810-eb18e753ff44\"; bscookie=\"v=1^&201610010831302ee66e54-22ff-4608-84ac-0f2f7511eea0AQHT-9IP6dXurZuyOFX72-6doqjLS_kN\"; visit=\"v=1^&M\"; PLAY_SESSION=1d7015caf51403846a8d7547384b8e8e62726d1a-chsInfo=bcd05c05-2007-4d33-b640-58399974402f+vsrp_people_facets_proposal_accepts; SID=4b5771bc-b4f9-4836-a8f4-74bcc65d9517; VID=V_2016_12_12_01_217755; share_setting=PUBLIC; hc_survey=true; _cb_ls=1; _chartbeat2=B4SLZSCbyTk6B5AWo_.1479287732844.1491303514668.0000000000000001; lang=\"v=2^&lang=en-us\"; lidc=\"b=SB94:g=24:u=91:i=1491348304:t=1491434704:s=AQE_L6H5smI32WXTsrsgTLZAn4f4X365\"; li_at=AQEDARxstRYDDHP_AAABWzgIuVUAAAFbPSjs9lEAg1P1Fh85UggkZEc4G1AeoG6UXqposYGHMyV7TnLkO-u82RXR8REVUEOt_52bx-KHOVw8zWYPPKLQkVxu-SpJqYwT2Xd4lvApQTegZrUD2p_eYUTO; liap=true; JSESSIONID=\"ajax:4840042334868528098\"; sdsc=1^%^3A1SZM1shxDNbLt36wZwCgPgvN58iw^%^3D; _ga=GA1.2.1251577009.1475482809; RT=s=1491370989903^&r=https^%^3A^%^2F^%^2Fwww.linkedin.com^%^2Fpulse^%^2Fadvanced-search-gone-new-linkedin-interface-robert-knop; _chartbeat4=t=DKB9ZOB9LXS7BHWMJvCtaMFCMZc_z^&E=132^&x=0^&c=1124.59^&y=9066^&w=1070; _lipt=CwEAAAFbPKNh6Z3qBeMf7_JBddW2Qjg3yN-e9UHjtNlsMNhVlyYg5BAGj7ZmI5IeRgTL5060xT8GeuiKMdFXwlBYNHYiG6eAKnm6iyXF6RMUc14Djv9QnSo86RbnJclsv9UdB7Kl68LJObbYpkG-CfacU8vyumXjTUMHmMZ4pNoNjyhP9R3xQW-yXQ-6DdyZSHbLA2pTIoYYMVhCJOlD5w0ivtoYVw8v7tlvbhTkkjLILUgEPnBYNKKWxmImInDCb_PY5Feq-qSSEKPHE_gSgZuuzwWuQlHsWjGFxGSp0JzMd1RDSesQ0-UeL9JK-WviLU-hbJOD4ldXUXCejAB_FUNLJCgt3bQTGYhe61UEIQMFr-FvXj-XH1k1VZPkEWH7I0TIuUoI04F3O0-trWODXsIjHTKB40AEiSV2odTj7ED3baO6wf-qy7-EkPh7arm7V8jT0xzvY7bNuI0WcvOChKq3Ek57XOQRVrhUGk3yt5DIbMl9T4Pbx6kIk4-NjYVSxQJ3658OPSVyGTAZgy6u_RYHUHAPP5u5yBoWKAerSBOqSGKTnLay-Jl2QJKtqCTtLHx6OPHJ0k0X1eQJucJyVDyZ3z12o6cfwqK7A10UF6uPgyYj_-6dQQUn8XrlTG8");
 
 		site.addHeader("referer", "https://www.linkedin.com/");
 		site.addHeader("origin", "https://www.linkedin.com");
@@ -142,6 +142,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 			url.setCurrentPageNumber(currentPageNumber + 1);
 			if (!downloadLinks.contains(url.getTargetURL())) {
 				page.addTargetRequest(url.getTargetURL());
+				SpiderConstants.allProfileURLsThisExcution.add(url.getTargetURL());
 			}
 		} else if (!SpiderConstants.stop) {
 			url.setAllDownloaded(true);
@@ -431,7 +432,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 					company.setValue(companyLinkedInID);
 					SpiderConstants.companys.put(companyLinkedInID, includeObj.getString("companyName"));
 					 //&& (experienceNumber == 1	|| isValuableCompany(includeObj.getString("companyName"), includeObj.getString("title")));
-					if (!this.companies.contains(companyLinkedInID) && !SpiderConstants.stop) {
+					if (!SpiderConstants.stop) {
 						companies.add(companyLinkedInID);
 						String baseURL = this.companyFormatPrefix + companyLinkedInID + this.companyFormatSurfix;
 						if (SpiderConstants.searchURLs.get(baseURL) == null) {
@@ -442,6 +443,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 							SpiderConstants.searchURLs.put(baseURL, url);
 							if (!downloadLinks.contains(url.getTargetURL())) {
 								page.addTargetRequest(url.getTargetURL());
+								SpiderConstants.allProfileURLsThisExcution.add(url.getTargetURL());
 							}
 						}
 					}
