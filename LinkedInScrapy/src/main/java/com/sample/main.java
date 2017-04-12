@@ -2,7 +2,6 @@ package com.sample;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -12,6 +11,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.downloader.selenium.SeleniumDownloader;
 import us.codecraft.webmagic.scheduler.PriorityScheduler;
 
 public class main {
@@ -192,6 +192,10 @@ public class main {
 		// .addUrl("https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%226279%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetNetwork=%5B%22F%22%2C%22S%22%2C%22O%22%5D&origin=FACETED_SEARCH&page=1")
 		// 设置Scheduler，使用Redis来管理URL队列
 
+		String chromeDriverPath = "/Users/i071944/chromedriver";
+		SeleniumDownloader seleniumDownloader = new SeleniumDownloader(chromeDriverPath);
+		
+		spider.setDownloader(seleniumDownloader);
 		spider.setScheduler(new PriorityScheduler())
 				// 设置Pipeline，将结果以json方式保存到文件
 				.addPipeline(new ExcelFilePipeLine())

@@ -35,18 +35,18 @@ public class SeleniumDownloader implements Downloader, Closeable {
 
 	private int sleepTime = 0;
 
-	private int poolSize = 1;
+	private int poolSize = 5;
 
 	private static final String DRIVER_PHANTOMJS = "phantomjs";
 
 	/**
 	 * 新建
 	 *
-	 * @param chromeDriverPath chromeDriverPath
+	 * @param chromeDriverPath
+	 *            chromeDriverPath
 	 */
 	public SeleniumDownloader(String chromeDriverPath) {
-		System.getProperties().setProperty("webdriver.chrome.driver",
-				chromeDriverPath);
+		System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
 	}
 
 	/**
@@ -62,7 +62,8 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	/**
 	 * set sleep time to wait until load success
 	 *
-	 * @param sleepTime sleepTime
+	 * @param sleepTime
+	 *            sleepTime
 	 * @return this
 	 */
 	public SeleniumDownloader setSleepTime(int sleepTime) {
@@ -90,10 +91,8 @@ public class SeleniumDownloader implements Downloader, Closeable {
 		WebDriver.Options manage = webDriver.manage();
 		Site site = task.getSite();
 		if (site.getCookies() != null) {
-			for (Map.Entry<String, String> cookieEntry : site.getCookies()
-					.entrySet()) {
-				Cookie cookie = new Cookie(cookieEntry.getKey(),
-						cookieEntry.getValue());
+			for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
+				Cookie cookie = new Cookie(cookieEntry.getKey(), cookieEntry.getValue());
 				manage.addCookie(cookie);
 			}
 		}
@@ -103,13 +102,24 @@ public class SeleniumDownloader implements Downloader, Closeable {
 		 * 
 		 * @author: bob.li.0718@gmail.com
 		 */
+		Page page = new Page();
 
+		if (!request.getUrl().contains("facetNetwork") && request.getUrl().contains("SEARCH")) {
+			WebElement webFirstCheckbookElement = null;
+			try {
+				webFirstCheckbookElement = webDriver.findElement(By.xpath("//input[@id='sf-facetNetwork-F']"));
+			} catch (Exception e) {
+				logger.info(e.getMessage());
+			}
+			if (webFirstCheckbookElement != null && webFirstCheckbookElement.isSelected()) {
+				page.setLinkedInLimitStarted(true);
+			}
+		}
 		WebElement webElement = webDriver.findElement(By.xpath("/html"));
 		String content = webElement.getAttribute("outerHTML");
-		Page page = new Page();
+
 		page.setRawText(content);
-		page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content,
-				request.getUrl())));
+		page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
 		page.setUrl(new PlainText(request.getUrl()));
 		page.setRequest(request);
 		webDriverPool.returnToPool(webDriver);
