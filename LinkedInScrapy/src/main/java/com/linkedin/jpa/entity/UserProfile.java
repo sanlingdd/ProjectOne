@@ -1,12 +1,20 @@
-package com.linkedin.entity;
+package com.linkedin.jpa.entity;
+
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class UserProfile {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,19 +25,33 @@ public class UserProfile {
 	private String maidenName;
 	private String lastName;
 	private String birthday;
-	private Integer totalExperienceInYear;
+	private Long totalExperienceInYear;
 	private String currentCompanyName;
 	private String currentTittleName;
 	private String highestDegreeName;
 	private String emailAddress;
 	private String industryName;
 	private String locationName;
-	private Integer locationId;
+	private Long locationId;
 	private String address;
 	private String interests;
 	private String versionTag;
 	private String wechatImageURL;
 	private String summary;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "company_id")
+	private Company currentCompany;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "school_id")
+	private School currentSchool;
+
+	@OneToMany(mappedBy = "profile")
+	private List<UserEducation> educations;
+
+	@OneToMany(mappedBy = "profile")
+	private List<UserExperience> experiences;
 
 	public long getId() {
 		return id;
@@ -79,11 +101,11 @@ public class UserProfile {
 		this.birthday = birthday;
 	}
 
-	public Integer getTotalExperienceInYear() {
+	public Long getTotalExperienceInYear() {
 		return totalExperienceInYear;
 	}
 
-	public void setTotalExperienceInYear(Integer totalExperienceInYear) {
+	public void setTotalExperienceInYear(Long totalExperienceInYear) {
 		this.totalExperienceInYear = totalExperienceInYear;
 	}
 
@@ -135,11 +157,11 @@ public class UserProfile {
 		this.locationName = locationName;
 	}
 
-	public Integer getLocationId() {
+	public Long getLocationId() {
 		return locationId;
 	}
 
-	public void setLocationId(Integer locationId) {
+	public void setLocationId(Long locationId) {
 		this.locationId = locationId;
 	}
 
@@ -183,4 +205,39 @@ public class UserProfile {
 		this.summary = summary;
 	}
 
+	public Company getCurrentCompany() {
+		return currentCompany;
+	}
+
+	public void setCurrentCompany(Company currentCompany) {
+		this.currentCompany = currentCompany;
+	}
+
+	public School getCurrentSchool() {
+		return currentSchool;
+	}
+
+	public void setCurrentSchool(School currentSchool) {
+		this.currentSchool = currentSchool;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public List<UserEducation> getEducations() {
+		return educations;
+	}
+
+	public void setEducations(List<UserEducation> educations) {
+		this.educations = educations;
+	}
+
+	public List<UserExperience> getExperiences() {
+		return experiences;
+	}
+
+	public void setExperiences(List<UserExperience> experiences) {
+		this.experiences = experiences;
+	}
 }
