@@ -27,6 +27,6 @@ public class SpiderConstants {
 	public static Date startDate = new Date();
 	
 	public static Set<String> allProfileURLsThisExcution = new HashSet<String>();
-
-
+	
+	public static Set<String> downloadLinks = new HashSet<String>();
 }

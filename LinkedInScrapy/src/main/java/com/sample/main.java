@@ -39,8 +39,8 @@ public class main {
 			Cell cell = POIHelper.getCell(row, 0);
 			String profileURL = cell.getStringCellValue();
 			if (profileURL != null && profileURL.matches("https://www.linkedin.com/in/.+")) {
-				if (!LinkedinPeopleProfilePageProcessor.downloadLinks.contains(profileURL)) {
-					LinkedinPeopleProfilePageProcessor.downloadLinks.add(profileURL);
+				if (!SpiderConstants.downloadLinks.contains(profileURL)) {
+					SpiderConstants.downloadLinks.add(profileURL);
 				} else {
 					int nextRowNum = POIHelper.getNextRowNum(profileSheet, row);
 					for (int iter = row.getRowNum(); iter < nextRowNum; iter++) {

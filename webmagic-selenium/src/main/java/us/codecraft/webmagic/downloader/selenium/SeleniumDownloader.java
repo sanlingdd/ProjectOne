@@ -86,6 +86,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			logger.warn("interrupted", e);
 			return null;
 		}
+		
 		logger.info("downloading page " + request.getUrl());
 		webDriver.get(request.getUrl());
 		try {
@@ -94,6 +95,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			e.printStackTrace();
 		}
 		WebDriver.Options manage = webDriver.manage();
+		
 		Site site = task.getSite();
 		if (site.getCookies() != null) {
 			for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {

@@ -98,11 +98,12 @@ class WebDriverPool {
 			}
 		}
 
-
 		ArrayList<String> cliArgsCap = new ArrayList<String>();
 		cliArgsCap.add("--web-security=false");
 		cliArgsCap.add("--ssl-protocol=any");
 		cliArgsCap.add("--ignore-ssl-errors=true");
+		cliArgsCap.add("--proxy=proxy.sin.sap.corp:8080");
+
 		sCaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgsCap);
 
 		// Control LogLevel for GhostDriver, via CLI arguments

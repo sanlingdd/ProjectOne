@@ -272,7 +272,7 @@ public class OutputKeeper extends Thread {
 			start = 1;
 			Sheet sheet4 = this.getSheet(workbook, "thisTimecopy");
 			for (String str : SpiderConstants.allProfileURLsThisExcution) {
-				if (!LinkedinPeopleProfilePageProcessor.downloadLinks.contains(str)) {
+				if (!SpiderConstants.downloadLinks.contains(str)) {
 					row = this.getRow(sheet4, start++);
 					Cell cell = this.getCell(row, 0);
 					cell.setCellValue((String) str);
