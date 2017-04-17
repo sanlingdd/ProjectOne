@@ -136,20 +136,13 @@ public class main {
 			}
 		}
 		workbook.removeSheetAt(workbook.getSheetIndex("companies"));
-
-//		for (String url : SpiderConstants.searchURLs.keySet()) {
-//			SearchURL ul = SpiderConstants.searchURLs.get(url);
-//			if (!ul.isAllDownloaded() && ul.getCurrentPageNUmber() == 1) {
-//				ul.setTotal(0);
-//			}
-//		}
 		
 		Spider spider = MySpider.create(new LinkedinPeopleProfilePageProcessor());
 		for (String baseURL : SpiderConstants.searchURLs.keySet()) {
 			SearchURL urlObj = SpiderConstants.searchURLs.get(baseURL);
-			if (!urlObj.isAllDownloaded()) {
-				spider.addUrl(urlObj.getTargetURL());
-			}
+//			if (!urlObj.isAllDownloaded()) {
+//				spider.addUrl(urlObj.getTargetURL());
+//			}
 		}
 
 		// companies
@@ -158,9 +151,9 @@ public class main {
 			Row row = POIHelper.getRow(thisTimeSheet, rowNum);
 			Cell cell = POIHelper.getCell(row, 0);
 			String newURL = cell.getStringCellValue();
-			if (!LinkedinPeopleProfilePageProcessor.downloadLinks.contains(newURL)) {
-				spider.addUrl(newURL);
-			}
+//			if (!LinkedinPeopleProfilePageProcessor.downloadLinks.contains(newURL)) {
+//				spider.addUrl(newURL);
+//			}
 		}
 		workbook.removeSheetAt(workbook.getSheetIndex("thisTime"));
 
@@ -175,6 +168,7 @@ public class main {
 
 		OutputKeeper keeper = new OutputKeeper();
 		keeper.start();
+		spider.addUrl("https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%22277318%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&origin=FACETED_SEARCH&page=3");
 		// String url =
 		// "https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%2262435%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%5D&facetNetwork=%5B%22F%22%5D&facetPastCompany=%5B%22166244%22%5D&origin=FACETED_SEARCH&page=1";
 		// 从https://github.com/code4craft开始抓

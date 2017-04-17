@@ -1,7 +1,9 @@
 package us.codecraft.webmagic.downloader.selenium;
 
 import org.apache.log4j.Logger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -65,7 +67,7 @@ class WebDriverPool {
 		// Read config file
 		sConfig = new Properties();
 		String configFile = DEFAULT_CONFIG_FILE;
-		if (System.getProperty("selenuim_config")!=null){
+		if (System.getProperty("selenuim_config") != null) {
 			configFile = System.getProperty("selenuim_config");
 		}
 		sConfig.load(new FileReader(configFile));
@@ -74,57 +76,39 @@ class WebDriverPool {
 		sCaps = new DesiredCapabilities();
 		sCaps.setJavascriptEnabled(true);
 		sCaps.setCapability("takesScreenshot", false);
-
 		String driver = sConfig.getProperty("driver", DRIVER_PHANTOMJS);
 
 		// Fetch PhantomJS-specific configuration parameters
 		if (driver.equals(DRIVER_PHANTOMJS)) {
 			// "phantomjs_exec_path"
 			if (sConfig.getProperty("phantomjs_exec_path") != null) {
-				sCaps.setCapability(
-						PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
+				sCaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
 						sConfig.getProperty("phantomjs_exec_path"));
 			} else {
-				throw new IOException(
-						String.format(
-								"Property '%s' not set!",
-								PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY));
+				throw new IOException(String.format("Property '%s' not set!",
+						PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY));
 			}
 			// "phantomjs_driver_path"
 			if (sConfig.getProperty("phantomjs_driver_path") != null) {
 				System.out.println("Test will use an external GhostDriver");
-				sCaps.setCapability(
-						PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_PATH_PROPERTY,
+				sCaps.setCapability(PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_PATH_PROPERTY,
 						sConfig.getProperty("phantomjs_driver_path"));
 			} else {
-				System.out
-						.println("Test will use PhantomJS internal GhostDriver");
+				System.out.println("Test will use PhantomJS internal GhostDriver");
 			}
 		}
 
-		// Disable "web-security", enable all possible "ssl-protocols" and
-		// "ignore-ssl-errors" for PhantomJSDriver
-		// sCaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, new
-		// String[] {
-		// "--web-security=false",
-		// "--ssl-protocol=any",
-		// "--ignore-ssl-errors=true"
-		// });
 
 		ArrayList<String> cliArgsCap = new ArrayList<String>();
 		cliArgsCap.add("--web-security=false");
 		cliArgsCap.add("--ssl-protocol=any");
 		cliArgsCap.add("--ignore-ssl-errors=true");
-		sCaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS,
-				cliArgsCap);
+		sCaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgsCap);
 
 		// Control LogLevel for GhostDriver, via CLI arguments
-		sCaps.setCapability(
-				PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS,
-				new String[] { "--logLevel="
-						+ (sConfig.getProperty("phantomjs_driver_loglevel") != null ? sConfig
-								.getProperty("phantomjs_driver_loglevel")
-								: "INFO") });
+		sCaps.setCapability(PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS,
+				new String[] { "--logLevel=" + (sConfig.getProperty("phantomjs_driver_loglevel") != null
+						? sConfig.getProperty("phantomjs_driver_loglevel") : "INFO") });
 
 		// String driver = sConfig.getProperty("driver", DRIVER_PHANTOMJS);
 
@@ -138,6 +122,16 @@ class WebDriverPool {
 			mDriver = new ChromeDriver(sCaps);
 		} else if (driver.equals(DRIVER_PHANTOMJS)) {
 			mDriver = new PhantomJSDriver(sCaps);
+			mDriver.get("http://www.linkedin.com");
+
+			WebElement webEmailElement = mDriver.findElement(By.xpath("//input[@id='login-email']"));
+			webEmailElement.sendKeys("huangxianbin_2005@aliyun.com");
+
+			WebElement webPasswordElement = mDriver.findElement(By.xpath("//input[@id='login-password']"));
+			webPasswordElement.sendKeys("pa22word");
+
+			WebElement webSubmitElement = mDriver.findElement(By.xpath("//input[@id='login-submit']"));
+			webSubmitElement.submit();
 		}
 	}
 
@@ -145,7 +139,8 @@ class WebDriverPool {
 	 * check whether input is a valid URL
 	 * 
 	 * @author bob.li.0718@gmail.com
-	 * @param urlString urlString
+	 * @param urlString
+	 *            urlString
 	 * @return true means yes, otherwise no.
 	 */
 	private boolean isUrl(String urlString) {
@@ -160,8 +155,7 @@ class WebDriverPool {
 	/**
 	 * store webDrivers created
 	 */
-	private List<WebDriver> webDriverList = Collections
-			.synchronizedList(new ArrayList<WebDriver>());
+	private List<WebDriver> webDriverList = Collections.synchronizedList(new ArrayList<WebDriver>());
 
 	/**
 	 * store webDrivers available

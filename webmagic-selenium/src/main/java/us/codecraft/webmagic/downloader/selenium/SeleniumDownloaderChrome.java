@@ -32,7 +32,7 @@ import java.util.Map;
  *         Date: 13-7-26 <br>
  *         Time: 下午1:37 <br>
  */
-public class SeleniumDownloader implements Downloader, Closeable {
+public class SeleniumDownloaderChrome implements Downloader, Closeable {
 
 	private volatile WebDriverPool webDriverPool;
 
@@ -50,7 +50,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	 * @param chromeDriverPath
 	 *            chromeDriverPath
 	 */
-	public SeleniumDownloader(String chromeDriverPath) {
+	public SeleniumDownloaderChrome(String chromeDriverPath) {
 		System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
 	}
 
@@ -59,7 +59,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	 * 
 	 * @author bob.li.0718@gmail.com
 	 */
-	public SeleniumDownloader() {
+	public SeleniumDownloaderChrome() {
 		// System.setProperty("phantomjs.binary.path",
 		// "/Users/Bingo/Downloads/phantomjs-1.9.7-macosx/bin/phantomjs");
 	}
@@ -71,7 +71,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	 *            sleepTime
 	 * @return this
 	 */
-	public SeleniumDownloader setSleepTime(int sleepTime) {
+	public SeleniumDownloaderChrome setSleepTime(int sleepTime) {
 		this.sleepTime = sleepTime;
 		return this;
 	}
@@ -123,17 +123,16 @@ public class SeleniumDownloader implements Downloader, Closeable {
 
 		page.setRawText(content);
         
-		// PrintWriter printWriter = null;
-		// try {
-		// printWriter = new PrintWriter(new
-		// FileWriter("C:/data/webmagic/www.linkedin.com/temp" + ".json"));
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// printWriter.write(content);
-		// printWriter.flush();
-		// printWriter.close();
+		PrintWriter printWriter = null;
+		try {
+			printWriter = new PrintWriter(new FileWriter("C:/data/webmagic/www.linkedin.com/temp" + ".json"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        printWriter.write(content);
+        printWriter.flush();
+        printWriter.close();
         
 		page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
 		page.setUrl(new PlainText(request.getUrl()));
