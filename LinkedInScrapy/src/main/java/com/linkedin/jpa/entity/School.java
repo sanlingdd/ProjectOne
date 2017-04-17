@@ -1,5 +1,6 @@
 package com.linkedin.jpa.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,7 +15,9 @@ public class School {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
+	@Column(nullable = false)
 	private Long schoolId;
+	@Column(nullable = false)
 	private String schoolName;
 
 	public Long getSchoolId() {

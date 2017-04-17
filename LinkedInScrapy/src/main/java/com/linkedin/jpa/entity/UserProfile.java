@@ -2,6 +2,7 @@ package com.linkedin.jpa.entity;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,18 +21,24 @@ public class UserProfile {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
+	@Column(nullable = false)
 	private String publicIdentifier;
 	private String firstName;
 	private String maidenName;
 	private String lastName;
 	private String birthday;
+	@Column(nullable = false)
 	private Long totalExperienceInYear;
 	private String currentCompanyName;
+	@Column(nullable = false)
 	private String currentTittleName;
+	@Column(nullable = false)
 	private String highestDegreeName;
 	private String emailAddress;
 	private String industryName;
+	@Column(nullable = false)
 	private String locationName;
+	@Column(nullable = false)
 	private Long locationId;
 	private String address;
 	private String interests;

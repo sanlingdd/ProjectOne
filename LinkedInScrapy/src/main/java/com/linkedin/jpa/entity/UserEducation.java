@@ -1,5 +1,6 @@
 package com.linkedin.jpa.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,11 +19,17 @@ public class UserEducation {
 	@JoinColumn(name = "school_id")
 	private School graudateSchool;
 
+	@Column(nullable = false)
 	private String universityName;
+	@Column(nullable = false)
 	private String major;
+	@Column(nullable = false)
 	private Long fromLong;
+	@Column(nullable = false)
 	private Long toLong;
+	@Column(nullable = false)
 	private String from;
+	@Column(nullable = false)
 	private String to;
 
 	@Enumerated(EnumType.STRING)

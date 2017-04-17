@@ -1,5 +1,6 @@
 package com.linkedin.jpa.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -19,11 +20,17 @@ public class UserExperience {
 	@JoinColumn(name = "company_id")
 	private Company company;
 
+	@Column(nullable = false)
 	private String from;
+	@Column(nullable = false)
 	private String to;
+	@Column(nullable = false)
 	private Long fromLong;
+	@Column(nullable = false)
 	private Long toLong;
+	@Column(nullable = false)
 	private String occupation;
+	@Column(nullable = false)
 	private String responsibility;
 
 	public UserProfile getProfile() {
