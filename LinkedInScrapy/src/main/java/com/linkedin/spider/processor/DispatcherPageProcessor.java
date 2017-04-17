@@ -1,4 +1,4 @@
-package com.sample;
+package com.linkedin.spider.processor;
 
 import org.apache.http.HttpHost;
 

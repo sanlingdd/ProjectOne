@@ -1,4 +1,4 @@
-package com.sample;
+package com.linkedin.spider;
 
 import java.util.HashMap;
 

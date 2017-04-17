@@ -1,4 +1,4 @@
-package com.sample;
+package com.linkedin.spider.processor;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,7 +18,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OutputKeeper extends Thread {
+import com.linkedin.spider.SearchURL;
+import com.linkedin.spider.SpiderConstants;
+
+public class LinkedInOutputKeeper extends Thread {
 	private static String fileName = null;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 

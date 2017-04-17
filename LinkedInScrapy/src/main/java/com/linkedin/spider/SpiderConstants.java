@@ -1,4 +1,4 @@
-package com.sample;
+package com.linkedin.spider;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -15,7 +15,6 @@ public class SpiderConstants {
 	public static ConcurrentHashMap<String, Object> schools = new ConcurrentHashMap<String, Object>();
 	public static ConcurrentHashMap<String, Object> companys = new ConcurrentHashMap<String, Object>();
 
-	public static Set<Request> targetRequests = null;
 	public static Map<String,SearchURL> downloadedSearchLinks = new HashMap<String,SearchURL>();
 	public static Map<String, SearchURL> searchURLs = new HashMap<String, SearchURL>();
 	

@@ -1,4 +1,4 @@
-package com.sample;
+package com.linkedin.spider.processor;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,11 +10,16 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.linkedin.spider.ExcelFilePipeLine;
+import com.linkedin.spider.POIHelper;
+import com.linkedin.spider.SearchURL;
+import com.linkedin.spider.SpiderConstants;
+
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.selenium.SeleniumDownloader;
 import us.codecraft.webmagic.scheduler.PriorityScheduler;
 
-public class main {
+public class LinkedinSpiderMain {
 
 	public static void main(String[] args) {
 
@@ -137,7 +142,7 @@ public class main {
 		}
 		workbook.removeSheetAt(workbook.getSheetIndex("companies"));
 		
-		Spider spider = MySpider.create(new LinkedinPeopleProfilePageProcessor());
+		Spider spider = MyLinkedInSpider.create(new DispatcherPageProcessor());
 		for (String baseURL : SpiderConstants.searchURLs.keySet()) {
 			SearchURL urlObj = SpiderConstants.searchURLs.get(baseURL);
 //			if (!urlObj.isAllDownloaded()) {
@@ -166,7 +171,7 @@ public class main {
 
 
 
-		OutputKeeper keeper = new OutputKeeper();
+		LinkedInOutputKeeper keeper = new LinkedInOutputKeeper();
 		keeper.start();
 		spider.addUrl("https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%22277318%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&origin=FACETED_SEARCH&page=3");
 		// String url =

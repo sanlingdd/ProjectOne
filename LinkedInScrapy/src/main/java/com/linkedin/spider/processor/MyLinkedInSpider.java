@@ -1,12 +1,15 @@
-package com.sample;
+package com.linkedin.spider.processor;
+
+import com.linkedin.spider.SpecialKeeper;
+import com.linkedin.spider.SpiderConstants;
 
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
-public class MySpider extends Spider {
+public class MyLinkedInSpider extends Spider {
 
-	public MySpider(PageProcessor pageProcessor) {
+	public MyLinkedInSpider(PageProcessor pageProcessor) {
 		super(pageProcessor);
 	}
 

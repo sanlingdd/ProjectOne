@@ -1,20 +1,20 @@
-package com.sample;
+package com.linkedin.spider.processor;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.http.HttpHost;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.linkedin.spider.DateString;
+import com.linkedin.spider.Pair;
+import com.linkedin.spider.SearchURL;
+import com.linkedin.spider.SpiderConstants;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;

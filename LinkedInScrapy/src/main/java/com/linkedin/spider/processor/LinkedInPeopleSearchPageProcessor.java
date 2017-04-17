@@ -1,20 +1,18 @@
-package com.sample;
+package com.linkedin.spider.processor;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.HttpHost;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.linkedin.spider.SearchURL;
+import com.linkedin.spider.SpiderConstants;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -46,9 +44,6 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 		// page.getHtml().links();
 		// https://www.linkedin.com/in/jessicajia/#
 
-		if (SpiderConstants.targetRequests == null) {
-			SpiderConstants.targetRequests = page.getTargetRequests();
-		}
 		String baseURL = page.getUrl().toString().substring(0, page.getUrl().toString().lastIndexOf("&"));
 		int last = StringUtils.lastIndexOf(page.getUrl().toString(), "=");
 		int currentPageNumber = Integer.valueOf(page.getUrl().toString().substring(last + 1));

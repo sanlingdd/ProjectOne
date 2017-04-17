@@ -1,4 +1,4 @@
-package com.sample;
+package com.linkedin.spider;
 
 public class DateString {
 	String year;

@@ -1,6 +1,8 @@
-package com.sample;
+package com.linkedin.spider;
 
-public class SpecialKeeper extends OutputKeeper {
+import com.linkedin.spider.processor.LinkedInOutputKeeper;
+
+public class SpecialKeeper extends LinkedInOutputKeeper {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
