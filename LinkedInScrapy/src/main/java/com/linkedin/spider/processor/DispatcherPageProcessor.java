@@ -60,8 +60,8 @@ public class DispatcherPageProcessor implements PageProcessor {
 
 	@Override
 	public void process(Page page) {
-		if (page.getUrl().toString().matches("https://www.linkedin.com/in/[^/]+/")
-				|| page.getUrl().toString().matches("https://www.linkedin.com/in/[^/]+")) {
+		if (page.getUrl().toString().matches("\\w+://www.linkedin.com/in/[^/]+/")
+				|| page.getUrl().toString().matches("\\w+://www.linkedin.com/in/[^/]+")) {
 			profileProcessor.process(page);
 		} else {
 			searchProcessor.process(page);

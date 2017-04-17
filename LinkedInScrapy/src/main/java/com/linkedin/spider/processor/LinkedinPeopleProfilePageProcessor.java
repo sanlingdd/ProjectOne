@@ -27,7 +27,6 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 	public String companyFormatSurfix = "%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&origin=FACETED_SEARCH";
 
 	LinkedinPeopleProfilePageProcessor() {
-
 	}
 
 	public void process(Page page) {

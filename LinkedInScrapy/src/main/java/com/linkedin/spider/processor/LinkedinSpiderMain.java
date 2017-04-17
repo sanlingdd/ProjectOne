@@ -173,7 +173,7 @@ public class LinkedinSpiderMain {
 
 		LinkedInOutputKeeper keeper = new LinkedInOutputKeeper();
 		keeper.start();
-		spider.addUrl("https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%22277318%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&origin=FACETED_SEARCH&page=3");
+		spider.addUrl("http://www.linkedin.com/in/dingxian-wang-8191a435/");
 		// String url =
 		// "https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%2262435%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%5D&facetNetwork=%5B%22F%22%5D&facetPastCompany=%5B%22166244%22%5D&origin=FACETED_SEARCH&page=1";
 		// 从https://github.com/code4craft开始抓
