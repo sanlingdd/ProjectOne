@@ -1,9 +1,12 @@
-package com.linkedin.spider;
+package com.linkedin.spider.processor;
 
 import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.linkedin.spider.SpecialKeeper;
+import com.linkedin.spider.SpiderConstants;
 
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
@@ -27,7 +30,9 @@ public class ExcelFilePipeLine extends FilePersistentBase implements Pipeline {
 				new SpecialKeeper().start();
 			}
 		}
+
 		if (resultItems.get("publicIdentifier") != null && resultItems.get("lastName") != null) {
+			SpiderConstants.allProfileURLsThisExcution.put(resultItems.get("publicIdentifier"), true);
 			SpiderConstants.profilesAccessedVector.addElement((HashMap<String, Object>) resultItems.getAll());
 		}
 	}

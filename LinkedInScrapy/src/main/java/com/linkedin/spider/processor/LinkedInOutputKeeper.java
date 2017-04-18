@@ -52,7 +52,7 @@ public class LinkedInOutputKeeper extends Thread {
 	@Override
 	public void run() {
 		int currentCount = 0;
-		long twoHour = 1000 * 60 * 60 * 3;
+		long twoHour = 1000 * 60 * 60 * 4;
 		while (true) {
 			int tempCount = SpiderConstants.profilesAccessedVector.size();
 			Date now = new Date();
@@ -274,11 +274,14 @@ public class LinkedInOutputKeeper extends Thread {
 
 			start = 1;
 			Sheet sheet4 = this.getSheet(workbook, "thisTimecopy");
-			for (String str : SpiderConstants.allProfileURLsThisExcution) {
+			for (String str : SpiderConstants.allProfileURLsThisExcution.keySet()) {
 				if (!SpiderConstants.downloadLinks.contains(str)) {
 					row = this.getRow(sheet4, start++);
 					Cell cell = this.getCell(row, 0);
 					cell.setCellValue((String) str);
+					
+					Cell cell1 = this.getCell(row, 1);
+					cell1.setCellValue(SpiderConstants.allProfileURLsThisExcution.get(str).toString());
 				}
 			}
 		} catch (Exception e) {

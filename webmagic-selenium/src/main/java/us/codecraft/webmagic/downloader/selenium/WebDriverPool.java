@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *         Date: 13-7-26 <br>
  *         Time: 下午1:41 <br>
  */
-class WebDriverPool {
+public class WebDriverPool {
 	private Logger logger = Logger.getLogger(getClass());
 
 	private final static int DEFAULT_CAPACITY = 5;

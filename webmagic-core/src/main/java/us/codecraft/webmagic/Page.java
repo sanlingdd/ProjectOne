@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Json;
@@ -45,8 +43,6 @@ public class Page {
     private int statusCode;
 
     private boolean needCycleRetry;
-    
-    private boolean isLinkedInLimitStarted;
 
     private Set<Request> targetRequests = new HashSet<Request>();
 
@@ -215,15 +211,6 @@ public class Page {
         this.rawText = rawText;
         return this;
     }
-
-
-	public boolean isLinkedInLimitStarted() {
-		return isLinkedInLimitStarted;
-	}
-
-	public void setLinkedInLimitStarted(boolean isLinkedInLimitStarted) {
-		this.isLinkedInLimitStarted = isLinkedInLimitStarted;
-	}
 
 	@Override
     public String toString() {

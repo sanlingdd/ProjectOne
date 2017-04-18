@@ -91,8 +91,8 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 					String format = "https://www.linkedin.com/in/%s/";
 					String newURL = String.format(format, publicIdentifier);
 					if (!SpiderConstants.downloadLinks.contains(newURL)) {
-						page.addTargetRequest(newURL);
-						SpiderConstants.allProfileURLsThisExcution.add(newURL);
+						// page.addTargetRequest(newURL);
+						SpiderConstants.allProfileURLsThisExcution.put(newURL, false);
 					}
 				}
 			}
@@ -108,14 +108,20 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 			url.setCurrentPageNumber(currentPageNumber + 1);
 			if (!SpiderConstants.downloadLinks.contains(url.getTargetURL())) {
 				page.addTargetRequest(url.getTargetURL());
-				SpiderConstants.allProfileURLsThisExcution.add(url.getTargetURL());
+				// SpiderConstants.allProfileURLsThisExcution.add(url.getTargetURL());
 			}
-		} else if (SpiderConstants.stop) {
-			url.setAllDownloaded(true);
 		} else if (total <= 10) {
 			url.setAllDownloaded(true);
 		} else if (currentPageNumber != 100) {
 			url.setCurrentPageNumber(currentPageNumber + 1);
+		}
+
+		if (SpiderConstants.stop) {
+			SpiderConstants.allProfileURLsThisExcution.keySet().forEach((profile) -> {
+				if (!SpiderConstants.allProfileURLsThisExcution.get(profile)) {
+					page.addTargetRequest(profile);
+				}
+			});
 		}
 		logger.info("dowloaded profile number:" + SpiderConstants.profilesAccessedVector.size()
 				+ " to be downloaded number: " + SpiderConstants.downloadLinks.size());

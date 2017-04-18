@@ -113,7 +113,7 @@ public class SeleniumDownloaderChrome implements Downloader, Closeable {
 			WebElement webFirstCheckbookElement = null;
 			try {
 				webFirstCheckbookElement = webDriver.findElement(By.xpath("//input[@id='sf-facetNetwork-F']"));
-				page.setLinkedInLimitStarted(webFirstCheckbookElement.isSelected());
+//				page.setLinkedInLimitStarted(webFirstCheckbookElement.isSelected());
 			} catch (Exception e) {
 				logger.info(e.getMessage());
 			}

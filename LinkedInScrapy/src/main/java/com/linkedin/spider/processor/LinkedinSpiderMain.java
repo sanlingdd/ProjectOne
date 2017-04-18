@@ -10,7 +10,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.linkedin.spider.ExcelFilePipeLine;
 import com.linkedin.spider.POIHelper;
 import com.linkedin.spider.SearchURL;
 import com.linkedin.spider.SpiderConstants;
@@ -192,7 +191,7 @@ public class LinkedinSpiderMain {
 		// 设置Scheduler，使用Redis来管理URL队列
 
 		String chromeDriverPath = "/Users/i071944/chromedriver";
-		SeleniumDownloader seleniumDownloader = new SeleniumDownloader(chromeDriverPath);
+		LinkedSeleniumDownloader seleniumDownloader = new LinkedSeleniumDownloader(chromeDriverPath);
 		
 		spider.setDownloader(seleniumDownloader);
 		spider.setScheduler(new PriorityScheduler())

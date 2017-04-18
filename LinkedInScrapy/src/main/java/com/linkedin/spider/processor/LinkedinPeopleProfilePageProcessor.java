@@ -6,8 +6,12 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import org.assertj.core.util.Arrays;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,8 +21,11 @@ import com.linkedin.spider.SearchURL;
 import com.linkedin.spider.SpiderConstants;
 
 import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.selector.PlainText;
+import us.codecraft.webmagic.selector.Selectable;
 
 public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 
@@ -185,7 +192,6 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 
 		// first name
 		page.putField("firstName", profileElementObj.getString("firstName"));
-
 		page.putField("maidenName", profileElementObj.getString("maidenName"));
 
 		// last name
@@ -207,6 +213,189 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		this.getWorkingExperience(page, included);
 		// get the education experience
 		getEducationExperience(page, included);
+		// get honors
+		getHonors(page);
+
+		// get Publication
+		getPublications(page);
+
+		// get Language
+		getLanguage(page);
+
+		// get patent
+		getPatent(page);
+
+		// get skills
+		getSkills(page);
+
+		LinkedinPage lpage = (LinkedinPage) page;
+		lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
+	}
+
+	private String getItemText(Selectable select, String code) {
+		try {
+			List<String> texts = select.codes(code).all();
+			if (!Arrays.isNullOrEmpty(texts.toArray())) {
+				return texts.get(0);
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private String getItemLinks(Selectable select, String code) {
+		try {
+			List<String> texts = select.codes(code).links().all();
+			if (!Arrays.isNullOrEmpty(texts.toArray())) {
+				return texts.get(0);
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private void getSkills(Page page) {
+		Selectable selectionArea = page.getHtml().codes(
+				"//section[contains(@class,'pv-profile-section artdeco-container-card pv-featured-skills-section')]");
+		if (selectionArea == null) {
+			return;
+		}
+		List<Selectable> selects = selectionArea.codes("//li").nodes();
+		LinkedinPage lpage = (LinkedinPage) page;
+		WebDriver webDriver = lpage.getWebDriver();
+
+		for (Selectable select : selects) {
+			String skillName = this.getItemText(select,
+					"//span[contains(@class,'pv-skill-entity__skill-name')]/text()");
+			String skillEndorseCount = this.getItemText(select,
+					"//span[contains(@class,'pv-skill-entity__endorsement-count')]/text()");
+
+			if (skillName == null) {
+				continue;
+			}
+			String name = skillName.split("\\W")[0];
+			try {
+				WebElement skillElement = null;
+				skillElement = webDriver.findElement(By.xpath(
+						"//span[contains(text()," + name + ") and contains(@class,'pv-skill-entity__skill-name')]"));
+
+				skillElement.click();
+				Page newPage = new Page();
+				WebElement webElement = webDriver.findElement(By.xpath("//div[@id='li-modal-container']"));
+				String content = webElement.getAttribute("outerHTML");
+				String text = webElement.getText();
+				newPage.setRawText(content);
+				newPage.setUrl(new PlainText(webDriver.getCurrentUrl()));
+				newPage.setRequest(new Request(webDriver.getCurrentUrl()));
+				List<String> links = newPage.getHtml().codes("//li[contains(@class,'pv-endorsement-entity')]").links()
+						.all();
+
+				WebElement exitPopupElement = null;
+				exitPopupElement = webDriver.findElement(By.xpath("//button[contains(@data-control-name,'cancel')]"));
+				exitPopupElement.click();
+			} catch (Exception e) {
+				logger.info(e.getMessage());
+			}
+
+		}
+
+	}
+
+	private void getPatent(Page page) {
+		Selectable selectionArea = page.getHtml().codes(
+				"//section[contains(@class,'pv-profile-section accordion-panel pv-accomplishments-block patents')]");
+		if (selectionArea == null) {
+			return;
+		}
+		List<Selectable> selects = selectionArea.codes("//li").nodes();
+		for (Selectable select : selects) {
+			String patentTitle = this.getItemText(select,
+					"//h4[contains(@class,'pv-accomplishment-entity__title')]/text()");
+			String patentDescription = this.getItemText(select,
+					"//p[contains(@class,'pv-accomplishment-entity__description')]/text()");
+			String honorIssues = this.getItemText(select,
+					"//p[contains(@class,'pv-accomplishment-entity__issuer')]/text()");
+		}
+	}
+
+	private void getLanguage(Page page) {
+		Selectable selectionArea = page.getHtml().codes(
+				"//section[contains(@class,'pv-profile-section accordion-panel pv-accomplishments-block languages languages')]");
+		if (selectionArea == null) {
+			return;
+		}
+		List<Selectable> selects = selectionArea.codes("//li").nodes();
+		for (Selectable select : selects) {
+			String languageTitle = this.getItemText(select,
+					"//h4[contains(@class,'pv-accomplishment-entity__title')]/text()");
+			String languageProficiency = this.getItemText(select,
+					"//p[contains(@class,'pv-accomplishment-entity__proficiency')]/text()");
+		}
+	}
+
+	private void getHonors(Page page) {
+		Selectable selectionArea = page.getHtml().codes(
+				"//section[contains(@class,'pv-profile-section accordion-panel pv-accomplishments-block honors')]");
+		if (selectionArea == null) {
+			return;
+		}
+		List<Selectable> selects = selectionArea.codes("//li").nodes();
+		for (Selectable select : selects) {
+			String honorTitle = this.getItemText(select,
+					"//h4[contains(@class,'pv-accomplishment-entity__title')]/text()");
+			String honorDescription = this.getItemText(select,
+					"//p[contains(@class,'pv-accomplishment-entity__description')]/text()");
+			String honorDate = this.getItemText(select,
+					"//p[contains(@class,'pv-accomplishment-entity__date')]/text()");
+			String honorIssues = this.getItemText(select,
+					"//p[contains(@class,'pv-accomplishment-entity__issuer')]/text()");
+		}
+	}
+
+	private void getPublications(Page page) {
+
+		Selectable selectionArea = page.getHtml().codes(
+				"//section[contains(@class,'pv-profile-section accordion-panel pv-accomplishments-block publications')]");
+		if (selectionArea == null) {
+			return;
+		}
+		List<Selectable> selects = selectionArea.codes("//li").nodes();
+
+		for (Selectable select : selects) {
+			String publicationTitle = this.getItemText(select,
+					"//h4[contains(@class,'pv-accomplishment-entity__title')]/text()");
+			String publicationDescription = this.getItemText(select,
+					"//p[contains(@class,'pv-accomplishment-entity__description')]/text()");
+			String publicationDate = this.getItemText(select,
+					"//p[contains(@class,'pv-accomplishment-entity__date')]/text()");
+			String publicationPublishers = this.getItemText(select,
+					"//p[contains(@class,'pv-accomplishment-entity__publisher')]/text()");
+			String externalURL = getItemLinks(select,
+					"//a[contains(@class,'pv-accomplishment-entity__external-source')]");
+
+			// WebElement contributorElement = null;
+			// try {
+			// contributorElement = webDriver
+			// .findElement(By.xpath("//a[contains(@data-control-name,'publication_contributors')]"));
+			// contributorElement.click();
+			// Page newPage = new Page();
+			// WebElement webElement = webDriver.findElement(By.xpath("/html"));
+			// String content = webElement.getAttribute("outerHTML");
+			// newPage.setRawText(content);
+			// newPage.setUrl(new PlainText(webDriver.getCurrentUrl()));
+			// newPage.setRequest(new Request(webDriver.getCurrentUrl()));
+			// List<String> links =
+			// newPage.getHtml().codes("//ul[contains(@class,'entity-list')]").links()
+			// .all();
+			// webDriver.navigate().back();
+			// } catch (Exception e) {
+			// logger.info(e.getMessage());
+			// }
+		}
 
 	}
 
@@ -247,18 +436,16 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 					// && (experienceNumber == 1 ||
 					// isValuableCompany(includeObj.getString("companyName"),
 					// includeObj.getString("title")));
-					if (!SpiderConstants.stop) {
-						String baseURL = this.companyFormatPrefix + companyLinkedInID + this.companyFormatSurfix;
-						if (SpiderConstants.searchURLs.get(baseURL) == null) {
-							SearchURL url = new SearchURL();
-							url.setBaseURL(baseURL);
-							url.setCurrentPageNumber(1);
-							url.setAllDownloaded(false);
-							SpiderConstants.searchURLs.put(baseURL, url);
-							if (!SpiderConstants.downloadLinks.contains(url.getTargetURL())) {
-								page.addTargetRequest(url.getTargetURL());
-								SpiderConstants.allProfileURLsThisExcution.add(url.getTargetURL());
-							}
+					String baseURL = this.companyFormatPrefix + companyLinkedInID + this.companyFormatSurfix;
+					if (SpiderConstants.searchURLs.get(baseURL) == null) {
+						SearchURL url = new SearchURL();
+						url.setBaseURL(baseURL);
+						url.setCurrentPageNumber(1);
+						url.setAllDownloaded(false);
+						SpiderConstants.searchURLs.put(baseURL, url);
+						if (!SpiderConstants.downloadLinks.contains(url.getTargetURL())) {
+							page.addTargetRequest(url.getTargetURL());
+							// SpiderConstants.allProfileURLsThisExcution.put(url.getTargetURL(),false);
 						}
 					}
 				}

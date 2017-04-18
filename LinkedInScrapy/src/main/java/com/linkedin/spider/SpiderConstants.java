@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-import us.codecraft.webmagic.Request;
-
 public class SpiderConstants {
 	public static Vector<HashMap<String, Object>> profilesAccessedVector = new Vector<HashMap<String, Object>>();
 	public static ConcurrentHashMap<String, Object> schools = new ConcurrentHashMap<String, Object>();
@@ -22,10 +20,8 @@ public class SpiderConstants {
 
 	public static boolean stop = false;
 	public static boolean terminate = false;
-	
 	public static Date startDate = new Date();
 	
-	public static Set<String> allProfileURLsThisExcution = new HashSet<String>();
-	
+	public static Map<String,Boolean> allProfileURLsThisExcution = new HashMap<String,Boolean>();
 	public static Set<String> downloadLinks = new HashSet<String>();
 }
