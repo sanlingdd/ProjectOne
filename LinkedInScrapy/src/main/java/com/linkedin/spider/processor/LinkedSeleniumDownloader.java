@@ -1,27 +1,25 @@
 package com.linkedin.spider.processor;
 
 import java.io.Closeable;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.selenium.WebDriverPool;
-import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
-import us.codecraft.webmagic.utils.UrlUtils;
 
 /**
  * 使用Selenium调用浏览器进行渲染�?�目前仅支持chrome�?<br>
@@ -87,6 +85,7 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 		}
 		logger.info("downloading page " + request.getUrl());
 		webDriver.get(request.getUrl());
+		this.sleep(1000);
 		webDriver.manage().window().maximize();
 		
 		WebDriver.Options manage = webDriver.manage();
@@ -115,6 +114,9 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 			while (true) {
 				WebElement moreSkills = null;
 				try {
+					
+					new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class,'pv-profile-section__card-action-bar artdeco-container-card-action-bar pv-skills-section__additional-skills')]")));
+					
 					moreSkills = webDriver.findElement(By.xpath(
 							"//button[contains(@class,'pv-profile-section__card-action-bar artdeco-container-card-action-bar pv-skills-section__additional-skills')]"));
 					moreSkills.click();
@@ -180,11 +182,16 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 	private void scrollThePage(WebDriver webDriver)
 	{
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;
+		js.executeScript("window.scrollTo(0, (document.body.scrollHeight)/5)");
+		sleep(sleepTime);
+		
 		js.executeScript("window.scrollTo(0, (document.body.scrollHeight)/4)");
 		sleep(sleepTime);
 		
 		js.executeScript("window.scrollTo(0, (document.body.scrollHeight)/3)");
-
+		sleep(sleepTime);
+		
+		js.executeScript("window.scrollTo(0, (document.body.scrollHeight)/2)");
 		sleep(sleepTime);
 
 		js.executeScript("window.scrollTo(0, 2*document.body.scrollHeight/3)");

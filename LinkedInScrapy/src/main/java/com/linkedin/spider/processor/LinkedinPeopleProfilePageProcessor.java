@@ -1,17 +1,28 @@
 package com.linkedin.spider.processor;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.io.FileUtils;
 import org.assertj.core.util.Arrays;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -281,28 +292,83 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 			try {
 				WebElement skillElement = null;
 				skillElement = webDriver.findElement(By.xpath(
-						"//span[contains(text()," + name + ") and contains(@class,'pv-skill-entity__skill-name')]"));
-
+						// "//span[contains(text(),'SQL') and
+						// contains(@class,'pv-skill-entity__skill-name')]"));
+						"//span[contains(text(),'" + name + "') and contains(@class,'pv-skill-entity__skill-name')]"));
 				skillElement.click();
+				this.sleep(500);
+				//print(webDriver);
 				Page newPage = new Page();
-				WebElement webElement = webDriver.findElement(By.xpath("//div[@id='li-modal-container']"));
+				WebElement webElement = null;
+				List<WebElement> webElements = webDriver.findElements(By.xpath("//artdeco-modal[@role='dialog']"));
+				webElement = webElements.get(webElements.size() - 1);
 				String content = webElement.getAttribute("outerHTML");
-				String text = webElement.getText();
 				newPage.setRawText(content);
 				newPage.setUrl(new PlainText(webDriver.getCurrentUrl()));
 				newPage.setRequest(new Request(webDriver.getCurrentUrl()));
 				List<String> links = newPage.getHtml().codes("//li[contains(@class,'pv-endorsement-entity')]").links()
 						.all();
-
+//				webElement.findElement(By.xpath("//a[contains(@class,'pv-endorsement-entity__link')]")).isDisplayed();
 				WebElement exitPopupElement = null;
-				exitPopupElement = webDriver.findElement(By.xpath("//button[contains(@data-control-name,'cancel')]"));
-				exitPopupElement.click();
+				// exitPopupElements =
+				// webElement.findElement(By.xpath("//button[contains(@class,'artdeco-dismiss')]"));
+				// ((JavascriptExecutor)webDriver).executeScript("window.document.getElementByClassName('artdeco-dismiss').click()");
+				// new WebDriverWait(webDriver,
+				// 30).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class,'artdeco-dismiss')]")));
+				List<WebElement> exitPopupElements = webElement.findElements(By.xpath("//button[contains(@class,'artdeco-dismiss')]"));
+				exitPopupElement = exitPopupElements.get(exitPopupElements.size() - 1);
+				((JavascriptExecutor)webDriver).executeScript("arguments[0].click();", exitPopupElement);
+				//exitPopupElements.getAttribute("outerHTML");exitPopupElements.getCssValue("visibility");
+				// new
+				// Actions(webDriver).moveToElement(exitPopupElements).click().perform();
+				// exitPopupElements.click();
+				 //arguments[0].style.height='auto'; arguments[0].style.visibility='visible';takescreenShot(webDriver)
+				// print(webDriver);((JavascriptExecutor)driver).executeScript("arguments[0].checked = true;", inputElement);
+				//takescreenShot(webDriver);
 			} catch (Exception e) {
 				logger.info(e.getMessage());
+				return;
 			}
 
 		}
 
+	}
+
+	public void takescreenShot(WebDriver webDriver) {
+		try {
+			TakesScreenshot ts = (TakesScreenshot) webDriver;
+			File source = ts.getScreenshotAs(OutputType.FILE);
+			FileUtils.copyFile(source, new File("C:\\Selenium_Shubham\\"+UUID.randomUUID().toString()+".jpg"));
+
+			System.out.println("Screenshot is printed");
+		} catch (Exception e) {
+			System.out.println("Exception is handled");
+			e.getMessage();
+		}
+	}
+
+	private void print(WebDriver webDriver) {
+		WebElement webElement = webDriver.findElement(By.xpath("/html"));
+		String content = webElement.getAttribute("outerHTML");
+		PrintWriter printWriter = null;
+		try {
+			printWriter = new PrintWriter(
+					new FileWriter("C:/data/webmagic/www.linkedin.com/" + UUID.randomUUID().toString() + ".html"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		printWriter.write(content);
+		printWriter.flush();
+		printWriter.close();
+	}
+
+	private void sleep(int timeOut) {
+		try {
+			Thread.sleep(timeOut);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void getPatent(Page page) {
