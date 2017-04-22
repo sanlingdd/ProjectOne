@@ -54,6 +54,8 @@
         <module>webmagic-selenium</module>
         <module>webmagic-saxon</module>
         <module>webmagic-samples</module>
+        <module>LinkedInScrapy</module>
+        <module>JSON</module>
     </modules>
 
     <dependencyManagement>

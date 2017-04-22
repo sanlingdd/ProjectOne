@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.io.FileUtils;
 import org.assertj.core.util.Arrays;
 import org.json.JSONArray;
@@ -22,7 +21,6 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
