@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -45,7 +44,7 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 		// https://www.linkedin.com/in/jessicajia/#
 
 		String baseURL = page.getUrl().toString().substring(0, page.getUrl().toString().lastIndexOf("&"));
-		int last = StringUtils.lastIndexOf(page.getUrl().toString(), "=");
+		int last = org.apache.commons.lang3.StringUtils.lastIndexOf(page.getUrl().toString(), "=");
 		int currentPageNumber = Integer.valueOf(page.getUrl().toString().substring(last + 1));
 		if (SpiderConstants.searchURLs.get(baseURL) == null) {
 			SearchURL url = new SearchURL();
