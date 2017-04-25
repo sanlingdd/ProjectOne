@@ -1,12 +1,23 @@
 package com.linkedin.spider.processor;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,8 +55,13 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 		// https://www.linkedin.com/in/jessicajia/#
 
 		String baseURL = page.getUrl().toString().substring(0, page.getUrl().toString().lastIndexOf("&"));
-		int last = org.apache.commons.lang3.StringUtils.lastIndexOf(page.getUrl().toString(), "=");
-		int currentPageNumber = Integer.valueOf(page.getUrl().toString().substring(last + 1));
+		int last = org.apache.commons.lang3.StringUtils.lastIndexOf(page.getUrl().toString(), "page=");
+		int currentPageNumber = 0;
+		if (last != -1) {
+			currentPageNumber = Integer.valueOf(page.getUrl().toString().substring(last + 5));
+		} else {
+			currentPageNumber = 1;
+		}
 		if (SpiderConstants.searchURLs.get(baseURL) == null) {
 			SearchURL url = new SearchURL();
 			url.setBaseURL(baseURL);
@@ -90,7 +106,7 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 					String format = "https://www.linkedin.com/in/%s/";
 					String newURL = String.format(format, publicIdentifier);
 					if (!SpiderConstants.downloadLinks.contains(newURL)) {
-						// page.addTargetRequest(newURL);
+						//page.addTargetRequest(newURL);
 						SpiderConstants.allProfileURLsThisExcution.put(newURL, false);
 					}
 				}
@@ -124,7 +140,40 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 		}
 		logger.info("dowloaded profile number:" + SpiderConstants.profilesAccessedVector.size()
 				+ " to be downloaded number: " + SpiderConstants.downloadLinks.size());
+		
+		
+		//this.print(((LinkedinPage)page).getWebDriver());
+		//this.takescreenShot(((LinkedinPage)page).getWebDriver());
 
+	}
+	
+	private void print(WebDriver webDriver) {
+		WebElement webElement = webDriver.findElement(By.xpath("/html"));
+		String content = webElement.getAttribute("outerHTML");
+		PrintWriter printWriter = null;
+		try {
+			printWriter = new PrintWriter(
+					new FileWriter("C:/data/webmagic/www.linkedin.com/" + UUID.randomUUID().toString() + ".html"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		printWriter.write(content);
+		printWriter.flush();
+		printWriter.close();
+	}
+	
+	public void takescreenShot(WebDriver webDriver) {
+		try {
+			TakesScreenshot ts = (TakesScreenshot) webDriver;
+			File source = ts.getScreenshotAs(OutputType.FILE);
+			FileUtils.copyFile(source, new File("C:\\Selenium_Shubham\\"+UUID.randomUUID().toString()+".jpg"));
+
+			System.out.println("Screenshot is printed");
+		} catch (Exception e) {
+			System.out.println("Exception is handled");
+			e.getMessage();
+		}
 	}
 
 	private boolean isTargetProfile(Set<String> valuableNames, String firstName, String lastName) {
@@ -170,8 +219,8 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 				if (dataObj != null) {
 					JSONObject metadataObj = (JSONObject) dataObj.get("metadata");
 					if (metadataObj != null) {
-						String id = metadataObj.getString("origin");
-						if ("FACETED_SEARCH".equals(id)) {
+						if((JSONArray) jsonObj.get("included")!=null)
+						{
 							return (JSONArray) jsonObj.get("included");
 						}
 					}

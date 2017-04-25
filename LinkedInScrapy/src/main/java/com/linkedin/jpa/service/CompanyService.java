@@ -9,7 +9,7 @@ public interface CompanyService {
 
 	Company getById(Long id);
 
-	Company saveOrUpdate(Company product);
+	Company saveOrUpdate(Company company);
 
 	void delete(Long id);
 }

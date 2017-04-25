@@ -73,6 +73,24 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		this.getProfile(page, resultArray);
 		// get contact info
 		this.getContactInfo(page, resultArray);
+
+		// get honors
+		getHonors(page);
+
+		// get Publication
+		getPublications(page);
+
+		// get Language
+		getLanguage(page);
+
+		// get patent
+		getPatent(page);
+
+		// get skills
+		getSkills(page);
+
+		LinkedinPage lpage = (LinkedinPage) page;
+		lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
 	}
 
 	private void getContactInfo(Page page, JSONArray jsonList) {
@@ -222,23 +240,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		this.getWorkingExperience(page, included);
 		// get the education experience
 		getEducationExperience(page, included);
-		// get honors
-		getHonors(page);
 
-		// get Publication
-		getPublications(page);
-
-		// get Language
-		getLanguage(page);
-
-		// get patent
-		getPatent(page);
-
-		// get skills
-		getSkills(page);
-
-		LinkedinPage lpage = (LinkedinPage) page;
-		lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
 	}
 
 	private String getItemText(Selectable select, String code) {
@@ -268,66 +270,75 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 	}
 
 	private void getSkills(Page page) {
-		Selectable selectionArea = page.getHtml().codes(
-				"//section[contains(@class,'pv-profile-section artdeco-container-card pv-featured-skills-section')]");
-		if (selectionArea == null) {
-			return;
-		}
-		List<Selectable> selects = selectionArea.codes("//li").nodes();
-		LinkedinPage lpage = (LinkedinPage) page;
-		WebDriver webDriver = lpage.getWebDriver();
-
-		for (Selectable select : selects) {
-			String skillName = this.getItemText(select,
-					"//span[contains(@class,'pv-skill-entity__skill-name')]/text()");
-			String skillEndorseCount = this.getItemText(select,
-					"//span[contains(@class,'pv-skill-entity__endorsement-count')]/text()");
-
-			if (skillName == null) {
-				continue;
-			}
-			String name = skillName.split("\\W")[0];
-			try {
-				WebElement skillElement = null;
-				skillElement = webDriver.findElement(By.xpath(
-						// "//span[contains(text(),'SQL') and
-						// contains(@class,'pv-skill-entity__skill-name')]"));
-						"//span[contains(text(),'" + name + "') and contains(@class,'pv-skill-entity__skill-name')]"));
-				skillElement.click();
-				this.sleep(500);
-				//print(webDriver);
-				Page newPage = new Page();
-				WebElement webElement = null;
-				List<WebElement> webElements = webDriver.findElements(By.xpath("//artdeco-modal[@role='dialog']"));
-				webElement = webElements.get(webElements.size() - 1);
-				String content = webElement.getAttribute("outerHTML");
-				newPage.setRawText(content);
-				newPage.setUrl(new PlainText(webDriver.getCurrentUrl()));
-				newPage.setRequest(new Request(webDriver.getCurrentUrl()));
-				List<String> links = newPage.getHtml().codes("//li[contains(@class,'pv-endorsement-entity')]").links()
-						.all();
-//				webElement.findElement(By.xpath("//a[contains(@class,'pv-endorsement-entity__link')]")).isDisplayed();
-				WebElement exitPopupElement = null;
-				// exitPopupElements =
-				// webElement.findElement(By.xpath("//button[contains(@class,'artdeco-dismiss')]"));
-				// ((JavascriptExecutor)webDriver).executeScript("window.document.getElementByClassName('artdeco-dismiss').click()");
-				// new WebDriverWait(webDriver,
-				// 30).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class,'artdeco-dismiss')]")));
-				List<WebElement> exitPopupElements = webElement.findElements(By.xpath("//button[contains(@class,'artdeco-dismiss')]"));
-				exitPopupElement = exitPopupElements.get(exitPopupElements.size() - 1);
-				((JavascriptExecutor)webDriver).executeScript("arguments[0].click();", exitPopupElement);
-				//exitPopupElements.getAttribute("outerHTML");exitPopupElements.getCssValue("visibility");
-				// new
-				// Actions(webDriver).moveToElement(exitPopupElements).click().perform();
-				// exitPopupElements.click();
-				 //arguments[0].style.height='auto'; arguments[0].style.visibility='visible';takescreenShot(webDriver)
-				// print(webDriver);((JavascriptExecutor)driver).executeScript("arguments[0].checked = true;", inputElement);
-				//takescreenShot(webDriver);
-			} catch (Exception e) {
-				logger.info(e.getMessage());
+		try {
+			Selectable selectionArea = page.getHtml().codes(
+					"//section[contains(@class,'pv-profile-section artdeco-container-card pv-featured-skills-section')]");
+			if (selectionArea == null) {
 				return;
 			}
+			List<Selectable> selects = selectionArea.codes("//li").nodes();
+			LinkedinPage lpage = (LinkedinPage) page;
+			WebDriver webDriver = lpage.getWebDriver();
 
+			for (Selectable select : selects) {
+				String skillName = this.getItemText(select,
+						"//span[contains(@class,'pv-skill-entity__skill-name')]/text()");
+				String skillEndorseCount = this.getItemText(select,
+						"//span[contains(@class,'pv-skill-entity__endorsement-count')]/text()");
+
+				if (skillName == null) {
+					continue;
+				}
+				String name = skillName.split("\\W")[0];
+				try {
+					WebElement skillElement = null;
+					skillElement = webDriver.findElement(By.xpath(
+							// "//span[contains(text(),'SQL') and
+							// contains(@class,'pv-skill-entity__skill-name')]"));
+							"//span[contains(text(),'" + name
+									+ "') and contains(@class,'pv-skill-entity__skill-name')]"));
+					skillElement.click();
+					this.sleep(500);
+					// print(webDriver);
+					Page newPage = new Page();
+					WebElement webElement = null;
+					List<WebElement> webElements = webDriver.findElements(By.xpath("//artdeco-modal[@role='dialog']"));
+					webElement = webElements.get(webElements.size() - 1);
+					String content = webElement.getAttribute("outerHTML");
+					newPage.setRawText(content);
+					newPage.setUrl(new PlainText(webDriver.getCurrentUrl()));
+					newPage.setRequest(new Request(webDriver.getCurrentUrl()));
+					List<String> links = newPage.getHtml().codes("//li[contains(@class,'pv-endorsement-entity')]")
+							.links().all();
+					// webElement.findElement(By.xpath("//a[contains(@class,'pv-endorsement-entity__link')]")).isDisplayed();
+					WebElement exitPopupElement = null;
+					// exitPopupElements =
+					// webElement.findElement(By.xpath("//button[contains(@class,'artdeco-dismiss')]"));
+					// ((JavascriptExecutor)webDriver).executeScript("window.document.getElementByClassName('artdeco-dismiss').click()");
+					// new WebDriverWait(webDriver,
+					// 30).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class,'artdeco-dismiss')]")));
+					List<WebElement> exitPopupElements = webElement
+							.findElements(By.xpath("//button[contains(@class,'artdeco-dismiss')]"));
+					exitPopupElement = exitPopupElements.get(exitPopupElements.size() - 1);
+					((JavascriptExecutor) webDriver).executeScript("arguments[0].click();", exitPopupElement);
+					// exitPopupElements.getAttribute("outerHTML");exitPopupElements.getCssValue("visibility");
+					// new
+					// Actions(webDriver).moveToElement(exitPopupElements).click().perform();
+					// exitPopupElements.click();
+					// arguments[0].style.height='auto';
+					// arguments[0].style.visibility='visible';takescreenShot(webDriver)
+					// print(webDriver);((JavascriptExecutor)driver).executeScript("arguments[0].checked
+					// = true;", inputElement);
+					// takescreenShot(webDriver);
+				} catch (Exception e) {
+					logger.info(e.getMessage());
+					return;
+				}
+
+			}
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return;
 		}
 
 	}
@@ -336,7 +347,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		try {
 			TakesScreenshot ts = (TakesScreenshot) webDriver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(source, new File("C:\\Selenium_Shubham\\"+UUID.randomUUID().toString()+".jpg"));
+			FileUtils.copyFile(source, new File("C:\\Selenium_Shubham\\" + UUID.randomUUID().toString() + ".jpg"));
 
 			System.out.println("Screenshot is printed");
 		} catch (Exception e) {
@@ -501,17 +512,20 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 					// isValuableCompany(includeObj.getString("companyName"),
 					// includeObj.getString("title")));
 					String baseURL = this.companyFormatPrefix + companyLinkedInID + this.companyFormatSurfix;
-					if (SpiderConstants.searchURLs.get(baseURL) == null) {
-						SearchURL url = new SearchURL();
-						url.setBaseURL(baseURL);
-						url.setCurrentPageNumber(1);
-						url.setAllDownloaded(false);
-						SpiderConstants.searchURLs.put(baseURL, url);
-						if (!SpiderConstants.downloadLinks.contains(url.getTargetURL())) {
-							page.addTargetRequest(url.getTargetURL());
-							// SpiderConstants.allProfileURLsThisExcution.put(url.getTargetURL(),false);
-						}
-					}
+					// if (SpiderConstants.searchURLs.get(baseURL) == null) {
+					// SearchURL url = new SearchURL();
+					// url.setBaseURL(baseURL);
+					// url.setCurrentPageNumber(1);
+					// url.setAllDownloaded(false);
+					// SpiderConstants.searchURLs.put(baseURL, url);
+					// if
+					// (!SpiderConstants.downloadLinks.contains(url.getTargetURL()))
+					// {
+					// page.addTargetRequest(url.getTargetURL());
+					// //
+					// SpiderConstants.allProfileURLsThisExcution.put(url.getTargetURL(),false);
+					// }
+					// }
 				}
 			}
 		}

@@ -1,14 +1,22 @@
 package com.linkedin.spider.processor;
 
 import java.io.Closeable;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
+import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -22,8 +30,8 @@ import us.codecraft.webmagic.downloader.selenium.WebDriverPool;
 import us.codecraft.webmagic.selector.PlainText;
 
 /**
- * 使用Selenium调用浏览器进行渲染�?�目前仅支持chrome�?<br>
- * �?要下载Selenium driver支持�?<br>
+ * 使用Selenium调用浏览器进行渲染�?�目前仅支持chrome�?<br>
+ * �?要下载Selenium driver支持�?<br>
  *
  * @author code4crafter@gmail.com <br>
  *         Date: 13-7-26 <br>
@@ -85,9 +93,6 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 		}
 		logger.info("downloading page " + request.getUrl());
 		webDriver.get(request.getUrl());
-		this.sleep(1000);
-		webDriver.manage().window().maximize();
-		
 		WebDriver.Options manage = webDriver.manage();
 		Site site = task.getSite();
 		if (site.getCookies() != null) {
@@ -97,11 +102,9 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 			}
 		}
 		
-		this.scrollThePage(webDriver);
-
 
 		LinkedinPage page = new LinkedinPage();
-		if (!request.getUrl().contains("facetNetwork") && request.getUrl().contains("SEARCH")) {
+		if (!request.getUrl().contains("facetNetwork") && StringUtils.containsIgnoreCase(request.getUrl(),"search")) {
 			WebElement webFirstCheckbookElement = null;
 			try {
 				webFirstCheckbookElement = webDriver.findElement(By.xpath("//input[@id='sf-facetNetwork-F']"));
@@ -110,20 +113,25 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 				logger.info(e.getMessage());
 			}
 		} else {
+			
+			this.sleep(1000);
+			webDriver.manage().window().maximize();
+			this.scrollThePage(webDriver);
+
 
 			while (true) {
 				WebElement moreSkills = null;
 				try {
-					
-					new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class,'pv-profile-section__card-action-bar artdeco-container-card-action-bar pv-skills-section__additional-skills')]")));
-					
+					//new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class,'pv-profile-section__card-action-bar artdeco-container-card-action-bar pv-skills-section__additional-skills')]")));					
 					moreSkills = webDriver.findElement(By.xpath(
 							"//button[contains(@class,'pv-profile-section__card-action-bar artdeco-container-card-action-bar pv-skills-section__additional-skills')]"));
 					moreSkills.click();
 					break;
 				} catch (Exception e) {
-					webDriver.navigate().refresh();
-					this.scrollThePage(webDriver);
+					break;
+//					this.takescreenShot(webDriver);
+//					webDriver.navigate().refresh();
+//					this.scrollThePage(webDriver);
 				}
 
 			}
@@ -168,7 +176,40 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 		page.setUrl(new PlainText(request.getUrl()));
 		page.setRequest(request);
 		// webDriverPool.returnToPool(webDriver);
+		//this.print(((LinkedinPage)page).getWebDriver());
+		//this.takescreenShot(((LinkedinPage)page).getWebDriver());
+
 		return page;
+	}
+
+	private void print(WebDriver webDriver) {
+		WebElement webElement = webDriver.findElement(By.xpath("/html"));
+		String content = webElement.getAttribute("outerHTML");
+		PrintWriter printWriter = null;
+		try {
+			printWriter = new PrintWriter(
+					new FileWriter("C:/data/webmagic/www.linkedin.com/" + UUID.randomUUID().toString() + ".html"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		printWriter.write(content);
+		printWriter.flush();
+		printWriter.close();
+	}
+
+	
+	public void takescreenShot(WebDriver webDriver) {
+		try {
+			TakesScreenshot ts = (TakesScreenshot) webDriver;
+			File source = ts.getScreenshotAs(OutputType.FILE);
+			FileUtils.copyFile(source, new File("C:\\Selenium_Shubham\\"+UUID.randomUUID().toString()+".jpg"));
+
+			System.out.println("Screenshot is printed");
+		} catch (Exception e) {
+			System.out.println("Exception is handled");
+			e.getMessage();
+		}
 	}
 
 	private void checkInit() {

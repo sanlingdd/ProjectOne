@@ -5,12 +5,26 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.joda.time.DateTime;
 
 @Entity
+@Table
 public class UserEducation {
 
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
 	private UserProfile profile;
@@ -31,9 +45,12 @@ public class UserEducation {
 	private String from;
 	@Column(nullable = false)
 	private String to;
-
+	@Column
 	@Enumerated(EnumType.STRING)
 	private Degree degree;
+	
+	@Column
+	private DateTime updateTime;
 
 	public UserProfile getProfile() {
 		return profile;
@@ -106,5 +123,27 @@ public class UserEducation {
 	public void setDegree(Degree degree) {
 		this.degree = degree;
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public DateTime getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(DateTime updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
 
 }

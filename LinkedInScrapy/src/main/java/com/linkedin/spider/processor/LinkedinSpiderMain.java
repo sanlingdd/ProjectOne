@@ -3,22 +3,25 @@ package com.linkedin.spider.processor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.linkedin.spider.POIHelper;
 import com.linkedin.spider.SearchURL;
 import com.linkedin.spider.SpiderConstants;
 
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.downloader.selenium.SeleniumDownloader;
-import us.codecraft.webmagic.scheduler.PriorityScheduler;
 
 public class LinkedinSpiderMain {
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	public static void main(String[] args) {
 
@@ -99,9 +102,10 @@ public class LinkedinSpiderMain {
 							&& urlObj.getTotal() > (urlObj.getCurrentPageNUmber() * 10)) {
 						urlObj.setAllDownloaded(false);
 					}
-//					if (urlObj.getTotal() < ((urlObj.getCurrentPageNUmber() - 1) * 10)) {
-//						urlObj.setAllDownloaded(true);
-//					}
+					// if (urlObj.getTotal() < ((urlObj.getCurrentPageNUmber() -
+					// 1) * 10)) {
+					// urlObj.setAllDownloaded(true);
+					// }
 
 					// if (urlObj.getTotal() < 10) {
 					// urlObj.setAllDownloaded(false);
@@ -140,13 +144,13 @@ public class LinkedinSpiderMain {
 			}
 		}
 		workbook.removeSheetAt(workbook.getSheetIndex("companies"));
-		
+
 		Spider spider = MyLinkedInSpider.create(new DispatcherPageProcessor());
 		for (String baseURL : SpiderConstants.searchURLs.keySet()) {
 			SearchURL urlObj = SpiderConstants.searchURLs.get(baseURL);
-//			if (!urlObj.isAllDownloaded()) {
-//				spider.addUrl(urlObj.getTargetURL());
-//			}
+			// if (!urlObj.isAllDownloaded()) {
+			// spider.addUrl(urlObj.getTargetURL());
+			// }
 		}
 
 		// companies
@@ -155,9 +159,11 @@ public class LinkedinSpiderMain {
 			Row row = POIHelper.getRow(thisTimeSheet, rowNum);
 			Cell cell = POIHelper.getCell(row, 0);
 			String newURL = cell.getStringCellValue();
-//			if (!LinkedinPeopleProfilePageProcessor.downloadLinks.contains(newURL)) {
-//				spider.addUrl(newURL);
-//			}
+			// if
+			// (!LinkedinPeopleProfilePageProcessor.downloadLinks.contains(newURL))
+			// {
+			// spider.addUrl(newURL);
+			// }
 		}
 		workbook.removeSheetAt(workbook.getSheetIndex("thisTime"));
 
@@ -168,14 +174,15 @@ public class LinkedinSpiderMain {
 			e.printStackTrace();
 		}
 
-
+		java.util.logging.Logger.getLogger(PhantomJSDriverService.class.getName()).setLevel(Level.OFF);
 
 		LinkedInOutputKeeper keeper = new LinkedInOutputKeeper();
 		keeper.start();
-		spider.addUrl("http://www.linkedin.com/in/dingxian-wang-8191a435/");
+		spider.addUrl(
+				"https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%222572611%22%5D&origin=FACETED_SEARCH");
 		// String url =
 		// "https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%2262435%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%5D&facetNetwork=%5B%22F%22%5D&facetPastCompany=%5B%22166244%22%5D&origin=FACETED_SEARCH&page=1";
-		// ´Óhttps://github.com/code4craft¿ªÊ¼×¥
+		// ï¿½ï¿½https://github.com/code4craftï¿½ï¿½Ê¼×¥
 		// .addUrl("https://www.linkedin.com/in/xiaohaizixiaoyao/")
 		// .addUrl("https://www.linkedin.com/in/jessicajia/")
 		// SAP
@@ -188,18 +195,18 @@ public class LinkedinSpiderMain {
 		// https://www.linkedin.com/search/results/people/?facetNetwork=%5B%22F%22%5D&keywords=tai%20helen&origin=FACETED_SEARCH
 		// .addUrl("https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%221179160%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetNetwork=%5B%22F%22%2C%22S%22%2C%22O%22%5D&origin=FACETED_SEARCH&page=1")
 		// .addUrl("https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%226279%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetNetwork=%5B%22F%22%2C%22S%22%2C%22O%22%5D&origin=FACETED_SEARCH&page=1")
-		// ÉèÖÃScheduler£¬Ê¹ÓÃRedisÀ´¹ÜÀíURL¶ÓÁÐ
+		// ï¿½ï¿½ï¿½ï¿½Schedulerï¿½ï¿½Ê¹ï¿½ï¿½Redisï¿½ï¿½ï¿½ï¿½ï¿½ï¿½URLï¿½ï¿½ï¿½ï¿½
 
 		String chromeDriverPath = "/Users/i071944/chromedriver";
 		LinkedSeleniumDownloader seleniumDownloader = new LinkedSeleniumDownloader(chromeDriverPath);
-		
+
 		spider.setDownloader(seleniumDownloader);
-		spider.setScheduler(new PriorityScheduler())
-				// ÉèÖÃPipeline£¬½«½á¹ûÒÔjson·½Ê½±£´æµ½ÎÄ¼þ
+		spider.setScheduler(new LinkedinPriorityScheduler())
+				// ï¿½ï¿½ï¿½ï¿½Pipelineï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½jsonï¿½ï¿½Ê½ï¿½ï¿½ï¿½æµ½ï¿½Ä¼ï¿½
 				.addPipeline(new ExcelFilePipeLine())
-				// ¿ªÆô5¸öÏß³ÌÍ¬Ê±Ö´ÐÐ
+				// ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½ß³ï¿½Í¬Ê±Ö´ï¿½ï¿½
 				.thread(3)
-				// Æô¶¯ÅÀ³æ
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				.run();
 
 	}

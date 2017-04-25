@@ -82,7 +82,6 @@ public class LinkedInOutputKeeper extends Thread {
 						logger.debug(e.getMessage());
 					}
 					this.sleep(10000);
-					break;
 				}
 
 			} catch (InterruptedException e) {

@@ -126,13 +126,12 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			} catch (Exception e) {
 				logger.info(e.getMessage());
 			}
-			
-			while(true)
-			{
+
+			while (true) {
 				WebElement seeMore = null;
 				try {
-					seeMore = webDriver.findElement(By.xpath(
-							"//button[@class='pv-profile-section__see-more-inline link']"));
+					seeMore = webDriver
+							.findElement(By.xpath("//button[@class='pv-profile-section__see-more-inline link']"));
 					seeMore.click();
 				} catch (Exception e) {
 					break;
@@ -146,16 +145,17 @@ public class SeleniumDownloader implements Downloader, Closeable {
 
 		page.setRawText(content);
 
-		PrintWriter printWriter = null;
-		try {
-			printWriter = new PrintWriter(new FileWriter("C:/data/webmagic/www.linkedin.com/temp" + ".json"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		printWriter.write(content);
-		printWriter.flush();
-		printWriter.close();
+		// PrintWriter printWriter = null;
+		// try {
+		// printWriter = new PrintWriter(new
+		// FileWriter("C:/data/webmagic/www.linkedin.com/temp" + ".json"));
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// printWriter.write(content);
+		// printWriter.flush();
+		// printWriter.close();
 
 		page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
 		page.setUrl(new PlainText(request.getUrl()));

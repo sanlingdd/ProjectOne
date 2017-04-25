@@ -5,8 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.joda.time.DateTime;
 
 @Entity
+@Table
 public class School {
 
 	private static final long serialVersionUID = 1L;
@@ -19,6 +23,9 @@ public class School {
 	private Long schoolId;
 	@Column(nullable = false)
 	private String schoolName;
+	
+	@Column
+	private DateTime updateTime;
 
 	public Long getSchoolId() {
 		return schoolId;
@@ -46,6 +53,14 @@ public class School {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public DateTime getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(DateTime updateTime) {
+		this.updateTime = updateTime;
 	}
 	
 	

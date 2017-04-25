@@ -11,8 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.joda.time.DateTime;
 
 @Entity
+@Table
 public class UserProfile {
 
 	private static final long serialVersionUID = 1L;
@@ -23,27 +27,39 @@ public class UserProfile {
 
 	@Column(nullable = false)
 	private String publicIdentifier;
+	@Column
 	private String firstName;
+	@Column
 	private String maidenName;
+	@Column
 	private String lastName;
+	@Column
 	private String birthday;
 	@Column(nullable = false)
 	private Long totalExperienceInYear;
+	@Column
 	private String currentCompanyName;
 	@Column(nullable = false)
 	private String currentTittleName;
 	@Column(nullable = false)
 	private String highestDegreeName;
+	@Column
 	private String emailAddress;
+	@Column
 	private String industryName;
 	@Column(nullable = false)
 	private String locationName;
 	@Column(nullable = false)
 	private Long locationId;
+	@Column
 	private String address;
+	@Column
 	private String interests;
+	@Column
 	private String versionTag;
+	@Column
 	private String wechatImageURL;
+	@Column
 	private String summary;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -60,6 +76,9 @@ public class UserProfile {
 	@OneToMany(mappedBy = "profile")
 	private List<UserExperience> experiences;
 
+	@Column
+	private DateTime updateTime;
+	
 	public long getId() {
 		return id;
 	}
@@ -247,4 +266,14 @@ public class UserProfile {
 	public void setExperiences(List<UserExperience> experiences) {
 		this.experiences = experiences;
 	}
+
+	public DateTime getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(DateTime updateTime) {
+		this.updateTime = updateTime;
+	}
+	
+	
 }
