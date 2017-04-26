@@ -85,12 +85,13 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 
 		// get patent
 		getPatent(page);
-
-		// get skills
-		getSkills(page);
-
-		LinkedinPage lpage = (LinkedinPage) page;
-		lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
+		if (page instanceof LinkedinPage) {
+			LinkedinPage lpage = (LinkedinPage) page;
+			if (lpage.getWebDriver() != null) { // get skills
+				getSkills(page);
+				lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
+			}
+		}
 	}
 
 	private void getContactInfo(Page page, JSONArray jsonList) {

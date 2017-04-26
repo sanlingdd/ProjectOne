@@ -106,7 +106,7 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 					String format = "https://www.linkedin.com/in/%s/";
 					String newURL = String.format(format, publicIdentifier);
 					if (!SpiderConstants.downloadLinks.contains(newURL)) {
-						//page.addTargetRequest(newURL);
+						// page.addTargetRequest(newURL);
 						SpiderConstants.allProfileURLsThisExcution.put(newURL, false);
 					}
 				}
@@ -140,13 +140,27 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 		}
 		logger.info("dowloaded profile number:" + SpiderConstants.profilesAccessedVector.size()
 				+ " to be downloaded number: " + SpiderConstants.downloadLinks.size());
-		
-		
-		//this.print(((LinkedinPage)page).getWebDriver());
-		//this.takescreenShot(((LinkedinPage)page).getWebDriver());
+
+		// this.print(page);
+		// this.takescreenShot(((LinkedinPage)page).getWebDriver());
 
 	}
-	
+
+	private void print(Page page) {
+		String content = page.getRawText();
+		PrintWriter printWriter = null;
+		try {
+			printWriter = new PrintWriter(
+					new FileWriter("C:/data/webmagic/www.linkedin.com/" + UUID.randomUUID().toString() + ".html"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		printWriter.write(content);
+		printWriter.flush();
+		printWriter.close();
+	}
+
 	private void print(WebDriver webDriver) {
 		WebElement webElement = webDriver.findElement(By.xpath("/html"));
 		String content = webElement.getAttribute("outerHTML");
@@ -162,12 +176,12 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 		printWriter.flush();
 		printWriter.close();
 	}
-	
+
 	public void takescreenShot(WebDriver webDriver) {
 		try {
 			TakesScreenshot ts = (TakesScreenshot) webDriver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(source, new File("C:\\Selenium_Shubham\\"+UUID.randomUUID().toString()+".jpg"));
+			FileUtils.copyFile(source, new File("C:\\Selenium_Shubham\\" + UUID.randomUUID().toString() + ".jpg"));
 
 			System.out.println("Screenshot is printed");
 		} catch (Exception e) {
@@ -219,8 +233,7 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 				if (dataObj != null) {
 					JSONObject metadataObj = (JSONObject) dataObj.get("metadata");
 					if (metadataObj != null) {
-						if((JSONArray) jsonObj.get("included")!=null)
-						{
+						if ((JSONArray) jsonObj.get("included") != null) {
 							return (JSONArray) jsonObj.get("included");
 						}
 					}

@@ -20,7 +20,7 @@ import com.linkedin.spider.SpiderConstants;
 
 import us.codecraft.webmagic.Spider;
 
-public class LinkedinSpiderMain {
+public class LinkedinSpiderPlantomMain {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	public static void main(String[] args) {

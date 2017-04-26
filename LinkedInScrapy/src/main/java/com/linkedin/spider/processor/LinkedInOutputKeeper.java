@@ -272,7 +272,7 @@ public class LinkedInOutputKeeper extends Thread {
 			}
 
 			start = 1;
-			Sheet sheet4 = this.getSheet(workbook, "thisTimecopy");
+			Sheet sheet4 = this.getSheet(workbook, "thisTime");
 			for (String str : SpiderConstants.allProfileURLsThisExcution.keySet()) {
 				if (!SpiderConstants.downloadLinks.contains(str)) {
 					row = this.getRow(sheet4, start++);
