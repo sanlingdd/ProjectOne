@@ -35,9 +35,9 @@ public class UserExperience {
 	private Company company;
 
 	@Column(nullable = false)
-	private String from;
+	private String fromString;
 	@Column(nullable = false)
-	private String to;
+	private String toString;
 	@Column(nullable = false)
 	private Long fromLong;
 	@Column(nullable = false)
@@ -80,20 +80,22 @@ public class UserExperience {
 		this.company = company;
 	}
 
-	public String getFrom() {
-		return from;
+	
+
+	public String getFromString() {
+		return fromString;
 	}
 
-	public void setFrom(String from) {
-		this.from = from;
+	public void setFromString(String fromString) {
+		this.fromString = fromString;
 	}
 
-	public String getTo() {
-		return to;
+	public String getToString() {
+		return toString;
 	}
 
-	public void setTo(String to) {
-		this.to = to;
+	public void setToString(String toString) {
+		this.toString = toString;
 	}
 
 	public String getOccupation() {

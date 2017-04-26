@@ -42,9 +42,9 @@ public class UserEducation {
 	@Column(nullable = false)
 	private Long toLong;
 	@Column(nullable = false)
-	private String from;
+	private String fromString;
 	@Column(nullable = false)
-	private String to;
+	private String toString;
 	@Column
 	@Enumerated(EnumType.STRING)
 	private Degree degree;
@@ -100,20 +100,22 @@ public class UserEducation {
 		this.toLong = toLong;
 	}
 
-	public String getFrom() {
-		return from;
+	
+
+	public String getFromString() {
+		return fromString;
 	}
 
-	public void setFrom(String from) {
-		this.from = from;
+	public void setFromString(String fromString) {
+		this.fromString = fromString;
 	}
 
-	public String getTo() {
-		return to;
+	public String getToString() {
+		return toString;
 	}
 
-	public void setTo(String to) {
-		this.to = to;
+	public void setToString(String toString) {
+		this.toString = toString;
 	}
 
 	public Degree getDegree() {

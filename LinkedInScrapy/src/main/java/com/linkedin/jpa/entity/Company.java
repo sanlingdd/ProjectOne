@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 @Entity
@@ -23,6 +24,7 @@ public class Company {
 	private Long companyId;
 	@Column(nullable = false)
 	private String companyName;
+	
 	@Column
 	private DateTime updateTime;
 

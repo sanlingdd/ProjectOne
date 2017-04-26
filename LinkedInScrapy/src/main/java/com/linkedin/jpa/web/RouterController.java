@@ -1,5 +1,6 @@
 package com.linkedin.jpa.web;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public class RouterController {
 		Company company = new Company();
 		company.setCompanyId(1000L);
 		company.setCompanyName("Names");
+		company.setUpdateTime(new DateTime());
 		this.companyService.saveOrUpdate(company);
 		return "Company";
 	}
