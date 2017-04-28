@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Patent {
+public class Skills {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,55 +20,55 @@ public class Patent {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	@Column
-	private String title;
+	private String skillNames;
 	@Column
-	private String description;
-	@Column
-	private String issues;
+	private String skillEndorseCount;
+
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
 	private UserProfile profile;
 
+
 	public long getId() {
 		return id;
 	}
+
 
 	public void setId(long id) {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+
+	public String getSkillNames() {
+		return skillNames;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+
+	public void setSkillNames(String skillNames) {
+		this.skillNames = skillNames;
 	}
 
-	public String getDescription() {
-		return description;
+
+	public String getSkillEndorseCount() {
+		return skillEndorseCount;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+
+	public void setSkillEndorseCount(String skillEndorseCount) {
+		this.skillEndorseCount = skillEndorseCount;
 	}
 
-	public String getIssues() {
-		return issues;
-	}
-
-	public void setIssues(String issues) {
-		this.issues = issues;
-	}
 
 	public UserProfile getProfile() {
 		return profile;
 	}
 
+
 	public void setProfile(UserProfile profile) {
 		this.profile = profile;
 	}
+
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;

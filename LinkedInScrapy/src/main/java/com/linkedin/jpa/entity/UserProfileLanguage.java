@@ -1,6 +1,5 @@
 package com.linkedin.jpa.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,23 +11,21 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Patent {
+public class UserProfileLanguage {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	@Column
-	private String title;
-	@Column
-	private String description;
-	@Column
-	private String issues;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
-	private UserProfile profile;
+	UserProfile profile;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "language_id")
+	Language language;
 
 	public long getId() {
 		return id;
@@ -38,36 +35,20 @@ public class Patent {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getIssues() {
-		return issues;
-	}
-
-	public void setIssues(String issues) {
-		this.issues = issues;
-	}
-
 	public UserProfile getProfile() {
 		return profile;
 	}
 
 	public void setProfile(UserProfile profile) {
 		this.profile = profile;
+	}
+
+	public Language getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(Language language) {
+		this.language = language;
 	}
 
 	public static long getSerialversionuid() {

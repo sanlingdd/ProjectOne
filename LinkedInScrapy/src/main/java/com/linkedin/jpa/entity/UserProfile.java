@@ -76,7 +76,18 @@ public class UserProfile {
 
 	@OneToMany(mappedBy = "profile")
 	private List<UserExperience> experiences = new ArrayList<UserExperience>();
+	
+	@OneToMany(mappedBy = "profile")
+	private List<UserProfileLanguage> languages = new ArrayList<UserProfileLanguage>();
 
+	@OneToMany(mappedBy = "profile")
+	private List<Honor> honors = new ArrayList<Honor>();
+	
+	@OneToMany(mappedBy = "profile")
+	private List<Patent> patents = new ArrayList<Patent>();
+
+	@OneToMany(mappedBy = "profile")
+	private List<Publication> publications = new ArrayList<Publication>();
 	@Column
 	private DateTime updateTime;
 	
@@ -276,6 +287,38 @@ public class UserProfile {
 
 	public void setUpdateTime(DateTime updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public List<UserProfileLanguage> getLanguages() {
+		return languages;
+	}
+
+	public void setLanguages(List<UserProfileLanguage> languages) {
+		this.languages = languages;
+	}
+
+	public List<Honor> getHonors() {
+		return honors;
+	}
+
+	public void setHonors(List<Honor> honors) {
+		this.honors = honors;
+	}
+
+	public List<Patent> getPatents() {
+		return patents;
+	}
+
+	public void setPatents(List<Patent> patents) {
+		this.patents = patents;
+	}
+
+	public List<Publication> getPublications() {
+		return publications;
+	}
+
+	public void setPublications(List<Publication> publications) {
+		this.publications = publications;
 	}
 	
 	
