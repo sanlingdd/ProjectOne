@@ -34,8 +34,7 @@ public class CompanyServiceImp implements CompanyService {
 
 	@Override
 	public Company saveOrUpdate(Company company) {
-		companyRepository.save(company);
-		return company;
+		return companyRepository.save(company);
 	}
 
 	@Override

@@ -27,5 +27,29 @@ public class RouterController {
 		this.companyService.saveOrUpdate(company);
 		return "Company";
 	}
+	
+	@RequestMapping("/httpspider")
+	@ResponseBody
+	@Transactional(readOnly = true)
+	public String httpSpider() {
+		Company company = new Company();
+		company.setCompanyId(1000L);
+		company.setCompanyName("Names");
+		company.setUpdateTime(new DateTime());
+		this.companyService.saveOrUpdate(company);
+		return "Company";
+	}
+	
+	@RequestMapping("/plantomspider")
+	@ResponseBody
+	@Transactional(readOnly = true)
+	public String plantomSpider() {
+		Company company = new Company();
+		company.setCompanyId(1000L);
+		company.setCompanyName("Names");
+		company.setUpdateTime(new DateTime());
+		this.companyService.saveOrUpdate(company);
+		return "Company";
+	}
 
 }

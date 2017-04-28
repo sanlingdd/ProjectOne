@@ -278,7 +278,7 @@ public class LinkedInOutputKeeper extends Thread {
 					row = this.getRow(sheet4, start++);
 					Cell cell = this.getCell(row, 0);
 					cell.setCellValue((String) str);
-					
+
 					Cell cell1 = this.getCell(row, 1);
 					cell1.setCellValue(SpiderConstants.allProfileURLsThisExcution.get(str).toString());
 				}

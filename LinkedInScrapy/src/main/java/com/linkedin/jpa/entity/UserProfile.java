@@ -1,5 +1,6 @@
 package com.linkedin.jpa.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -35,13 +36,13 @@ public class UserProfile {
 	private String lastName;
 	@Column
 	private String birthday;
-	@Column(nullable = false)
+	@Column
 	private Long totalExperienceInYear;
 	@Column
 	private String currentCompanyName;
-	@Column(nullable = false)
+	@Column
 	private String currentTittleName;
-	@Column(nullable = false)
+	@Column
 	private String highestDegreeName;
 	@Column
 	private String emailAddress;
@@ -71,13 +72,15 @@ public class UserProfile {
 	private School currentSchool;
 
 	@OneToMany(mappedBy = "profile")
-	private List<UserEducation> educations;
+	private List<UserEducation> educations = new ArrayList<UserEducation>();
 
 	@OneToMany(mappedBy = "profile")
-	private List<UserExperience> experiences;
+	private List<UserExperience> experiences = new ArrayList<UserExperience>();
 
 	@Column
 	private DateTime updateTime;
+	
+	
 	
 	public long getId() {
 		return id;

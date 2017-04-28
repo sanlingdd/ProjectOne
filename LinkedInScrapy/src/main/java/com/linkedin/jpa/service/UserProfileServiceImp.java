@@ -32,8 +32,7 @@ public class UserProfileServiceImp implements UserProfileService {
 
 	@Override
 	public UserProfile saveOrUpdate(UserProfile UserProfile) {
-		UserProfileRepository.save(UserProfile);
-		return UserProfile;
+		return UserProfileRepository.save(UserProfile);
 	}
 
 	@Override

@@ -33,17 +33,20 @@ public class UserEducation {
 	@JoinColumn(name = "school_id")
 	private School graudateSchool;
 
+	@Column
+	private String schoolName;
+	
 	@Column(nullable = false)
 	private String universityName;
 	@Column(nullable = false)
 	private String major;
-	@Column(nullable = false)
-	private Long fromLong;
-	@Column(nullable = false)
-	private Long toLong;
-	@Column(nullable = false)
+	@Column
+	private DateTime fromLong;
+	@Column
+	private DateTime toLong;
+	@Column
 	private String fromString;
-	@Column(nullable = false)
+	@Column
 	private String toString;
 	@Column
 	@Enumerated(EnumType.STRING)
@@ -84,19 +87,19 @@ public class UserEducation {
 		this.major = major;
 	}
 
-	public Long getFromLong() {
+	public DateTime getFromLong() {
 		return fromLong;
 	}
 
-	public void setFromLong(Long fromLong) {
+	public void setFromLong(DateTime fromLong) {
 		this.fromLong = fromLong;
 	}
 
-	public Long getToLong() {
+	public DateTime getToLong() {
 		return toLong;
 	}
 
-	public void setToLong(Long toLong) {
+	public void setToLong(DateTime toLong) {
 		this.toLong = toLong;
 	}
 
@@ -144,6 +147,14 @@ public class UserEducation {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getSchoolName() {
+		return schoolName;
+	}
+
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
 	}
 	
 	

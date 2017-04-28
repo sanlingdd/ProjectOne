@@ -26,25 +26,33 @@ public class UserExperience {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
 	private UserProfile profile;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "location_id")
+	private Location location;
 
-	private String location;
+	@Column
+	private String locationName;
+	@Column
 	private String companyName;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "company_id")
 	private Company company;
 
-	@Column(nullable = false)
+	@Column
+	private String title;	
+	@Column
 	private String fromString;
-	@Column(nullable = false)
+	@Column
 	private String toString;
-	@Column(nullable = false)
-	private Long fromLong;
-	@Column(nullable = false)
-	private Long toLong;
-	@Column(nullable = false)
+	@Column
+	private DateTime fromLong;
+	@Column
+	private DateTime toLong;
+	@Column
 	private String occupation;
-	@Column(nullable = false)
+	@Column
 	private String responsibility;
 	@Column
 	private DateTime updateTime;
@@ -54,14 +62,6 @@ public class UserExperience {
 
 	public void setProfile(UserProfile profile) {
 		this.profile = profile;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
 	}
 
 	public String getCompanyName() {
@@ -114,19 +114,19 @@ public class UserExperience {
 		this.responsibility = responsibility;
 	}
 
-	public Long getFromLong() {
+	public DateTime getFromLong() {
 		return fromLong;
 	}
 
-	public void setFromLong(Long fromLong) {
+	public void setFromLong(DateTime fromLong) {
 		this.fromLong = fromLong;
 	}
 
-	public Long getToLong() {
+	public DateTime getToLong() {
 		return toLong;
 	}
 
-	public void setToLong(Long toLong) {
+	public void setToLong(DateTime toLong) {
 		this.toLong = toLong;
 	}
 
@@ -148,6 +148,30 @@ public class UserExperience {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public String getLocationName() {
+		return locationName;
+	}
+
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	

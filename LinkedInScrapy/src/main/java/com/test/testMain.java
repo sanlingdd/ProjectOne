@@ -4,11 +4,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
 
 public class testMain {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		Pattern p = Pattern.compile("\\D+(\\d+)\\D+");
+		Matcher m = p.matcher("urn:li:8909asdfa");
+		while(m.find())
+		{
+			String str = m.group(1);
+		}
+		
 		run1 r1 = new run1();
 		run2 r2 = new run2();
 		r1.start();

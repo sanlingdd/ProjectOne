@@ -34,8 +34,7 @@ public class SchoolServiceImp implements SchoolService {
 
 	@Override
 	public School saveOrUpdate(School School) {
-		schoolRepository.save(School);
-		return School;
+		return schoolRepository.save(School);
 	}
 
 	@Override
