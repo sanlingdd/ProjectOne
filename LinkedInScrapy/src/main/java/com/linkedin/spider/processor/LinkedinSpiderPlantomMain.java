@@ -13,18 +13,24 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.linkedin.jpa.service.CompanyService;
 import com.linkedin.spider.POIHelper;
 import com.linkedin.spider.SearchURL;
 import com.linkedin.spider.SpiderConstants;
 
 import us.codecraft.webmagic.Spider;
 
+@Service
 public class LinkedinSpiderPlantomMain {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	public static void main(String[] args) {
-
+	@Autowired
+	private CompanyService companyService;
+	
+	public void startLinkedProfileSpider() {
 		Workbook workbook = null;
 		FileInputStream inputStream = null;
 		String tempFile = "C:/data/webmagic/www.linkedin.com/LinkedProfiles.xlsx";
@@ -208,6 +214,9 @@ public class LinkedinSpiderPlantomMain {
 				.thread(3)
 				// ��������
 				.run();
+	}
 
+	public static void main(String[] args) {
+		new LinkedinSpiderPlantomMain().startLinkedProfileSpider();
 	}
 }

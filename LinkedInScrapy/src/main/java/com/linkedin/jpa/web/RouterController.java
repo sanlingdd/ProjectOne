@@ -9,13 +9,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.linkedin.jpa.entity.Company;
 import com.linkedin.jpa.service.CompanyService;
+import com.linkedin.spider.processor.LinkedinSpiderHttpMain;
 
 @Controller
 public class RouterController {
 
 	@Autowired
 	private CompanyService companyService;
-
+	
+	@Autowired
+	private LinkedinSpiderHttpMain linkedInSpider;
+	
 	@RequestMapping("/")
 	@ResponseBody
 	@Transactional(readOnly = true)
@@ -37,6 +41,7 @@ public class RouterController {
 		company.setCompanyName("Names");
 		company.setUpdateTime(new DateTime());
 		this.companyService.saveOrUpdate(company);
+		linkedInSpider.startLinkedProfileSpider();
 		return "Company";
 	}
 	

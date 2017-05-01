@@ -1,15 +1,20 @@
 package com.linkedin.spider.processor;
 
 import org.apache.http.HttpHost;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+@Service
 public class DispatcherPageProcessor implements PageProcessor {
 
-	private LinkedinPeopleProfilePageProcessor profileProcessor = new LinkedinPeopleProfilePageProcessor();
-	private LinkedInPeopleSearchPageProcessor searchProcessor = new LinkedInPeopleSearchPageProcessor();
+	@Autowired
+	private LinkedinPeopleProfilePageProcessor profileProcessor;
+	@Autowired
+	private LinkedInPeopleSearchPageProcessor searchProcessor;
 
 	private Site site = Site.me().setRetryTimes(3).setSleepTime(15000).setTimeOut(10000);
 
@@ -60,6 +65,10 @@ public class DispatcherPageProcessor implements PageProcessor {
 
 	@Override
 	public void process(Page page) {
+		if (profileProcessor == null) {
+			profileProcessor = new LinkedinPeopleProfilePageProcessor();
+			searchProcessor = new LinkedInPeopleSearchPageProcessor();
+		}
 		if (page.getUrl().toString().matches("\\w+://www.linkedin.com/in/[^/]+/")
 				|| page.getUrl().toString().matches("\\w+://www.linkedin.com/in/[^/]+")) {
 			profileProcessor.process(page);

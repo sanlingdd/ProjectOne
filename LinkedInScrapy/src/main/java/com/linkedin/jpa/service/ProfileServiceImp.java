@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.linkedin.jpa.entity.Profile;
 import com.linkedin.jpa.repositories.ProfileRepository;
 
+@Service
 public class ProfileServiceImp extends EntityServiceImp<Profile> implements ProfileService {
 	
 	private ProfileRepository UserProfileRepository;

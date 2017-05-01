@@ -13,7 +13,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.linkedin.jpa.service.CompanyService;
 import com.linkedin.spider.POIHelper;
 import com.linkedin.spider.SearchURL;
 import com.linkedin.spider.SpiderConstants;
@@ -21,11 +24,14 @@ import com.linkedin.spider.SpiderConstants;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 
+@Service
 public class LinkedinSpiderHttpMain {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	public static void main(String[] args) {
-
+	@Autowired
+	private CompanyService companyService;
+	
+	public void startLinkedProfileSpider() {
 		Workbook workbook = null;
 		FileInputStream inputStream = null;
 		String tempFile = "C:/data/webmagic/www.linkedin.com/LinkedProfiles.xlsx";
@@ -180,7 +186,7 @@ public class LinkedinSpiderHttpMain {
 		LinkedInOutputKeeper keeper = new LinkedInOutputKeeper();
 		keeper.start();
 		spider.addUrl(
-				"https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%227802895%22%5D&origin=FACETED_SEARCH");
+				"https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%222572611%22%5D&origin=FACETED_SEARCH");
 		// String url =
 		// "https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%2262435%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%5D&facetNetwork=%5B%22F%22%5D&facetPastCompany=%5B%22166244%22%5D&origin=FACETED_SEARCH&page=1";
 		// ��https://github.com/code4craft��ʼץ
@@ -202,14 +208,18 @@ public class LinkedinSpiderHttpMain {
 		LinkedSeleniumDownloader seleniumDownloader = new LinkedSeleniumDownloader(chromeDriverPath);
 
 		spider.setDownloader(seleniumDownloader);
-		spider.setDownloader(new HttpClientDownloader())
-				.setScheduler(new LinkedinPriorityScheduler())
+		spider.setScheduler(new LinkedinPriorityScheduler())
 				// ����Pipeline���������json��ʽ���浽�ļ�
 				.addPipeline(new ExcelFilePipeLine())
 				// ����5���߳�ͬʱִ��
 				.thread(3)
 				// ��������
 				.run();
+	}
+
+	
+	public static void main(String[] args) {
+		new LinkedinSpiderHttpMain().startLinkedProfileSpider();
 
 	}
 }
