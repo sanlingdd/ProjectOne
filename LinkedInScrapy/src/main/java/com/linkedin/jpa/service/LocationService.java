@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.linkedin.jpa.entity.Location;
 
-public interface LocationService {
+public interface LocationService extends EntityService<Location>{
 	List<Location> listAll();
 
 	Location getById(Long id);

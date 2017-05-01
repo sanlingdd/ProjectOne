@@ -14,7 +14,7 @@ import org.joda.time.DateTime;
 
 @Entity
 @Table
-public class UserExperience {
+public class Experience {
 
 	private static final long serialVersionUID = 1L;
 
@@ -25,7 +25,7 @@ public class UserExperience {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
-	private UserProfile profile;
+	private Profile profile;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "location_id")
@@ -56,11 +56,11 @@ public class UserExperience {
 	private String responsibility;
 	@Column
 	private DateTime updateTime;
-	public UserProfile getProfile() {
+	public Profile getProfile() {
 		return profile;
 	}
 
-	public void setProfile(UserProfile profile) {
+	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
 

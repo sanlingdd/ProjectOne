@@ -11,7 +11,7 @@ import com.linkedin.jpa.repositories.LocationRepository;
 
 
 @Service
-public class LocationServiceImp implements LocationService {
+public class LocationServiceImp extends EntityServiceImp<Location> implements LocationService {
 
 	private LocationRepository locationRepository;
 

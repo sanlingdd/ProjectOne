@@ -34,7 +34,7 @@ public class Publication {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
-	private UserProfile profile;
+	private Profile profile;
 
 	public long getId() {
 		return id;
@@ -92,11 +92,11 @@ public class Publication {
 		this.externalURL = externalURL;
 	}
 
-	public UserProfile getProfile() {
+	public Profile getProfile() {
 		return profile;
 	}
 
-	public void setProfile(UserProfile profile) {
+	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
 

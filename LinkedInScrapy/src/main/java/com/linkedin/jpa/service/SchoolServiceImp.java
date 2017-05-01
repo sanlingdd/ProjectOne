@@ -10,7 +10,7 @@ import com.linkedin.jpa.entity.School;
 import com.linkedin.jpa.repositories.SchoolRepository;
 
 @Service
-public class SchoolServiceImp implements SchoolService {
+public class SchoolServiceImp extends EntityServiceImp<School> implements SchoolService {
 
 	private SchoolRepository schoolRepository;
 

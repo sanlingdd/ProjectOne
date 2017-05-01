@@ -36,13 +36,13 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.selector.Selectable;
 
-public class LinkedinPeopleProfilePageProcessorWithPersit implements PageProcessor {
+public class LinkedinPeopleProfilePageProcessorWithoutPersist implements PageProcessor {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	public String companyFormatPrefix = "https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%22";
 	public String companyFormatSurfix = "%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&origin=FACETED_SEARCH";
 
-	LinkedinPeopleProfilePageProcessorWithPersit() {
+	LinkedinPeopleProfilePageProcessorWithoutPersist() {
 	}
 
 	public void process(Page page) {

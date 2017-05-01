@@ -30,7 +30,7 @@ public class Honor {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
-	private UserProfile profile;
+	private Profile profile;
 
 	public String getTitle() {
 		return title;

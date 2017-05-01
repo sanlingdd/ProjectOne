@@ -19,6 +19,7 @@ public class Company {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
+	
 	@Column(nullable = false)
 	private Long companyId;
 	@Column(nullable = false)

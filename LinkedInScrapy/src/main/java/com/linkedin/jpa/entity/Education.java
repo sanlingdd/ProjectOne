@@ -16,18 +16,17 @@ import org.joda.time.DateTime;
 
 @Entity
 @Table
-public class UserEducation {
+public class Education {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
-	private UserProfile profile;
+	private Profile profile;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "school_id")
@@ -55,11 +54,11 @@ public class UserEducation {
 	@Column
 	private DateTime updateTime;
 
-	public UserProfile getProfile() {
+	public Profile getProfile() {
 		return profile;
 	}
 
-	public void setProfile(UserProfile profile) {
+	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
 

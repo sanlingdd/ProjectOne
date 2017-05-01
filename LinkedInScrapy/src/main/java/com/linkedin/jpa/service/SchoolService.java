@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.linkedin.jpa.entity.School;
 
-public interface SchoolService {
+public interface SchoolService extends EntityService<School>{
 	List<School> listAll();
 
 	School getById(Long id);

@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 
 @Entity
 @Table
-public class UserProfile {
+public class Profile {
 
 	private static final long serialVersionUID = 1L;
 
@@ -72,13 +72,13 @@ public class UserProfile {
 	private School currentSchool;
 
 	@OneToMany(mappedBy = "profile")
-	private List<UserEducation> educations = new ArrayList<UserEducation>();
+	private List<Education> educations = new ArrayList<Education>();
 
 	@OneToMany(mappedBy = "profile")
-	private List<UserExperience> experiences = new ArrayList<UserExperience>();
+	private List<Experience> experiences = new ArrayList<Experience>();
 	
 	@OneToMany(mappedBy = "profile")
-	private List<UserProfileLanguage> languages = new ArrayList<UserProfileLanguage>();
+	private List<ProfileLanguage> languages = new ArrayList<ProfileLanguage>();
 
 	@OneToMany(mappedBy = "profile")
 	private List<Honor> honors = new ArrayList<Honor>();
@@ -88,6 +88,10 @@ public class UserProfile {
 
 	@OneToMany(mappedBy = "profile")
 	private List<Publication> publications = new ArrayList<Publication>();
+	
+	@OneToMany(mappedBy = "profile")
+	private List<ProfileSkill> skills = new ArrayList<ProfileSkill>();
+	
 	@Column
 	private DateTime updateTime;
 	
@@ -265,19 +269,19 @@ public class UserProfile {
 		return serialVersionUID;
 	}
 
-	public List<UserEducation> getEducations() {
+	public List<Education> getEducations() {
 		return educations;
 	}
 
-	public void setEducations(List<UserEducation> educations) {
+	public void setEducations(List<Education> educations) {
 		this.educations = educations;
 	}
 
-	public List<UserExperience> getExperiences() {
+	public List<Experience> getExperiences() {
 		return experiences;
 	}
 
-	public void setExperiences(List<UserExperience> experiences) {
+	public void setExperiences(List<Experience> experiences) {
 		this.experiences = experiences;
 	}
 
@@ -289,11 +293,11 @@ public class UserProfile {
 		this.updateTime = updateTime;
 	}
 
-	public List<UserProfileLanguage> getLanguages() {
+	public List<ProfileLanguage> getLanguages() {
 		return languages;
 	}
 
-	public void setLanguages(List<UserProfileLanguage> languages) {
+	public void setLanguages(List<ProfileLanguage> languages) {
 		this.languages = languages;
 	}
 
@@ -319,6 +323,14 @@ public class UserProfile {
 
 	public void setPublications(List<Publication> publications) {
 		this.publications = publications;
+	}
+
+	public List<ProfileSkill> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<ProfileSkill> skills) {
+		this.skills = skills;
 	}
 	
 	

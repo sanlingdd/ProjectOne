@@ -27,18 +27,20 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.linkedin.jpa.entity.Company;
 import com.linkedin.jpa.entity.Degree;
+import com.linkedin.jpa.entity.Education;
+import com.linkedin.jpa.entity.Experience;
 import com.linkedin.jpa.entity.Location;
+import com.linkedin.jpa.entity.Profile;
 import com.linkedin.jpa.entity.School;
-import com.linkedin.jpa.entity.UserEducation;
-import com.linkedin.jpa.entity.UserExperience;
-import com.linkedin.jpa.entity.UserProfile;
 import com.linkedin.jpa.service.CompanyService;
 import com.linkedin.jpa.service.LocationService;
+import com.linkedin.jpa.service.ProfileService;
 import com.linkedin.jpa.service.SchoolService;
-import com.linkedin.jpa.service.UserProfileService;
+import com.linkedin.jpa.service.SkillService;
 import com.linkedin.spider.DateString;
 import com.linkedin.spider.Pair;
 import com.linkedin.spider.SpiderConstants;
@@ -50,6 +52,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.selector.Selectable;
 
+@Service
 public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -60,12 +63,15 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 	@Autowired
 	private SchoolService schoolService;
 	@Autowired
-	private UserProfileService userProfileService;
+	private ProfileService userProfileService;
 
 	@Autowired
 	private LocationService locationService;
 
-	private UserProfile userProfile = new UserProfile();
+	@Autowired
+	private SkillService skillService;
+
+	private Profile userProfile = new Profile();
 
 	LinkedinPeopleProfilePageProcessor() {
 	}
@@ -522,7 +528,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 			if ("com.linkedin.voyager.identity.profile.Position".equals(proFileType)) {
 				experienceNumber++;
 
-				UserExperience experience = new UserExperience();
+				Experience experience = new Experience();
 				experience.setUpdateTime(new DateTime());
 
 				HashMap<String, Object> experiencePiece = new HashMap<String, Object>();
@@ -595,12 +601,15 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 					// SpiderConstants.allProfileURLsThisExcution.put(url.getTargetURL(),false);
 					// }
 					// }
-					Company company = new Company();
-					company.setCompanyId(Long.valueOf(companyLinkedInID));
-					company.setCompanyName(includeObj.getString("companyName"));
-					company.setUpdateTime(new DateTime());
+					Company company = (Company) companyService.getByBusinessKey(Company.class, "companyId", companyLinkedInID);
+					if (company == null) {
+						company = new Company();
+						company.setCompanyId(Long.valueOf(companyLinkedInID));
+						company.setCompanyName(includeObj.getString("companyName"));
+						company.setUpdateTime(new DateTime());
 
-					company = companyService.saveOrUpdate(company);
+						company = companyService.saveOrUpdate(company);
+					}
 					experience.setCompany(company);
 				}
 			}
@@ -636,7 +645,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 			String proFileType = includeObj.getString("$type");
 			if ("com.linkedin.voyager.identity.profile.Education".equals(proFileType)) {
 
-				UserEducation userEducation = new UserEducation();
+				Education userEducation = new Education();
 				HashMap<String, Object> educationExperience = new HashMap<String, Object>();
 				educationExperience.put("degreeName", includeObj.getString("degreeName"));
 				userEducation.setDegree(Degree.valueOf(includeObj.getString("degreeName")));
@@ -688,7 +697,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		page.putField("educationExperiences", educationExperiences);
 		if (!educationExperiences.isEmpty()) {
 			page.putField("highestDegree", educationExperiences.get(0).get("degreeName"));
-			userProfile.setHighestDegreeName((String)educationExperiences.get(0).get("degreeName"));
+			userProfile.setHighestDegreeName((String) educationExperiences.get(0).get("degreeName"));
 		}
 	}
 
