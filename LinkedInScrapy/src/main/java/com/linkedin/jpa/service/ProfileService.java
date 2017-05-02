@@ -9,7 +9,7 @@ public interface ProfileService extends EntityService<Profile> {
 
 	Profile getById(Long id);
 
-	Profile saveOrUpdate(Profile product);
+	Profile saveOrUpdate(Profile profile);
 
 	void delete(Long id);
 }

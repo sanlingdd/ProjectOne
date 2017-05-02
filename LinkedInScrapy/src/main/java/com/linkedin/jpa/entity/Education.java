@@ -23,7 +23,7 @@ public class Education {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
 	private Profile profile;
@@ -34,10 +34,7 @@ public class Education {
 
 	@Column
 	private String schoolName;
-	
-	@Column(nullable = false)
-	private String universityName;
-	@Column(nullable = false)
+	@Column
 	private String major;
 	@Column
 	private DateTime fromLong;
@@ -50,7 +47,7 @@ public class Education {
 	@Column
 	@Enumerated(EnumType.STRING)
 	private Degree degree;
-	
+
 	@Column
 	private DateTime updateTime;
 
@@ -70,14 +67,6 @@ public class Education {
 		this.graudateSchool = graudateSchool;
 	}
 
-	public String getUniversityName() {
-		return universityName;
-	}
-
-	public void setUniversityName(String universityName) {
-		this.universityName = universityName;
-	}
-
 	public String getMajor() {
 		return major;
 	}
@@ -87,6 +76,10 @@ public class Education {
 	}
 
 	public DateTime getFromLong() {
+		if (fromString != null && fromLong != null
+				&& fromLong.getMillis() - new DateTime("2100-01-01").getMillis() == 0) {
+			return new DateTime();
+		}
 		return fromLong;
 	}
 
@@ -95,6 +88,9 @@ public class Education {
 	}
 
 	public DateTime getToLong() {
+		if (toString != null && toLong != null && toLong.getMillis() - new DateTime("2100-01-01").getMillis() == 0) {
+			return new DateTime();
+		}
 		return toLong;
 	}
 
@@ -102,9 +98,11 @@ public class Education {
 		this.toLong = toLong;
 	}
 
-	
-
 	public String getFromString() {
+		if (fromString != null && fromLong != null
+				&& fromLong.getMillis() - new DateTime("2100-01-01").getMillis() == 0) {
+			return new DateTime().toString();
+		}
 		return fromString;
 	}
 
@@ -113,6 +111,9 @@ public class Education {
 	}
 
 	public String getToString() {
+		if (toString != null && toLong != null && toLong.getMillis() - new DateTime("2100-01-01").getMillis() == 0) {
+			return new DateTime().toString();
+		}
 		return toString;
 	}
 
@@ -155,7 +156,5 @@ public class Education {
 	public void setSchoolName(String schoolName) {
 		this.schoolName = schoolName;
 	}
-	
-	
 
 }

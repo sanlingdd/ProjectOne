@@ -5,18 +5,20 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.linkedin.jpa.entity.Skill;
 import com.linkedin.jpa.repositories.SkillRepository;
 
 @Service
-public class SkillServiceImp extends EntityServiceImp implements SkillService {
+
+public class SkillServiceImp extends EntityServiceImp<Skill> implements SkillService {
 
 	private SkillRepository skillRepository;
 
 	@Autowired
-	public SkillServiceImp(SkillRepository productRepository) {
-		this.skillRepository = productRepository;
+	public SkillServiceImp(SkillRepository skillRepository) {
+		this.skillRepository = skillRepository;
 	}
 
 	@Override
@@ -33,11 +35,13 @@ public class SkillServiceImp extends EntityServiceImp implements SkillService {
 	}
 
 	@Override
+	@Transactional
 	public Skill saveOrUpdate(Skill Skill) {
 		return skillRepository.save(Skill);
 	}
 
 	@Override
+	@Transactional
 	public void delete(Long id) {
 		skillRepository.delete(id);
 

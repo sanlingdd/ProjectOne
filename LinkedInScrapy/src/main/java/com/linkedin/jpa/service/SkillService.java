@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.linkedin.jpa.entity.Skill;
 
-public interface SkillService extends EntityService{
+public interface SkillService extends EntityService<Skill>{
 	List<Skill> listAll();
 
 	Skill getById(Long id);

@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.joda.time.DateTime;
+
 @Entity
 @Table
 public class Publication {
@@ -23,7 +25,7 @@ public class Publication {
 	private String title;
 	@Column
 	private String date;
-	@Column
+	@Column(length = 5120)
 	private String description;
 	@Column
 	private String issues;
@@ -35,6 +37,9 @@ public class Publication {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
 	private Profile profile;
+	
+	@Column
+	private DateTime updateTime;
 
 	public long getId() {
 		return id;
@@ -102,6 +107,14 @@ public class Publication {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public DateTime getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(DateTime updateTime) {
+		this.updateTime = updateTime;
 	}
 	
 	

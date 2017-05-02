@@ -3,6 +3,7 @@ package com.linkedin.jpa.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,10 +49,6 @@ public class Profile {
 	private String emailAddress;
 	@Column
 	private String industryName;
-	@Column(nullable = false)
-	private String locationName;
-	@Column(nullable = false)
-	private Long locationId;
 	@Column
 	private String address;
 	@Column
@@ -60,8 +57,14 @@ public class Profile {
 	private String versionTag;
 	@Column
 	private String wechatImageURL;
-	@Column
+	@Column(length = 5120)
 	private String summary;
+	@Column
+	private DateTime updateTime;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "location_id")
+	private Location location;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "company_id")
@@ -71,32 +74,33 @@ public class Profile {
 	@JoinColumn(name = "school_id")
 	private School currentSchool;
 
-	@OneToMany(mappedBy = "profile")
+	@OneToMany(mappedBy = "profile", cascade = { CascadeType.ALL })
 	private List<Education> educations = new ArrayList<Education>();
 
-	@OneToMany(mappedBy = "profile")
+	@OneToMany(mappedBy = "profile", cascade = { CascadeType.ALL })
 	private List<Experience> experiences = new ArrayList<Experience>();
-	
-	@OneToMany(mappedBy = "profile")
+
+	@OneToMany(mappedBy = "profile", cascade = { CascadeType.ALL })
 	private List<ProfileLanguage> languages = new ArrayList<ProfileLanguage>();
 
-	@OneToMany(mappedBy = "profile")
+	@OneToMany(mappedBy = "profile", cascade = { CascadeType.ALL })
 	private List<Honor> honors = new ArrayList<Honor>();
-	
-	@OneToMany(mappedBy = "profile")
+
+	@OneToMany(mappedBy = "profile", cascade = { CascadeType.ALL })
 	private List<Patent> patents = new ArrayList<Patent>();
 
-	@OneToMany(mappedBy = "profile")
+	@OneToMany(mappedBy = "profile", cascade = { CascadeType.ALL })
 	private List<Publication> publications = new ArrayList<Publication>();
-	
-	@OneToMany(mappedBy = "profile")
+
+	@OneToMany(mappedBy = "profile", cascade = { CascadeType.ALL })
 	private List<ProfileSkill> skills = new ArrayList<ProfileSkill>();
-	
-	@Column
-	private DateTime updateTime;
-	
-	
-	
+
+	@OneToMany(mappedBy = "profile", cascade = { CascadeType.ALL })
+	private List<Phone> phones = new ArrayList<Phone>();
+
+	@OneToMany(mappedBy = "profile", cascade = { CascadeType.ALL })
+	private List<WebSite> sites = new ArrayList<WebSite>();
+
 	public long getId() {
 		return id;
 	}
@@ -191,22 +195,6 @@ public class Profile {
 
 	public void setIndustryName(String industryName) {
 		this.industryName = industryName;
-	}
-
-	public String getLocationName() {
-		return locationName;
-	}
-
-	public void setLocationName(String locationName) {
-		this.locationName = locationName;
-	}
-
-	public Long getLocationId() {
-		return locationId;
-	}
-
-	public void setLocationId(Long locationId) {
-		this.locationId = locationId;
 	}
 
 	public String getAddress() {
@@ -332,6 +320,29 @@ public class Profile {
 	public void setSkills(List<ProfileSkill> skills) {
 		this.skills = skills;
 	}
-	
-	
+
+	public List<Phone> getPhones() {
+		return phones;
+	}
+
+	public void setPhones(List<Phone> phones) {
+		this.phones = phones;
+	}
+
+	public List<WebSite> getSites() {
+		return sites;
+	}
+
+	public void setSites(List<WebSite> sites) {
+		this.sites = sites;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
 }

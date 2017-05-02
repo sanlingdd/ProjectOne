@@ -5,18 +5,20 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.linkedin.jpa.entity.Profile;
 import com.linkedin.jpa.repositories.ProfileRepository;
 
 @Service
+
 public class ProfileServiceImp extends EntityServiceImp<Profile> implements ProfileService {
 	
 	private ProfileRepository UserProfileRepository;
 
 	@Autowired
-	public ProfileServiceImp(ProfileRepository UserProfileRepository) {
-		this.UserProfileRepository = UserProfileRepository;
+	public ProfileServiceImp(ProfileRepository userProfileRepository) {
+		this.UserProfileRepository = userProfileRepository;
 	}
 
 	@Override
@@ -33,11 +35,13 @@ public class ProfileServiceImp extends EntityServiceImp<Profile> implements Prof
 	}
 
 	@Override
+	@Transactional
 	public Profile saveOrUpdate(Profile UserProfile) {
 		return UserProfileRepository.save(UserProfile);
 	}
 
 	@Override
+	@Transactional
 	public void delete(Long id) {
 		UserProfileRepository.delete(id);
 

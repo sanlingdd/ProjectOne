@@ -31,6 +31,9 @@ public class LinkedinSpiderHttpMain {
 	@Autowired
 	private CompanyService companyService;
 	
+	@Autowired
+	private DispatcherPageProcessor dispather;
+	
 	public void startLinkedProfileSpider() {
 		Workbook workbook = null;
 		FileInputStream inputStream = null;
@@ -152,7 +155,7 @@ public class LinkedinSpiderHttpMain {
 		}
 		workbook.removeSheetAt(workbook.getSheetIndex("companies"));
 
-		Spider spider = MyLinkedInSpider.create(new DispatcherPageProcessor());
+		Spider spider = MyLinkedInSpider.create(dispather);
 		for (String baseURL : SpiderConstants.searchURLs.keySet()) {
 			SearchURL urlObj = SpiderConstants.searchURLs.get(baseURL);
 			// if (!urlObj.isAllDownloaded()) {
@@ -208,7 +211,8 @@ public class LinkedinSpiderHttpMain {
 		LinkedSeleniumDownloader seleniumDownloader = new LinkedSeleniumDownloader(chromeDriverPath);
 
 		spider.setDownloader(seleniumDownloader);
-		spider.setScheduler(new LinkedinPriorityScheduler())
+		spider.setDownloader(new HttpClientDownloader())
+				.setScheduler(new LinkedinPriorityScheduler())
 				// ����Pipeline���������json��ʽ���浽�ļ�
 				.addPipeline(new ExcelFilePipeLine())
 				// ����5���߳�ͬʱִ��

@@ -1,10 +1,11 @@
 package com.linkedin.jpa.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,10 +20,13 @@ public class Location {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@Column(nullable = false)
-	private String locationId;
-	@Column(nullable = false)
+	@Column
+	private String locationid;
+	@Column
 	private String locationName;
+	
+	@OneToMany(mappedBy="location",fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	private List<Experience> experience;
 	
 	public long getId() {
 		return id;
@@ -31,10 +35,10 @@ public class Location {
 		this.id = id;
 	}
 	public String getLocationId() {
-		return locationId;
+		return locationid;
 	}
 	public void setLocationId(String locationId) {
-		this.locationId = locationId;
+		this.locationid = locationId;
 	}
 	public String getLocationName() {
 		return locationName;
@@ -44,6 +48,12 @@ public class Location {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public List<Experience> getExperience() {
+		return experience;
+	}
+	public void setExperience(List<Experience> experience) {
+		this.experience = experience;
 	}
 
 }

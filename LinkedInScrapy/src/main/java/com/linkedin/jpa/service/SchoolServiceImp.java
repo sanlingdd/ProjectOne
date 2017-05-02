@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.linkedin.jpa.entity.School;
 import com.linkedin.jpa.repositories.SchoolRepository;
 
 @Service
+
 public class SchoolServiceImp extends EntityServiceImp<School> implements SchoolService {
 
 	private SchoolRepository schoolRepository;
@@ -33,11 +35,13 @@ public class SchoolServiceImp extends EntityServiceImp<School> implements School
 	}
 
 	@Override
+	@Transactional
 	public School saveOrUpdate(School School) {
 		return schoolRepository.save(School);
 	}
 
 	@Override
+	@Transactional
 	public void delete(Long id) {
 		schoolRepository.delete(id);
 

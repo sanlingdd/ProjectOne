@@ -33,10 +33,20 @@ import com.linkedin.jpa.entity.Company;
 import com.linkedin.jpa.entity.Degree;
 import com.linkedin.jpa.entity.Education;
 import com.linkedin.jpa.entity.Experience;
+import com.linkedin.jpa.entity.Honor;
+import com.linkedin.jpa.entity.Language;
 import com.linkedin.jpa.entity.Location;
+import com.linkedin.jpa.entity.Patent;
+import com.linkedin.jpa.entity.Phone;
 import com.linkedin.jpa.entity.Profile;
+import com.linkedin.jpa.entity.ProfileLanguage;
+import com.linkedin.jpa.entity.ProfileSkill;
+import com.linkedin.jpa.entity.Publication;
 import com.linkedin.jpa.entity.School;
+import com.linkedin.jpa.entity.Skill;
+import com.linkedin.jpa.entity.WebSite;
 import com.linkedin.jpa.service.CompanyService;
+import com.linkedin.jpa.service.LanguageService;
 import com.linkedin.jpa.service.LocationService;
 import com.linkedin.jpa.service.ProfileService;
 import com.linkedin.jpa.service.SchoolService;
@@ -58,6 +68,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	public String companyFormatPrefix = "https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%22";
 	public String companyFormatSurfix = "%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&origin=FACETED_SEARCH";
+
 	@Autowired
 	private CompanyService companyService;
 	@Autowired
@@ -71,7 +82,10 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 	@Autowired
 	private SkillService skillService;
 
-	private Profile userProfile = new Profile();
+	@Autowired
+	private LanguageService languageService;
+
+	private Profile userProfile = null;
 
 	LinkedinPeopleProfilePageProcessor() {
 	}
@@ -87,6 +101,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 	}
 
 	private void processProfile(Page page) {
+		userProfile = new Profile();
 		userProfile.setPublicIdentifier(page.getUrl().toString());
 		userProfile.setUpdateTime(new DateTime());
 		page.putField("publicIdentifier", page.getUrl().toString());
@@ -116,15 +131,16 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		// get Language
 		getLanguage(page);
 
+		// get skills
+		getSkills(page);
 		// get patent
 		getPatent(page);
 		if (page instanceof LinkedinPage) {
 			LinkedinPage lpage = (LinkedinPage) page;
-			if (lpage.getWebDriver() != null) { // get skills
-				getSkills(page);
-				lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
-			}
+			lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
 		}
+
+		userProfileService.saveOrUpdate(userProfile);
 
 	}
 
@@ -143,8 +159,10 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 
 		// emailAddress
 		page.putField("emailAddress", dataObj.getString("emailAddress"));
+		userProfile.setEmailAddress(dataObj.getString("emailAddress"));
 		// address
 		page.putField("address", dataObj.getString("address"));
+		userProfile.setAddress(dataObj.getString("address"));
 		// phone
 		JSONArray phoneNumbersURLs = (JSONArray) dataObj.get("phoneNumbers");
 		if (phoneNumbersURLs != null) {
@@ -157,6 +175,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		if (birthDateOn != null) {
 			DateString birthDay = this.getDateString(birthDateOn, included);
 			page.putField("birthday", birthDay.toString());
+			userProfile.setBirthday(birthDay.toString());
 		}
 		// website
 		JSONArray websitesURLs = (JSONArray) dataObj.get("websites");
@@ -169,21 +188,28 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		String weChatContactInfo = dataObj.getString("weChatContactInfo");
 		JSONObject wechatElement = this.getElementInIncluded(included, weChatContactInfo);
 		if (wechatElement != null) {
-			page.putField("wechatImageURL", wechatElement.get("qrCodeImageUrl"));
+			page.putField("wechatImageURL", weChatContactInfo);
+			userProfile.setWechatImageURL(weChatContactInfo);
 		}
 
 	}
 
 	private List<HashMap<String, Object>> getWebSites(JSONArray websites, JSONArray included) {
-		List<HashMap<String, Object>> phones = new ArrayList<HashMap<String, Object>>();
+		List<HashMap<String, Object>> sites = new ArrayList<HashMap<String, Object>>();
 		for (int iter = 0; iter < websites.length(); iter++) {
 			String website = websites.getString(iter);
 			JSONObject phoneObj = this.getElementInIncluded(included, website);
-			HashMap<String, Object> phone = new HashMap<String, Object>();
-			phone.put("websitesurl", phoneObj.getString("url"));
-			phones.add(phone);
+			HashMap<String, Object> site = new HashMap<String, Object>();
+			site.put("websitesurl", phoneObj.getString("url"));
+			sites.add(site);
+
+			WebSite web = new WebSite();
+			web.setProfile(userProfile);
+			web.setWebsitesurl(phoneObj.getString("url"));
+
+			userProfile.getSites().add(web);
 		}
-		return phones;
+		return sites;
 	}
 
 	private List<HashMap<String, Object>> getPhoneNumbers(JSONArray phoneNumbersURLs, JSONArray included) {
@@ -197,6 +223,13 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 			phone.put("type", phoneObj.getString("type"));
 			phone.put("number", phoneObj.getString("number"));
 			phones.add(phone);
+
+			Phone pphone = new Phone();
+			pphone.setProfile(userProfile);
+			pphone.setType(phoneObj.getString("type"));
+			pphone.setNumber(phoneObj.getString("number"));
+
+			userProfile.getPhones().add(pphone);
 		}
 		return phones;
 	}
@@ -266,7 +299,11 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		userProfile.setIndustryName(profileElementObj.getString("industryName"));
 		// location name
 		page.putField("locationName", profileElementObj.getString("locationName"));
-		userProfile.setLocationName(profileElementObj.getString("locationName"));
+		Location location = locationService.getByBusinessKey(Location.class, "locationName",
+				profileElementObj.getString("locationName"));
+		if (location != null) {
+			userProfile.setLocation(location);
+		}
 
 		page.putField("address", profileElementObj.getString("address"));
 		userProfile.setAddress(profileElementObj.getString("address"));
@@ -321,8 +358,6 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 				return;
 			}
 			List<Selectable> selects = selectionArea.codes("//li").nodes();
-			LinkedinPage lpage = (LinkedinPage) page;
-			WebDriver webDriver = lpage.getWebDriver();
 
 			for (Selectable select : selects) {
 				String skillName = this.getItemText(select,
@@ -333,8 +368,31 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 				if (skillName == null) {
 					continue;
 				}
+
+				Skill skill = skillService.getByBusinessKey(Skill.class, "skillName", skillName);
+				if (skill == null) {
+					skill = new Skill();
+					skill.setSkillName(skillName);
+					skill.setUpdateTime(new DateTime());
+					skill = skillService.saveOrUpdate(skill);
+				}
+
+				ProfileSkill ps = new ProfileSkill();
+				ps.setProfile(userProfile);
+				ps.setSkill(skill);
+				ps.setSkillEndorseCount(Long.valueOf(skillEndorseCount));
+
+				userProfile.getSkills().add(ps);
+
 				String name = skillName.split("\\W")[0];
 				try {
+					LinkedinPage lpage = null;
+					if (page instanceof LinkedinPage) {
+						lpage = (LinkedinPage) page;
+					} else {
+						return;
+					}
+					WebDriver webDriver = lpage.getWebDriver();
 					WebElement skillElement = null;
 					skillElement = webDriver.findElement(By.xpath(
 							// "//span[contains(text(),'SQL') and
@@ -436,8 +494,16 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 					"//h4[contains(@class,'pv-accomplishment-entity__title')]/text()");
 			String patentDescription = this.getItemText(select,
 					"//p[contains(@class,'pv-accomplishment-entity__description')]/text()");
-			String honorIssues = this.getItemText(select,
+			String patentIssues = this.getItemText(select,
 					"//p[contains(@class,'pv-accomplishment-entity__issuer')]/text()");
+
+			Patent patent = new Patent();
+			patent.setTitle(patentTitle);
+			patent.setDescription(patentDescription);
+			patent.setIssues(patentIssues);
+			patent.setProfile(userProfile);
+
+			userProfile.getPatents().add(patent);
 		}
 	}
 
@@ -453,6 +519,21 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 					"//h4[contains(@class,'pv-accomplishment-entity__title')]/text()");
 			String languageProficiency = this.getItemText(select,
 					"//p[contains(@class,'pv-accomplishment-entity__proficiency')]/text()");
+
+			Language language = languageService.getByBusinessKey(Language.class, "languageName", languageTitle);
+			if (language == null) {
+				language = new Language();
+				language.setLanguageName(languageTitle);
+				language.setUpdateTime(new DateTime());
+				language = languageService.saveOrUpdate(language);
+			}
+			ProfileLanguage pl = new ProfileLanguage();
+			pl.setProfile(userProfile);
+			pl.setLanguage(language);
+			pl.setProficiency(languageProficiency);
+			pl.setUpdateTime(new DateTime());
+
+			userProfile.getLanguages().add(pl);
 		}
 	}
 
@@ -472,6 +553,14 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 					"//p[contains(@class,'pv-accomplishment-entity__date')]/text()");
 			String honorIssues = this.getItemText(select,
 					"//p[contains(@class,'pv-accomplishment-entity__issuer')]/text()");
+
+			Honor honor = new Honor();
+			honor.setDate(honorDate);
+			honor.setDescription(honorDescription);
+			honor.setTitle(honorTitle);
+			honor.setIssues(honorIssues);
+			honor.setProfile(userProfile);
+			userProfile.getHonors().add(honor);
 		}
 	}
 
@@ -496,6 +585,16 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 			String externalURL = getItemLinks(select,
 					"//a[contains(@class,'pv-accomplishment-entity__external-source')]");
 
+			Publication publication = new Publication();
+			publication.setDate(publicationDate);
+			publication.setDescription(publicationDescription);
+			publication.setTitle(publicationTitle);
+			publication.setPublisher(publicationPublishers);
+			publication.setExternalURL(externalURL);
+			publication.setProfile(userProfile);
+			publication.setUpdateTime(new DateTime());
+
+			userProfile.getPublications().add(publication);
 			// WebElement contributorElement = null;
 			// try {
 			// contributorElement = webDriver
@@ -523,95 +622,108 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 
 		int experienceNumber = 1;
 		for (int iter = 0; iter < included.length(); iter++) {
-			JSONObject includeObj = included.getJSONObject(iter);
-			String proFileType = includeObj.getString("$type");
-			if ("com.linkedin.voyager.identity.profile.Position".equals(proFileType)) {
-				experienceNumber++;
+			try {
+				JSONObject includeObj = included.getJSONObject(iter);
+				String proFileType = includeObj.getString("$type");
+				if ("com.linkedin.voyager.identity.profile.Position".equals(proFileType)) {
+					experienceNumber++;
 
-				Experience experience = new Experience();
-				experience.setUpdateTime(new DateTime());
+					Experience experience = new Experience();
+					experience.setUpdateTime(new DateTime());
 
-				HashMap<String, Object> experiencePiece = new HashMap<String, Object>();
-				experiencePiece.put("title", includeObj.getString("title"));
-				experience.setTitle(includeObj.getString("title"));
-				experiencePiece.put("companyName", includeObj.getString("companyName"));
-				experience.setCompanyName(includeObj.getString("companyName"));
-				experiencePiece.put("WlocationName", includeObj.getString("locationName"));
-				experience.setLocationName(includeObj.getString("locationName"));
-				experiencePiece.put("description", includeObj.getString("description"));
-				experience.setResponsibility(includeObj.getString("description"));
+					HashMap<String, Object> experiencePiece = new HashMap<String, Object>();
+					experiencePiece.put("title", includeObj.getString("title"));
+					experience.setTitle(includeObj.getString("title"));
+					experiencePiece.put("companyName", includeObj.getString("companyName"));
+					experience.setCompanyName(includeObj.getString("companyName"));
+					experiencePiece.put("WlocationName", includeObj.getString("locationName"));
+					experience.setLocationName(includeObj.getString("locationName"));
+					experiencePiece.put("description", includeObj.getString("description"));
+					experience.setResponsibility(includeObj.getString("description"));
 
-				String dateString = includeObj.getString("timePeriod");
-				String dateStringStarted = dateString + ",startDate";
-				String dateStringEnd = dateString + ",endDate";
+					String dateString = includeObj.getString("timePeriod");
+					String dateStringStarted = dateString + ",startDate";
+					String dateStringEnd = dateString + ",endDate";
 
-				DateString startDate = this.getDateString(dateStringStarted, included);
-				DateString endDate = this.getDateString(dateStringEnd, included);
-				experiencePiece.put("Wstart", startDate.toString());
-				experience.setFromString(startDate.toString());
-				experiencePiece.put("Wend", endDate.toString());
-				experience.setToString(endDate.toString());
-				experiencePiece.put("WstartYear", startDate.getYear());
+					DateString startDate = this.getDateString(dateStringStarted, included);
+					DateString endDate = this.getDateString(dateStringEnd, included);
+					experiencePiece.put("Wstart", startDate.toString());
+					experience.setFromString(startDate.toString());
+					experiencePiece.put("Wend", endDate.toString());
+					experience.setToString(endDate.toString());
+					experiencePiece.put("WstartYear", startDate.getYear());
 
-				experience.setFromLong(DateTime.parse(startDate.toString()));
-				experience.setToLong(DateTime.parse(endDate.toString()));
-				workExperience.add(experiencePiece);
+					experience.setFromLong(DateTime.parse(startDate.toString()));
+					experience.setToLong(DateTime.parse(endDate.toString()));
+					workExperience.add(experiencePiece);
+					experience.setProfile(this.userProfile);
+					userProfile.getExperiences().add(experience);
 
-				userProfile.getExperiences().add(experience);
-
-				if (includeObj.getString("region") != null) {
-					// urn:li:fs_region:(cn,8909)
-					Location location = new Location();
-					String region = includeObj.getString("region");
-					Pattern p = Pattern.compile("\\D+(\\d+)\\D+");
-					Matcher m = p.matcher(region);
-					if (m.find()) {
-						String regionId = m.group(1);
-						location.setLocationId(regionId);
+					if (includeObj.getString("region") != null) {
+						// urn:li:fs_region:(cn,8909)
+						Location location = null;
+						String region = includeObj.getString("region");
+						Pattern p = Pattern.compile("\\D+(\\d+)\\D+");
+						Matcher m = p.matcher(region);
+						String regionId = null;
+						if (m.find()) {
+							regionId = m.group(1);
+							location = locationService.getByBusinessKey(Location.class, "locationId", regionId);
+						}
+						if (location == null) {
+							location = new Location();
+							location.setLocationId(regionId);
+							location.setLocationName(includeObj.getString("locationName"));
+							location = locationService.saveOrUpdate(location);
+						}
+						if (location != null) {
+							experience.setLocation(location);
+						} else {
+							experience.setLocation(null);
+						}
 					}
-					location.setLocationName(includeObj.getString("locationName"));
 
-					location = locationService.saveOrUpdate(location);
-					experience.setLocation(location);
-				}
-
-				// company
-				if (includeObj.getString("companyName") != null && includeObj.getString("companyUrn") != null) {
-					Pair pcompany = new Pair();
-					pcompany.setKey(includeObj.getString("companyName"));
-					int splitIndex = includeObj.getString("companyUrn").lastIndexOf(":");
-					String companyLinkedInID = includeObj.getString("companyUrn").substring(splitIndex + 1);
-					pcompany.setValue(companyLinkedInID);
-					SpiderConstants.companys.put(companyLinkedInID, includeObj.getString("companyName"));
-					// && (experienceNumber == 1 ||
-					// isValuableCompany(includeObj.getString("companyName"),
-					// includeObj.getString("title")));
-					String baseURL = this.companyFormatPrefix + companyLinkedInID + this.companyFormatSurfix;
-					// if (SpiderConstants.searchURLs.get(baseURL) == null) {
-					// SearchURL url = new SearchURL();
-					// url.setBaseURL(baseURL);
-					// url.setCurrentPageNumber(1);
-					// url.setAllDownloaded(false);
-					// SpiderConstants.searchURLs.put(baseURL, url);
-					// if
-					// (!SpiderConstants.downloadLinks.contains(url.getTargetURL()))
-					// {
-					// page.addTargetRequest(url.getTargetURL());
-					// //
-					// SpiderConstants.allProfileURLsThisExcution.put(url.getTargetURL(),false);
-					// }
-					// }
-					Company company = (Company) companyService.getByBusinessKey(Company.class, "companyId", companyLinkedInID);
-					if (company == null) {
-						company = new Company();
-						company.setCompanyId(Long.valueOf(companyLinkedInID));
-						company.setCompanyName(includeObj.getString("companyName"));
-						company.setUpdateTime(new DateTime());
-
-						company = companyService.saveOrUpdate(company);
+					// company
+					if (includeObj.getString("companyName") != null && includeObj.getString("companyUrn") != null) {
+						Pair pcompany = new Pair();
+						pcompany.setKey(includeObj.getString("companyName"));
+						int splitIndex = includeObj.getString("companyUrn").lastIndexOf(":");
+						String companyLinkedInID = includeObj.getString("companyUrn").substring(splitIndex + 1);
+						pcompany.setValue(companyLinkedInID);
+						SpiderConstants.companys.put(companyLinkedInID, includeObj.getString("companyName"));
+						// && (experienceNumber == 1 ||
+						// isValuableCompany(includeObj.getString("companyName"),
+						// includeObj.getString("title")));
+						String baseURL = this.companyFormatPrefix + companyLinkedInID + this.companyFormatSurfix;
+						// if (SpiderConstants.searchURLs.get(baseURL) == null)
+						// {
+						// SearchURL url = new SearchURL();
+						// url.setBaseURL(baseURL);
+						// url.setCurrentPageNumber(1);
+						// url.setAllDownloaded(false);
+						// SpiderConstants.searchURLs.put(baseURL, url);
+						// if
+						// (!SpiderConstants.downloadLinks.contains(url.getTargetURL()))
+						// {
+						// page.addTargetRequest(url.getTargetURL());
+						// //
+						// SpiderConstants.allProfileURLsThisExcution.put(url.getTargetURL(),false);
+						// }
+						// }
+						Company company = companyService.getByBusinessKey(Company.class, "companyId",
+								Long.valueOf(companyLinkedInID));
+						if (company == null) {
+							company = new Company();
+							company.setCompanyId(Long.valueOf(companyLinkedInID));
+							company.setCompanyName(includeObj.getString("companyName"));
+							company.setUpdateTime(new DateTime());
+							company = companyService.saveOrUpdate(company);
+						}
+						experience.setCompany(company);
 					}
-					experience.setCompany(company);
 				}
+			} catch (Exception e) {
+				logger.info("unexpected error", e);
 			}
 		}
 		Collections.sort(workExperience, new Comparator<HashMap<String, Object>>() {
@@ -620,18 +732,31 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 			}
 
 		});
+
+		List<Experience> exps = userProfile.getExperiences();
+		if (!exps.isEmpty()) {
+			exps.sort((Experience left, Experience right) -> Long
+					.valueOf(left.getFromLong().getMillis() - right.getFromLong().getMillis()).intValue());
+			Experience exp = exps.get(0);
+			userProfile.setCurrentCompany(exp.getCompany());
+			if (userProfile.getLocation() == null) {
+				userProfile.setLocation(exp.getLocation());
+			}
+		}
+
 		page.putField("workExperience", workExperience);
 		if (!workExperience.isEmpty()) {
 			try {
-				Integer totalWorkExerience = Integer.valueOf(workExperience.get(0).get("WstartYear").toString())
-						- Integer.valueOf(workExperience.get(workExperience.size() - 1).get("WstartYear").toString());
-				page.putField("currentCompany", workExperience.get(0).get("companyName"));
-				userProfile.setCurrentCompanyName((String) workExperience.get(0).get("companyName"));
-				page.putField("currentTittle", workExperience.get(0).get("title"));
-				userProfile.setCurrentTittleName((String) workExperience.get(0).get("title"));
+
+				Integer totalWorkExerience = exps.get(0).getToLong().getYear()
+						- exps.get(exps.size() - 1).getFromLong().getYear();
+
+				userProfile.setCurrentCompanyName(exps.get(0).getCompanyName());
+				page.putField("currentTittle", exps.get(0).getTitle());
+				userProfile.setCurrentTittleName(exps.get(0).getTitle());
 				page.putField("totalWorkExperience", totalWorkExerience.toString());
 
-				userProfile.setTotalExperienceInYear(Long.valueOf(totalWorkExerience.toString()));
+				userProfile.setTotalExperienceInYear(Long.valueOf(totalWorkExerience));
 			} catch (Exception e) {
 				logger.equals(e.getMessage());
 			}
@@ -648,7 +773,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 				Education userEducation = new Education();
 				HashMap<String, Object> educationExperience = new HashMap<String, Object>();
 				educationExperience.put("degreeName", includeObj.getString("degreeName"));
-				userEducation.setDegree(Degree.valueOf(includeObj.getString("degreeName")));
+				userEducation.setDegree(Degree.VValueOf(includeObj.getString("degreeName")));
 				educationExperience.put("fieldOfStudy", includeObj.getString("fieldOfStudy"));
 				userEducation.setMajor(includeObj.getString("fieldOfStudy"));
 
@@ -670,6 +795,9 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 
 				userEducation.setFromLong(new DateTime(startDate.toString()));
 				userEducation.setToLong(new DateTime(endDate.toString()));
+				userEducation.setUpdateTime(new DateTime());
+				userEducation.setProfile(userProfile);
+				userProfile.getEducations().add(userEducation);
 				educationExperiences.add(educationExperience);
 
 				if (includeObj.getString("schoolName") != null && includeObj.getString("school") != null) {
@@ -679,25 +807,34 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 					String companyLinkedInID = includeObj.getString("school").substring(splitIndex + 1);
 					company.setValue(companyLinkedInID);
 					SpiderConstants.schools.put(companyLinkedInID, includeObj.getString("schoolName"));
-					School school = new School();
-					school.setSchoolId(Long.valueOf(companyLinkedInID));
-					school.setSchoolName(includeObj.getString("schoolName"));
-					school = schoolService.saveOrUpdate(school);
+					School school = schoolService.getByBusinessKey(School.class, "schoolId",
+							Long.valueOf(companyLinkedInID));
+					if (school == null) {
+						school = new School();
+						school.setSchoolId(Long.valueOf(companyLinkedInID));
+						school.setSchoolName(includeObj.getString("schoolName"));
+						school.setUpdateTime(new DateTime());
+						school = schoolService.saveOrUpdate(school);
+					}
 					userEducation.setGraudateSchool(school);
 				}
-				userProfile.getEducations().add(userEducation);
 			}
 		}
+
+		List<Education> educations = userProfile.getEducations();
+		educations.sort((Education left, Education right) -> Long
+				.valueOf(left.getToLong().getMillis() - right.getToLong().getMillis()).intValue());
+
 		Collections.sort(educationExperiences, new Comparator<HashMap<String, Object>>() {
 			public int compare(HashMap<String, Object> map1, HashMap<String, Object> map2) {
 				return map2.get("Eend").toString().compareTo(map1.get("Eend").toString());
 			}
-
 		});
+
 		page.putField("educationExperiences", educationExperiences);
 		if (!educationExperiences.isEmpty()) {
 			page.putField("highestDegree", educationExperiences.get(0).get("degreeName"));
-			userProfile.setHighestDegreeName((String) educationExperiences.get(0).get("degreeName"));
+			userProfile.setHighestDegreeName(educations.get(0).getDegree().toString());
 		}
 	}
 
@@ -706,6 +843,9 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 
 		JSONObject includeObj = this.getElementInIncluded(included, dateString);
 		if (includeObj == null) {
+			date.setYear("2100");
+			date.setMonth("01");
+			date.setDay("01");
 			return date;
 		}
 		String year = includeObj.getString("year");

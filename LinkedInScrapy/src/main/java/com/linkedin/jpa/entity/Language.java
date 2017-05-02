@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.joda.time.DateTime;
 @Entity
 @Table
 public class Language {
@@ -17,8 +19,10 @@ public class Language {
 	private long id;
 	@Column
 	private String languageName;
+	
 	@Column
-	private String languageProficiency;
+	private DateTime updateTime;
+	
 	public long getId() {
 		return id;
 	}
@@ -31,14 +35,15 @@ public class Language {
 	public void setLanguageName(String languageName) {
 		this.languageName = languageName;
 	}
-	public String getLanguageProficiency() {
-		return languageProficiency;
-	}
-	public void setLanguageProficiency(String languageProficiency) {
-		this.languageProficiency = languageProficiency;
-	}
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public DateTime getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(DateTime updateTime) {
+		this.updateTime = updateTime;
 	}
 	
 }

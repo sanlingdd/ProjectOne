@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.linkedin.jpa.entity.Location;
 import com.linkedin.jpa.repositories.LocationRepository;
 
 
 @Service
+
 public class LocationServiceImp extends EntityServiceImp<Location> implements LocationService {
 
 	private LocationRepository locationRepository;
@@ -34,11 +36,13 @@ public class LocationServiceImp extends EntityServiceImp<Location> implements Lo
 	}
 
 	@Override
+	@Transactional
 	public Location saveOrUpdate(Location Location) {
 		return locationRepository.save(Location);
 	}
 
 	@Override
+	@Transactional
 	public void delete(Long id) {
 		locationRepository.delete(id);
 

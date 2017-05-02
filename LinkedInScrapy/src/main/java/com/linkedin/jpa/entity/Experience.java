@@ -1,5 +1,6 @@
 package com.linkedin.jpa.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,13 +23,11 @@ public class Experience {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
 	private Profile profile;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "location_id")
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	private Location location;
 
 	@Column
@@ -36,12 +35,12 @@ public class Experience {
 	@Column
 	private String companyName;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "company_id")
 	private Company company;
 
 	@Column
-	private String title;	
+	private String title;
 	@Column
 	private String fromString;
 	@Column
@@ -52,10 +51,11 @@ public class Experience {
 	private DateTime toLong;
 	@Column
 	private String occupation;
-	@Column
+	@Column(length = 5120)
 	private String responsibility;
 	@Column
 	private DateTime updateTime;
+
 	public Profile getProfile() {
 		return profile;
 	}
@@ -80,9 +80,11 @@ public class Experience {
 		this.company = company;
 	}
 
-	
-
 	public String getFromString() {
+		if (fromString != null && fromLong != null
+				&& fromLong.getMillis() - new DateTime("2100-01-01").getMillis() == 0) {
+			return new DateTime().toString();
+		}
 		return fromString;
 	}
 
@@ -115,6 +117,9 @@ public class Experience {
 	}
 
 	public DateTime getFromLong() {
+		if (fromLong != null && fromLong.getMillis() - new DateTime("2100-01-01").getMillis() == 0) {
+			return new DateTime();
+		}
 		return fromLong;
 	}
 
@@ -174,5 +179,4 @@ public class Experience {
 		this.title = title;
 	}
 
-	
 }

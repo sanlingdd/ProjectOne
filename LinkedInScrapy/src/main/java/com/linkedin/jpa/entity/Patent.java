@@ -21,7 +21,7 @@ public class Patent {
 	private long id;
 	@Column
 	private String title;
-	@Column
+	@Column(length = 5120)
 	private String description;
 	@Column
 	private String issues;

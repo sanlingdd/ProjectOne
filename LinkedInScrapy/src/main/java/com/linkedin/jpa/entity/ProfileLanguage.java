@@ -1,5 +1,6 @@
 package com.linkedin.jpa.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.joda.time.DateTime;
 
 @Entity
 @Table
@@ -26,6 +29,12 @@ public class ProfileLanguage {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "language_id")
 	Language language;
+	
+	@Column
+	private String proficiency;
+	
+	@Column
+	private DateTime updateTime;
 
 	public long getId() {
 		return id;
@@ -53,6 +62,22 @@ public class ProfileLanguage {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getProficiency() {
+		return proficiency;
+	}
+
+	public void setProficiency(String proficiency) {
+		this.proficiency = proficiency;
+	}
+
+	public DateTime getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(DateTime updateTime) {
+		this.updateTime = updateTime;
 	}
 	
 	

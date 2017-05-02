@@ -20,7 +20,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.linkedin.jpa.entity.Profile;
+import com.linkedin.jpa.service.LanguageService;
+import com.linkedin.jpa.service.ProfileService;
 import com.linkedin.spider.SearchURL;
 import com.linkedin.spider.SpiderConstants;
 
@@ -28,12 +33,16 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+@Service
 public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 
 	public String companyFormatPrefix = "https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%22";
 	public String companyFormatSurfix = "%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&origin=FACETED_SEARCH";
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Autowired
+	private ProfileService userProfileService;
 
 	LinkedInPeopleSearchPageProcessor() {
 
@@ -98,7 +107,6 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 			JSONObject includeObj = included.getJSONObject(iter);
 			String typeString = includeObj.getString("$type");
 			if ("com.linkedin.voyager.identity.shared.MiniProfile".equals(typeString)) {
-				//
 				String firstName = includeObj.getString("firstName");
 				String lastName = includeObj.getString("lastName");
 				if (this.isTargetProfile(valuableNames, firstName, lastName)) {
@@ -106,6 +114,11 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 					String format = "https://www.linkedin.com/in/%s/";
 					String newURL = String.format(format, publicIdentifier);
 					if (!SpiderConstants.downloadLinks.contains(newURL)) {
+						Profile profile = userProfileService.getByBusinessKey(Profile.class, "publicIdentifier",
+								publicIdentifier);
+						if (profile != null) {
+							continue;
+						}
 						// page.addTargetRequest(newURL);
 						SpiderConstants.allProfileURLsThisExcution.put(newURL, false);
 					}

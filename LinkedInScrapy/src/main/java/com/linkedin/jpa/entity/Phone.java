@@ -10,26 +10,41 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.joda.time.DateTime;
+
 @Entity
 @Table
-public class ProfileSkill {
-
+public class Phone {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_id")
-	Profile profile;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "skill_id")
-	Skill skill;
-	
+	private Profile profile;
 	@Column
-	private Long skillEndorseCount;
+	private String type;
+	@Column
+	private String number;
+	@Column
+	private DateTime updateTime;
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
 
 	public long getId() {
 		return id;
@@ -47,26 +62,8 @@ public class ProfileSkill {
 		this.profile = profile;
 	}
 
-	public Skill getSkill() {
-		return skill;
-	}
-
-	public void setSkill(Skill skill) {
-		this.skill = skill;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-	public Long getSkillEndorseCount() {
-		return skillEndorseCount;
-	}
-
-	public void setSkillEndorseCount(Long skillEndorseCount) {
-		this.skillEndorseCount = skillEndorseCount;
-	}
-	
-	
 
 }
