@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.assertj.core.util.Arrays;
 import org.joda.time.DateTime;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.linkedin.json.JSONArray;
+import org.linkedin.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -668,11 +668,12 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 						String regionId = null;
 						if (m.find()) {
 							regionId = m.group(1);
-							location = locationService.getByBusinessKey(Location.class, "locationId", regionId);
+							location = locationService.getByBusinessKey(Location.class, "locationId",
+									Long.valueOf(regionId));
 						}
 						if (location == null) {
 							location = new Location();
-							location.setLocationId(regionId);
+							location.setLocationId(Long.valueOf(regionId));
 							location.setLocationName(includeObj.getString("locationName"));
 							location = locationService.saveOrUpdate(location);
 						}

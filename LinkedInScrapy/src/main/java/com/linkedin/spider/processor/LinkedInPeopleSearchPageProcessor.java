@@ -11,8 +11,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.linkedin.json.JSONArray;
+import org.linkedin.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.linkedin.jpa.entity.Profile;
-import com.linkedin.jpa.service.LanguageService;
 import com.linkedin.jpa.service.ProfileService;
 import com.linkedin.spider.SearchURL;
 import com.linkedin.spider.SpiderConstants;

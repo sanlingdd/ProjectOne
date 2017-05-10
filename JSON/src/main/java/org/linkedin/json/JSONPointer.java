@@ -1,4 +1,4 @@
-package org.json;
+package org.linkedin.json;
 
 import static java.lang.String.format;
 

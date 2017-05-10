@@ -21,7 +21,7 @@ public class Location {
 	private long id;
 
 	@Column
-	private String locationid;
+	private Long locationid;
 	@Column
 	private String locationName;
 	
@@ -34,10 +34,10 @@ public class Location {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public String getLocationId() {
+	public Long getLocationId() {
 		return locationid;
 	}
-	public void setLocationId(String locationId) {
+	public void setLocationId(Long locationId) {
 		this.locationid = locationId;
 	}
 	public String getLocationName() {

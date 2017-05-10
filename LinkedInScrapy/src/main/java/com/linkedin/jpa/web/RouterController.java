@@ -16,22 +16,17 @@ public class RouterController {
 
 	@Autowired
 	private CompanyService companyService;
-	
+
 	@Autowired
 	private LinkedinSpiderHttpMain linkedInSpider;
-	
+
 	@RequestMapping("/")
 	@ResponseBody
 	@Transactional(readOnly = true)
 	public String helloWorld() {
-		Company company = new Company();
-		company.setCompanyId(1000L);
-		company.setCompanyName("Names");
-		company.setUpdateTime(new DateTime());
-		this.companyService.saveOrUpdate(company);
-		return "Company";
+		return "index";
 	}
-	
+
 	@RequestMapping("/httpspider")
 	@ResponseBody
 	@Transactional(readOnly = true)
@@ -44,7 +39,7 @@ public class RouterController {
 		linkedInSpider.startLinkedProfileSpider();
 		return "Company";
 	}
-	
+
 	@RequestMapping("/plantomspider")
 	@ResponseBody
 	@Transactional(readOnly = true)

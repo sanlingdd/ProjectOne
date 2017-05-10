@@ -1,4 +1,4 @@
-package org.json;
+package org.linkedin.json;
 
 import java.io.IOException;
 

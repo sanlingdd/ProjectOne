@@ -1,4 +1,4 @@
-package org.json;
+package org.linkedin.json;
 
 /*
 Copyright (c) 2008 JSON.org

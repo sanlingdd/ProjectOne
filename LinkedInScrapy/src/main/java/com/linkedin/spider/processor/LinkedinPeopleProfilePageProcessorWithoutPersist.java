@@ -13,8 +13,8 @@ import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.assertj.core.util.Arrays;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.linkedin.json.JSONArray;
+import org.linkedin.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import com.linkedin.spider.DateString;
 import com.linkedin.spider.Pair;
-import com.linkedin.spider.SearchURL;
 import com.linkedin.spider.SpiderConstants;
 
 import us.codecraft.webmagic.Page;

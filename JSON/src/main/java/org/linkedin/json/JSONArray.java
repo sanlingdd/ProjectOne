@@ -1,4 +1,4 @@
-package org.json;
+package org.linkedin.json;
 
 /*
  Copyright (c) 2002 JSON.org
@@ -181,7 +181,6 @@ public class JSONArray implements Iterable<Object> {
         }
     }
 
-    @Override
     public Iterator<Object> iterator() {
         return myArrayList.iterator();
     }
