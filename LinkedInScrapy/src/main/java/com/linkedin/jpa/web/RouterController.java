@@ -24,7 +24,7 @@ public class RouterController {
 	@ResponseBody
 	@Transactional(readOnly = true)
 	public String helloWorld() {
-		return "index";
+		return "abc";
 	}
 
 	@RequestMapping("/httpspider")
