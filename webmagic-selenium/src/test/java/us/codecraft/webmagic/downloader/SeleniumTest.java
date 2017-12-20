@@ -31,7 +31,7 @@ public class SeleniumTest {
 	// System.getProperties().setProperty("webdriver.chrome.driver",
 	// chromeDriverPath);
 
-	@Test
+	//@Test
 	public void testSelenium() {
 		System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
 

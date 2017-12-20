@@ -21,11 +21,22 @@ public class RouterController {
 	private LinkedinSpiderHttpMain linkedInSpider;
 
 	@RequestMapping("/")
-	@ResponseBody
 	@Transactional(readOnly = true)
-	public String helloWorld() {
-		return "abc";
+	public String index() {
+		return "index";
 	}
+	
+	@RequestMapping("/abc")
+	@Transactional(readOnly = true)
+	public String abc() {
+		return "index";
+	}
+	
+	@RequestMapping("/register")
+	@Transactional(readOnly = true)
+	public String register() {
+		return "register";
+	}	
 
 	@RequestMapping("/httpspider")
 	@ResponseBody

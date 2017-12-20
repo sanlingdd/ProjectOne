@@ -13,7 +13,7 @@ public class WebDriverPoolTest {
 
     private String chromeDriverPath = "/Users/i071944/chromedriver";
 
-    @Test
+    //@Test
     public void test() {
         System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
         WebDriverPool webDriverPool = new WebDriverPool(5);

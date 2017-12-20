@@ -16,7 +16,7 @@ public class SeleniumDownloaderTest {
 
 	private String chromeDriverPath = "/Users/i071944/chromedriver";
 
-	@Test
+	//@Test
 	public void test() {
 		SeleniumDownloader seleniumDownloader = new SeleniumDownloader(chromeDriverPath);
 		long time1 = System.currentTimeMillis();
@@ -37,7 +37,7 @@ public class SeleniumDownloaderTest {
 		System.out.println(System.currentTimeMillis() - time1);
 	}
 
-	@Test
+	//@Test
 	public void testBaiduWenku() {
 		SeleniumDownloader seleniumDownloader = new SeleniumDownloader(chromeDriverPath);
         seleniumDownloader.setSleepTime(10000);

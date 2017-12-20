@@ -9,3 +9,4 @@ public class SpringBootLinkedInApplication {
 		SpringApplication.run(SpringBootLinkedInApplication.class, args);
 	}
 }
+	

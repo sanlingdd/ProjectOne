@@ -1,0 +1,132 @@
+LinkedInSearch:LinkedInSearch:jar:1.0.1-SNAPSHOT
++- org.springframework.boot:spring-boot-starter-data-jpa:jar:1.5.3.RELEASE:compile
+|  +- org.springframework.boot:spring-boot-starter:jar:1.5.3.RELEASE:compile
+|  |  +- org.springframework.boot:spring-boot:jar:1.5.3.RELEASE:compile
+|  |  +- org.springframework.boot:spring-boot-autoconfigure:jar:1.5.3.RELEASE:compile
+|  |  +- org.springframework:spring-core:jar:4.3.8.RELEASE:compile
+|  |  \- org.yaml:snakeyaml:jar:1.17:runtime
+|  +- org.springframework.boot:spring-boot-starter-aop:jar:1.5.3.RELEASE:compile
+|  |  \- org.aspectj:aspectjweaver:jar:1.8.10:compile
+|  +- org.springframework.boot:spring-boot-starter-jdbc:jar:1.5.3.RELEASE:compile
+|  |  +- org.apache.tomcat:tomcat-jdbc:jar:8.5.14:compile
+|  |  |  \- org.apache.tomcat:tomcat-juli:jar:8.5.14:compile
+|  |  \- org.springframework:spring-jdbc:jar:4.3.8.RELEASE:compile
+|  +- javax.transaction:javax.transaction-api:jar:1.2:compile
+|  +- org.springframework.data:spring-data-jpa:jar:1.11.3.RELEASE:compile
+|  |  +- org.springframework.data:spring-data-commons:jar:1.13.3.RELEASE:compile
+|  |  +- org.springframework:spring-orm:jar:4.3.8.RELEASE:compile
+|  |  +- org.springframework:spring-context:jar:4.3.8.RELEASE:compile
+|  |  +- org.springframework:spring-tx:jar:4.3.8.RELEASE:compile
+|  |  +- org.springframework:spring-beans:jar:4.3.8.RELEASE:compile
+|  |  \- org.slf4j:jcl-over-slf4j:jar:1.7.25:runtime
+|  \- org.springframework:spring-aspects:jar:4.3.8.RELEASE:compile
++- org.springframework.boot:spring-boot-starter-thymeleaf:jar:1.5.3.RELEASE:compile
+|  +- org.thymeleaf:thymeleaf-spring4:jar:2.1.5.RELEASE:compile
+|  \- nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:jar:1.4.0:compile
+|     \- org.codehaus.groovy:groovy:jar:2.4.10:compile
++- org.springframework.boot:spring-boot-starter-web:jar:1.5.3.RELEASE:compile
+|  +- org.springframework.boot:spring-boot-starter-tomcat:jar:1.5.3.RELEASE:compile
+|  |  +- org.apache.tomcat.embed:tomcat-embed-core:jar:8.5.14:compile
+|  |  +- org.apache.tomcat.embed:tomcat-embed-el:jar:8.5.14:compile
+|  |  \- org.apache.tomcat.embed:tomcat-embed-websocket:jar:8.5.14:compile
+|  +- org.hibernate:hibernate-validator:jar:5.3.5.Final:compile
+|  |  \- javax.validation:validation-api:jar:1.1.0.Final:compile
+|  +- org.springframework:spring-web:jar:4.3.8.RELEASE:compile
+|  \- org.springframework:spring-webmvc:jar:4.3.8.RELEASE:compile
+|     \- org.springframework:spring-expression:jar:4.3.8.RELEASE:compile
++- org.springframework.boot:spring-boot-starter-security:jar:1.5.3.RELEASE:compile
+|  +- org.springframework:spring-aop:jar:4.3.8.RELEASE:compile
+|  +- org.springframework.security:spring-security-config:jar:4.2.2.RELEASE:compile
+|  |  \- org.springframework.security:spring-security-core:jar:4.2.2.RELEASE:compile
+|  \- org.springframework.security:spring-security-web:jar:4.2.2.RELEASE:compile
++- org.mariadb.jdbc:mariadb-java-client:jar:1.1.9:compile
+|  +- net.java.dev.jna:jna:jar:4.2.2:compile
+|  +- net.java.dev.jna:jna:jar:platform:3.3.0:compile
+|  \- commons-dbcp:commons-dbcp:jar:1.4:compile
+|     \- commons-pool:commons-pool:jar:1.6:compile
++- joda-time:joda-time:jar:2.9.9:compile
++- org.jadira.usertype:usertype.core:jar:6.0.1.GA:compile
+|  +- org.slf4j:slf4j-api:jar:1.7.25:compile
+|  \- org.jadira.usertype:usertype.spi:jar:6.0.1.GA:compile
++- org.hibernate:hibernate-core:jar:5.2.10.Final:compile
+|  +- org.jboss.logging:jboss-logging:jar:3.3.1.Final:compile
+|  +- org.hibernate.javax.persistence:hibernate-jpa-2.1-api:jar:1.0.0.Final:compile
+|  +- org.javassist:javassist:jar:3.21.0-GA:compile
+|  +- antlr:antlr:jar:2.7.7:compile
+|  +- org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:jar:1.0.1.Final:compile
+|  +- org.jboss:jandex:jar:2.0.3.Final:compile
+|  +- com.fasterxml:classmate:jar:1.3.3:compile
+|  +- dom4j:dom4j:jar:1.6.1:compile
+|  \- org.hibernate.common:hibernate-commons-annotations:jar:5.0.1.Final:compile
++- org.hibernate:hibernate-entitymanager:jar:5.2.10.Final:compile
+|  \- net.bytebuddy:byte-buddy:jar:1.6.6:compile
++- com.google.guava:guava:jar:21.0:compile
++- com.fasterxml.jackson.core:jackson-core:jar:2.9.2:compile
++- com.fasterxml.jackson.core:jackson-databind:jar:2.9.2:compile
+|  \- com.fasterxml.jackson.core:jackson-annotations:jar:2.8.0:compile
++- org.apache.poi:poi-ooxml:jar:3.15:compile
+|  +- org.apache.poi:poi:jar:3.15:compile
+|  |  +- commons-codec:commons-codec:jar:1.10:compile
+|  |  \- org.apache.commons:commons-collections4:jar:4.1:compile
+|  +- org.apache.poi:poi-ooxml-schemas:jar:3.15:compile
+|  |  \- org.apache.xmlbeans:xmlbeans:jar:2.6.0:compile
+|  |     \- stax:stax-api:jar:1.0.1:compile
+|  \- com.github.virtuald:curvesapi:jar:1.04:compile
++- wejson:wejson:jar:1.0.1-SNAPSHOT:compile
++- us.codecraft:webmagic-selenium:jar:0.6.2-SNAPSHOT:compile
+|  +- org.seleniumhq.selenium:selenium-java:jar:2.53.1:compile
+|  |  +- org.seleniumhq.selenium:selenium-chrome-driver:jar:2.53.1:compile
+|  |  +- org.seleniumhq.selenium:selenium-edge-driver:jar:2.53.1:compile
+|  |  |  \- org.apache.commons:commons-exec:jar:1.3:compile
+|  |  +- org.seleniumhq.selenium:htmlunit-driver:jar:2.21:compile
+|  |  |  \- net.sourceforge.htmlunit:htmlunit:jar:2.21:compile
+|  |  |     +- xalan:xalan:jar:2.7.2:compile
+|  |  |     |  \- xalan:serializer:jar:2.7.2:compile
+|  |  |     +- org.apache.httpcomponents:httpmime:jar:4.5.3:compile
+|  |  |     +- net.sourceforge.htmlunit:htmlunit-core-js:jar:2.17:compile
+|  |  |     +- net.sourceforge.htmlunit:neko-htmlunit:jar:2.21:compile
+|  |  |     |  \- xerces:xercesImpl:jar:2.11.0:compile
+|  |  |     |     \- xml-apis:xml-apis:jar:1.4.01:compile
+|  |  |     +- net.sourceforge.cssparser:cssparser:jar:0.9.18:compile
+|  |  |     |  \- org.w3c.css:sac:jar:1.3:compile
+|  |  |     \- org.eclipse.jetty.websocket:websocket-client:jar:9.4.4.v20170414:compile
+|  |  |        +- org.eclipse.jetty:jetty-util:jar:9.4.4.v20170414:compile
+|  |  |        +- org.eclipse.jetty:jetty-io:jar:9.4.4.v20170414:compile
+|  |  |        +- org.eclipse.jetty:jetty-client:jar:9.4.4.v20170414:compile
+|  |  |        |  \- org.eclipse.jetty:jetty-http:jar:9.4.4.v20170414:compile
+|  |  |        \- org.eclipse.jetty.websocket:websocket-common:jar:9.4.4.v20170414:compile
+|  |  |           \- org.eclipse.jetty.websocket:websocket-api:jar:9.4.4.v20170414:compile
+|  |  +- org.seleniumhq.selenium:selenium-firefox-driver:jar:2.53.1:compile
+|  |  +- org.seleniumhq.selenium:selenium-ie-driver:jar:2.53.1:compile
+|  |  |  \- net.java.dev.jna:jna-platform:jar:4.1.0:compile
+|  |  +- org.seleniumhq.selenium:selenium-safari-driver:jar:2.53.1:compile
+|  |  |  \- io.netty:netty:jar:3.5.7.Final:compile
+|  |  +- org.seleniumhq.selenium:selenium-support:jar:2.53.1:compile
+|  |  \- org.seleniumhq.selenium:selenium-leg-rc:jar:2.53.1:compile
+|  \- com.codeborne:phantomjsdriver:jar:1.4.1:compile
+|     +- org.seleniumhq.selenium:selenium-api:jar:2.53.1:compile
+|     |  \- com.google.code.gson:gson:jar:2.8.0:compile
+|     \- org.seleniumhq.selenium:selenium-remote-driver:jar:2.53.1:compile
+|        \- cglib:cglib-nodep:jar:2.1_3:compile
++- us.codecraft:webmagic-core:jar:0.6.2-SNAPSHOT:compile
+|  +- org.apache.httpcomponents:httpclient:jar:4.5.3:compile
+|  |  \- org.apache.httpcomponents:httpcore:jar:4.4.6:compile
+|  +- org.apache.commons:commons-lang3:jar:3.1:compile
+|  +- us.codecraft:xsoup:jar:0.3.1:compile
+|  |  \- org.assertj:assertj-core:jar:2.6.0:compile
+|  +- commons-collections:commons-collections:jar:3.2.2:compile
+|  +- org.jsoup:jsoup:jar:1.8.3:compile
+|  +- commons-io:commons-io:jar:1.3.2:compile
+|  \- com.alibaba:fastjson:jar:1.2.28:compile
++- us.codecraft:webmagic-extension:jar:0.6.2-SNAPSHOT:compile
+|  \- redis.clients:jedis:jar:2.9.0:compile
+|     \- org.apache.commons:commons-pool2:jar:2.4.2:compile
++- com.jayway.jsonpath:json-path:jar:2.2.0:compile
++- org.thymeleaf:thymeleaf:jar:2.1.4.RELEASE:compile
+|  +- ognl:ognl:jar:3.0.8:compile
+|  \- org.unbescape:unbescape:jar:1.1.0.RELEASE:compile
++- net.minidev:json-smart:jar:2.2.1:compile
+|  \- net.minidev:accessors-smart:jar:1.1:compile
+|     \- org.ow2.asm:asm:jar:5.0.3:compile
+\- org.slf4j:slf4j-log4j12:jar:1.7.25:compile
+   \- log4j:log4j:jar:1.2.17:compile

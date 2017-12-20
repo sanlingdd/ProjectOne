@@ -1,28 +1,60 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="en">
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<title>Inside Consulting</title>
+<meta name="description" content=""></meta>
+<meta name="author" content=""></meta>
 
-<title>Spring Framework Guru</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Bootstrap -->
+<link rel="stylesheet" type="text/css"  th:href="@{css/bootstrap.css}" href="css/bootstrap.css"></link>
+<link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.css"></link>
 
-<link
-	href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
-	th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
-	rel="stylesheet" media="screen" />
+<!-- Stylesheet
+    ================================================== -->
+<link rel="stylesheet" type="text/css"  href="css/style.css"></link>
+<link rel="stylesheet" type="text/css" href="css/prettyPhoto.css"></link>
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'></link>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800,600,300' rel='stylesheet' type='text/css'></link>
+<script type="text/javascript" src="js/modernizr.custom.js"></script>
 
-<script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
-	th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 <body>
-	<div class="container">
-		<div class="jumbotron">
-			<img src="../static/images/FBcover1200x628.png" width="1000"
-				th:src="@{images/FBcover1200x628.png}" />
-			<h1>Hello</h1>
 
-			<h2>Fellow Spring Framework Gurus!!!</h2>
-		</div>
-	</div>
+<div th:include="header::header-section"></div>
+<div th:include="navigation::navigation-section"></div> 
+
+<div th:include="services::services-section"></div>
+<div th:include="portfolio::portfolio-section"></div>
+<div th:include="achievements::achievements-section"></div> 
+<div th:include="team::team-section"></div>
+<div th:include="contact::contact-section"></div>
+<div th:include="social::social-section"></div>
+<div th:include="footer::footer-section"></div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+<script type="text/javascript" src="js/jquery.1.11.1.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed --> 
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/SmoothScroll.js"></script>
+<script type="text/javascript" src="js/jquery.counterup.js"></script> 
+<script type="text/javascript" src="js/waypoints.js"></script>
+
+ <script type="text/javascript" src="js/jquery.prettyPhoto.js"></script> 
+ <script type="text/javascript" src="js/jquery.isotope.js"></script>
+ 
+<script type="text/javascript" src="js/jqBootstrapValidation.js"></script> 
+<script type="text/javascript" src="js/contact_me.js"></script>
 
 </body>
 </html>
