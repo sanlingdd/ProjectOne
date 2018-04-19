@@ -1,4 +1,4 @@
-package com.linkedin.configuration;
+package com.falcon.configuration;
 
 import javax.sql.DataSource;
 
@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 @Configuration
 @EnableWebSecurity
@@ -33,17 +32,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-//		http.csrf().disable().authorizeRequests().antMatchers("/", "/home", "/about", "/index","/js/**", "/css/**", "/images/**", "/fonts/**").permitAll()
-//				.antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN").antMatchers("/user/**").hasAnyRole("ROLE_USER")
-//				.anyRequest().authenticated().and().formLogin().loginPage("/login**").permitAll().and().logout()
-//				.permitAll().and().exceptionHandling().accessDeniedPage("/404");
+		//http.csrf().disable().authorizeRequests().antMatchers("/js", "/css", "/images", "/fonts").permitAll();
 
-        http.antMatcher("/**")
-        .authorizeRequests()
-        .antMatchers("/", "/login**")
-        .permitAll()
-        .anyRequest()
-        .authenticated();
+		http.csrf().disable().authorizeRequests().antMatchers("/", "/home", "/about", "/index","/js/**", "/css/**", "/images/**", "/fonts/**").permitAll()
+				.antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN").antMatchers("/user/**").hasAnyRole("ROLE_USER")
+				.anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and().logout()
+				.permitAll().and().exceptionHandling().accessDeniedPage("/404");
+
+		/*
+		 * http.authorizeRequests().antMatchers("/abc").access(
+		 * "hasRole('ROLE_ADMIN')").anyRequest().permitAll().and()
+		 * .formLogin().loginPage("/login").usernameParameter("username").
+		 * passwordParameter("password").and()
+		 * .logout().logoutSuccessUrl("/login?logout").and().exceptionHandling()
+		 * .accessDeniedPage("/403").and() .csrf();
+		 */
 	}
 
 	@Autowired
