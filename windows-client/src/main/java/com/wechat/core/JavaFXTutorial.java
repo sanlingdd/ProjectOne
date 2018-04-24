@@ -70,7 +70,6 @@ public class JavaFXTutorial extends Application {
         
         btn.setOnAction(new EventHandler<ActionEvent>() {
         	 
-            @Override
             public void handle(ActionEvent e) {
                 actiontarget.setFill(Color.FIREBRICK);
                 actiontarget.setText("Sign in button pressed");

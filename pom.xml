@@ -36,7 +36,8 @@
         <module>webmagic-selenium</module>
         <module>webmagic-saxon</module>
         <module>webmagic-samples</module>
-		<module>wechat-java</module>				
+		<module>wechat-java</module>
+		<module>linkedin-java</module>		
     </modules>
 
 
