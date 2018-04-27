@@ -22,6 +22,9 @@ public class FXMLExample extends Application {
 		stage.setTitle("FXML Welcome");
 		stage.setScene(scene);
 		stage.show();
+		
+		
+		
 	}
 
 }
