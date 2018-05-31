@@ -39,10 +39,11 @@ public class WeChat {
 		//
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability("platformName", "Android");
-		capabilities.setCapability("platformVersion", "4.4.4");
+		capabilities.setCapability("platformVersion", "7.0");
 		// desired_caps['deviceName'] = 'Android Emulator'
 		// miu miu installed port
-		capabilities.setCapability("deviceName", "localhost:7555");
+		capabilities.setCapability("deviceName", "SAL0217A28001753");
+		//capabilities.setCapability("deviceName", "localhost:7555");
 		capabilities.setCapability("appPackage", "com.tencent.mm");
 		capabilities.setCapability("appActivity", "com.tencent.mm.ui.LauncherUI");
 		capabilities.setCapability("noReset", true);

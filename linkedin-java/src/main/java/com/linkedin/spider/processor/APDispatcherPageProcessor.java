@@ -9,16 +9,14 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 @Service
-public class DispatcherPageProcessor implements PageProcessor {
+public class APDispatcherPageProcessor implements PageProcessor {
 
-	@Autowired
-	private LinkedinPeopleProfilePageProcessor profileProcessor;
-	@Autowired
-	private LinkedInPeopleSearchPageProcessor searchProcessor;
+	private APPageProcessor profileProcessor;
+
 
 	private Site site = Site.me().setRetryTimes(3).setSleepTime(15000).setTimeOut(10000);
 
-	public DispatcherPageProcessor() {
+	public APDispatcherPageProcessor() {
 		site.setCharset("UTF-8");
 		site.addHeader("accept-encoding", "gzip, deflate, sdch, br");
 		site.addHeader("accept-language", "zh-CN,zh;q=0.8");
@@ -27,7 +25,6 @@ public class DispatcherPageProcessor implements PageProcessor {
 				"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
 		site.addHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
 		site.addHeader("cache-control", "max-age=0");
-		site.addHeader("avail-dictionary", "YFA7RCTS");
 		site.addHeader("cookie",
 				"shpuvid=\"CmEHO1sOdoexGQm5BYOjAg==\"; BIGipServer~sap_it_corp_webapps-people_prod~lb-4c7322be4-e721=\"rd5o00000000000000000000ffff0a61073bo4000\"; _expertondemand_session=\"BAh7CkkiD3Nlc3Npb25faWQGOgZFVEkiJTU2NWIyNGFkYmQ0YTdjYmFlYzQ1NzQ0ZjYxMGYxZmY5BjsAVEkiCHVpZAY7AEZJIgxJMDcxOTQ0BjsAVEkiDnJldHVybl90bwY7AEYiDC9zZWFyY2hJIhhhdmFpbGFiaWxpdHlfYmFza2V0BjsARnsGOgl1aWRzWwBJIhBfY3NyZl90b2tlbgY7AEZJIjEvYUI0ajBod2U0NVBwQWJ4TXhKU0l2bkV1alhGUytIZEo2Y2lIQjM1aGJnPQY7AEY%3D--ddce5eb432f0ca3a9634f55a13a6936f0c53634f\"");
 
@@ -64,15 +61,10 @@ public class DispatcherPageProcessor implements PageProcessor {
 	@Override
 	public void process(Page page) {
 		if (profileProcessor == null) {
-			profileProcessor = new LinkedinPeopleProfilePageProcessor();
-			searchProcessor = new LinkedInPeopleSearchPageProcessor();
+			profileProcessor = new APPageProcessor();
 		}
-		if (page.getUrl().toString().matches("\\w+://www.linkedin.com/in/[^/]+/")
-				|| page.getUrl().toString().matches("\\w+://www.linkedin.com/in/[^/]+")) {
-			profileProcessor.process(page);
-		} else {
-			searchProcessor.process(page);
-		}
+		
+		profileProcessor.process(page);
 	}
 
 	@Override
