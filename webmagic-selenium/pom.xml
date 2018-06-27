@@ -2,9 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<artifactId>webmagic-parent</artifactId>
 		<groupId>us.codecraft</groupId>
+		<artifactId>webmagic-parent</artifactId>
 		<version>0.6.2</version>
+		<relativePath>../common/webmagic</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 

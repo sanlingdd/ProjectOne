@@ -4,6 +4,7 @@
         <artifactId>webmagic-parent</artifactId>
         <groupId>us.codecraft</groupId>
         <version>0.6.2</version>
+		<relativePath>../common/webmagic</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
