@@ -1,3 +1,4 @@
+package com.linkedin.automation;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

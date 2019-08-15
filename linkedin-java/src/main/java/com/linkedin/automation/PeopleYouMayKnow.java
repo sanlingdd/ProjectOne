@@ -1,3 +1,4 @@
+package com.linkedin.automation;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -7,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class PeopleYouMayKnow2 {
+public class PeopleYouMayKnow {
 
 	public void scrollThePage(WebDriver webDriver) {
 		int sleepTime = 100;
@@ -29,20 +30,19 @@ public class PeopleYouMayKnow2 {
 
 	public static void main(String[] args) throws InterruptedException {
 
-		PeopleYouMayKnow2 obj = new PeopleYouMayKnow2();
+		PeopleYouMayKnow obj = new PeopleYouMayKnow();
 		WebDriver driver;
 		System.setProperty("webdriver.chrome.driver", "/temp/chromedriver_win32/chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.get("https://www.linkedin.com");
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 
 		WebElement account = driver.findElements(By.xpath(".//input[@id='login-email']")).get(0);
-		account.sendKeys("17612165703");
+		account.sendKeys("17091275816");
 		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 
 		WebElement pass = driver.findElement(By.xpath(".//input[@id='login-password']"));
-		pass.sendKeys("Initial0");
+		pass.sendKeys("hiro12345");
 		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 
 		WebElement button = driver.findElement(By.xpath(".//input[@id='login-submit']"));

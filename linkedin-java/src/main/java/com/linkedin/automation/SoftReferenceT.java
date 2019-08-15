@@ -1,3 +1,4 @@
+package com.linkedin.automation;
 import java.lang.ref.SoftReference;
 
 public class SoftReferenceT {
