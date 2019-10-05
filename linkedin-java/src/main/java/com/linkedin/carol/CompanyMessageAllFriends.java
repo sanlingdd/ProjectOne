@@ -1,4 +1,4 @@
-package com.linkedin.automation;
+package com.linkedin.carol;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -15,8 +15,11 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.linkedin.automation.HuntingCompany;
+import com.linkedin.automation.LinkedInCookie;
+import com.linkedin.automation.PageOperation;
 
-public class CompanyMessageSending {
+public class CompanyMessageAllFriends {
 
 	public static void HandleAPage(PageOperation obj, WebDriver driver, HuntingCompany firm) {
 		int skip = 0;// skip email check
@@ -105,15 +108,9 @@ public class CompanyMessageSending {
 					if(!namespans.isEmpty()){
 						name = namespans.get(0).getText().split(" ")[0];						
 					}
-					String hintMessage = "Hi "+name+",\r\n"
-							+ "我在帮一些内外资专业的猎头公司做招聘猎头,看了您的Profile,有一些合适您的猎头机会推荐，不知道您最近open看外面的机会吗？\r\n"
-							+ "如近期没有看机会的计划，也希望有机会约您见面聊一聊，一起交流交流行业资讯\r\n"
-							+ "\r\n"
-							+ "I am hunter William. I am searching excellent hunters for some really fancy hunting firms.\r\n"
-							+ "Viewed your profile, I have some very suitable positions for you.\r\n"
-							+ "I am wonderring whether you are open to new opportunities\r\n"
-							+ "Of no plans recently, I also hope I can have the opportunity to see and exchange the industry info with each\r\n"
-							+ "Best Regards, William";
+					String hintMessage = "Hi "+name+", 我是招聘猎头的William，很高兴认识你，方便留个联系方式认识一下吗？我的微信18601793121\r\n" + 
+							"如近期有看机会的计划，请务必回复哈，Big Thanks～\r\n" + 
+							"";
 					WebElement messageElement = driver.findElements(By.xpath(".//div[contains(@class,'msg-form__contenteditable')]")).get(0);
 					messageElement.sendKeys(hintMessage);
 
@@ -157,7 +154,7 @@ public class CompanyMessageSending {
 
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
 
-		File huntingFirmFile = new File("C://temp/HuntingTarget.txt");
+		File huntingFirmFile = new File("C://temp/huntingfirmsPureCode.txt");
 		ObjectMapper mapper = new ObjectMapper();
 		JavaType firmType = mapper.getTypeFactory().constructParametricType(List.class, HuntingCompany.class);
 		// new TypeReference<List<Cookie>>() {}

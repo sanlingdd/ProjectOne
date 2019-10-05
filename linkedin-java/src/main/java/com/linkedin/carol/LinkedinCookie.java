@@ -35,9 +35,19 @@ public class LinkedinCookie {
 		
 		//Carol Xu
 		lop.login(driver,"478267107@qq.com","Xu234567");
+		
+		//Lily Rao
+		//lop.login(driver,"15000729310","rt135790");
+		
 
+		//Yulia ===Email Yulia170814
+		//lop.login(driver,"13774278832@163.com","hx123888");
+		
+//		https://www.linkedin.com/search/results/people/?facetGeoRegion=%5B%22cn%3A8911%22%5D&facetIndustry=%5B%226%22%5D&keywords=HRBP&origin=FACETED_SEARCH
+		
 		Set<org.openqa.selenium.Cookie> cookies = driver.manage().getCookies();
 		//File cookieFile = new File("C://temp/YaqiCookie.txt");
+		//File cookieFile = new File("C://temp/LilyCookie.txt");
 		File cookieFile = new File("C://temp/CarolCookie.txt");
 		ObjectMapper mapper = new ObjectMapper(); 
 		mapper.writeValue(cookieFile, cookies);

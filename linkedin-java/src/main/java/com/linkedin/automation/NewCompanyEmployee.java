@@ -1,4 +1,5 @@
 package com.linkedin.automation;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class NewCompanyEmployee {
 
 	public static void HandleAPage(PageOperation obj, WebDriver driver, HuntingCompany firm) {
-		int skip = 0;//skip email check
+		int skip = 0;// skip email check
 		double current = 0.0;
 		obj.scrollThePageWithPercent(driver, Double.valueOf(0.75));
 		while (true) {
@@ -34,9 +35,10 @@ public class NewCompanyEmployee {
 				break;
 			}
 			try {
-				WebElement element = elements.get(0+skip);
+				WebElement element = elements.get(0 + skip);
 				obj.scrollThePage(driver, element);
-				element.sendKeys(Keys.ENTER);;
+				element.sendKeys(Keys.ENTER);
+				;
 				obj.sleep(5000);
 
 				List<WebElement> emails = driver.findElements(By.xpath(".//input[@id='email']"));
@@ -50,19 +52,17 @@ public class NewCompanyEmployee {
 					continue;
 				}
 
-				List<WebElement> sendbuttons = driver.findElements(By.xpath(".//button[text()='添加消息']"));
+				List<WebElement> sendbuttons = driver.findElements(By.xpath(".//span[text()='添加消息']/.."));
 				if (!sendbuttons.isEmpty()) {
 					sendbuttons.get(0).sendKeys(Keys.ENTER);
 
 					String hintMessage = "";
 					if (!firm.isCustomer()) {
-						hintMessage = "Dear"+""+"\r\n" + 
-								"谢谢接受我的邀请 \r\n" + 
-								"我是R2R猎头顾问William，专注猎头行业，服务各行业内外资Top的一些猎头公司的职位招聘。\r\n" + 
-								"希望和您建立联系，持续与您迅速分享并探讨或许会对您有所提升的职业机会和最新的市场信息。暂不看机会，可先认识并保持联络。\r\n" + 
-								"为方便联系，烦请互换手机号码or微信？（18601793121,微信R2RWilliam,欢迎添加）\r\n" + 
-								"谢谢您的时间，等待回复。\r\n" + 
-								"William\r\n" ;
+						hintMessage = "Dear" + "" + "\r\n" + "谢谢接受我的邀请 \r\n"
+								+ "我是R2R猎头顾问William，专注猎头行业，服务各行业内外资Top的一些猎头公司的职位招聘。\r\n"
+								+ "希望和您建立联系，持续与您迅速分享并探讨或许会对您有所提升的职业机会和最新的市场信息。暂不看机会，可先认识并保持联络。\r\n"
+								+ "为方便联系，烦请互换手机号码or微信？（18601793121,微信R2RWilliam,欢迎添加）\r\n" + "谢谢您的时间，等待回复。\r\n"
+								+ "William\r\n";
 					} else {
 						hintMessage = "我是William，希望可以与您建立联系！";
 					}
@@ -72,7 +72,7 @@ public class NewCompanyEmployee {
 					messageElement.sendKeys(hintMessage);
 					obj.sleep(3000);
 
-					List<WebElement> sendinvitationElements = driver.findElements(By.xpath(".//button[text()='发邀请']"));
+					List<WebElement> sendinvitationElements = driver.findElements(By.xpath(".//span[text()='发邀请']/.."));
 					if (!sendinvitationElements.isEmpty()) {
 						sendinvitationElements.get(0).sendKeys(Keys.ENTER);
 						obj.sleep(3000);
@@ -80,51 +80,42 @@ public class NewCompanyEmployee {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				
-				obj.sleep(1000*60*20*1  );
+
+				obj.sleep(1000 * 60 * 20 * 1);
 
 				String currentURL = driver.getCurrentUrl();
-				WebGet(driver,currentURL);
+				WebGet(driver, currentURL);
 
 				HandleAPage(obj, driver, firm);
 			}
 			obj.sleep(10000);
 		}
 	}
-	
+
 	public static void WebGet(WebDriver driver, String url) {
 		try {
 			driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
 			driver.navigate().to(url);
-		}catch(TimeoutException e)
-		{
+		} catch (TimeoutException e) {
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
 			jse.executeScript("window.stop()");
 		}
 	}
 
-	public static void main(String[] args)
+	public static WebDriver getNewDriver()
 			throws InterruptedException, JsonParseException, JsonMappingException, IOException {
-
-		File huntingFirmFile = new File("C://temp/huntingfirmsPureCode.txt");
+		WebDriver driver;
+		PageOperation obj = new PageOperation();
 		ObjectMapper mapper = new ObjectMapper();
 		JavaType firmType = mapper.getTypeFactory().constructParametricType(List.class, HuntingCompany.class);
-		// new TypeReference<List<Cookie>>() {}
-		List<HuntingCompany> firmsSet = (List<HuntingCompany>) mapper.readValue(huntingFirmFile, firmType);
-//		for (HuntingCompany firm : firmsSet) {
-//			firm.setHasFinished(false);
-//		}
-
-		PageOperation obj = new PageOperation();
-		WebDriver driver;
 		// chrome
 		System.setProperty("webdriver.chrome.driver", "/temp/chromedriver_win32/chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 
-		driver.manage().timeouts().pageLoadTimeout(200,TimeUnit.SECONDS);
-		
-		WebGet(driver,"https://www.linkedin.com");
+		driver.manage().timeouts().pageLoadTimeout(200, TimeUnit.SECONDS);
+
+		WebGet(driver, "https://www.linkedin.com");
 
 		driver.manage().deleteAllCookies();
 		Thread.sleep(3000);
@@ -138,72 +129,99 @@ public class NewCompanyEmployee {
 					cook.isSecure(), cook.isHttpOnly());
 			driver.manage().addCookie(coo);
 		}
+
+		return driver;
+	}
+
+	public static void main(String[] args)
+			throws InterruptedException, JsonParseException, JsonMappingException, IOException {
+
+		File huntingFirmFile = new File("C://temp/huntingfirmsPureCode.txt");
+		ObjectMapper mapper = new ObjectMapper();
+		JavaType firmType = mapper.getTypeFactory().constructParametricType(List.class, HuntingCompany.class);
+		// new TypeReference<List<Cookie>>() {}
+		List<HuntingCompany> firmsSet = (List<HuntingCompany>) mapper.readValue(huntingFirmFile, firmType);
+		// for (HuntingCompany firm : firmsSet) {
+		// firm.setHasFinished(false);
+		// }
+
+		PageOperation obj = new PageOperation();
 		for (HuntingCompany firm : firmsSet) {
-			//if (StringUtils.isEmpty(firm.getName())) {
-				firm.setHasFinished(false);
-			//}
+			// if (StringUtils.isEmpty(firm.getName())) {
+			firm.setHasFinished(false);
+			// }
 		}
 
 		for (HuntingCompany firm : firmsSet) {
-			if (firm.isHasFinished()) {
-				continue;
-			}
-			String company = "";
-			if (firm.isLink()) {
-				company = firm.getUrl();
-			} else {
-				StringBuilder argsStr = new StringBuilder("");
-				argsStr.append("\"").append(firm.getCode()).append("\"");
-				//BeiJing
-//				company = "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B" + argsStr.toString()
-//						+ "%5D&facetGeoRegion=%5B\"cn%3A8911\"%2C\"cn%3A8905\"%5D&facetNetwork=%5B\"S\"%5D&origin=FACETED_SEARCH&page=1";
-				//ShangHai
-				company = "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B" + argsStr.toString()
-				+ "%5D&facetGeoRegion=%5B\"cn%3A8909\"%2C\"cn%3A8883\"%5D&facetNetwork=%5B\"S\"%5D&origin=FACETED_SEARCH&page=1";
+			try {
+				if (firm.isHasFinished()) {
+					continue;
+				}
+				WebDriver driver = getNewDriver();
+				String company = "";
+				if (firm.isLink()) {
+					company = firm.getUrl();
+				} else {
+					StringBuilder argsStr = new StringBuilder("");
+					argsStr.append("\"").append(firm.getCode()).append("\"");
+					// BeiJing
+					// company =
+					// "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B" +
+					// argsStr.toString()
+					// +
+					// "%5D&facetGeoRegion=%5B\"cn%3A8911\"%2C\"cn%3A8905\"%5D&facetNetwork=%5B\"S\"%5D&origin=FACETED_SEARCH&page=1";
+					// ShangHai
+					company = "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B"
+							+ argsStr.toString()
+							+ "%5D&facetGeoRegion=%5B\"cn%3A8909\"%2C\"cn%3A8883\"%5D&facetNetwork=%5B\"S\"%5D&origin=FACETED_SEARCH&page=1";
 
-			}
+				}
 
-			obj.sleep(1000);
-			WebGet(driver,company);
-			obj.sleep(3000);// get company name
-			if (StringUtils.isEmpty(firm.getName())) {
-				List<WebElement> firmNameElments = driver
-						.findElements(By.xpath(".//button[@class='search-s-facet__button artdeco-button artdeco-button--icon-right artdeco-button--2 artdeco-button--primary ember-view']//span[@class='artdeco-button__text']"));
-				if (firmNameElments.size() != 0) {
-					WebElement firmNameElement = firmNameElments.get(0);
-					String firmName = firmNameElement.getText();
-					if (firm.getName() == null && (!StringUtils.isEmpty(firmName))) {
-						firm.setName(firmName);
+				obj.sleep(1000);
+				WebGet(driver, company);
+				obj.sleep(3000);// get company name
+				if (StringUtils.isEmpty(firm.getName())) {
+					List<WebElement> firmNameElments = driver.findElements(By.xpath(
+							".//button[@class='search-s-facet__button artdeco-button artdeco-button--icon-right artdeco-button--2 artdeco-button--primary ember-view']//span[@class='artdeco-button__text']"));
+					if (firmNameElments.size() != 0) {
+						WebElement firmNameElement = firmNameElments.get(0);
+						String firmName = firmNameElement.getText();
+						if (firm.getName() == null && (!StringUtils.isEmpty(firmName))) {
+							firm.setName(firmName);
+						}
 					}
 				}
-			}
 
-			while (true) {
-				try {
+				while (true) {
+					try {
 
-					HandleAPage(obj, driver, firm);
-					// elements.forEach((element) -> {
-					// element.sendKeys(Keys.ENTER);
-					// obj.sleep(100);
-					// });
-					List<WebElement> nextPageElements = driver.findElements(By.xpath(
-							".//button[@class='artdeco-pagination__button artdeco-pagination__button--next artdeco-button artdeco-button--muted artdeco-button--icon-right artdeco-button--1 artdeco-button--tertiary ember-view']"));
-					if (nextPageElements.isEmpty()) {
-						firm.setHasFinished(true);
-						mapper.writeValue(huntingFirmFile, firmsSet);
+						HandleAPage(obj, driver, firm);
+						// elements.forEach((element) -> {
+						// element.sendKeys(Keys.ENTER);
+						// obj.sleep(100);
+						// });
+						List<WebElement> nextPageElements = driver.findElements(By.xpath(
+								".//button[@class='artdeco-pagination__button artdeco-pagination__button--next artdeco-button artdeco-button--muted artdeco-button--icon-right artdeco-button--1 artdeco-button--tertiary ember-view']"));
+						if (nextPageElements.isEmpty()) {
+							firm.setHasFinished(true);
+							mapper.writeValue(huntingFirmFile, firmsSet);
+							break;
+						} else {
+							nextPageElements.get(0).sendKeys(Keys.ENTER);
+							obj.sleep(10000);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 						break;
-					} else {
-						nextPageElements.get(0).sendKeys(Keys.ENTER);
-						obj.sleep(10000);
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					break;
 				}
+				driver.close();
+				driver.quit();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
 		}
-		
+
 		System.out.println("Batch Finished!");
 
 		// finished

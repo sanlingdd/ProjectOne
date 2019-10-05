@@ -27,7 +27,7 @@ public class EmailSend {
      
     public static void main(String[] args) throws Exception {
         //1、连接邮件服务器的参数配置
-        Properties props = new Properties();
+        Properties props = new Properties(); 
         //设置用户的认证方式
         props.setProperty("mail.smtp.auth", "true");
         //设置传输协议

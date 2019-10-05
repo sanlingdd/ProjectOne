@@ -22,7 +22,7 @@ import com.linkedin.automation.HuntingCompany;
 import com.linkedin.automation.LinkedInCookie;
 import com.linkedin.automation.PageOperation;
 
-public class NewCompanyEmployeeCFO {
+public class NewCompanyEmployeeLilyRao {
 
 	public static void HandleAPage(PageOperation obj, WebDriver driver, HuntingCompany firm) {
 		int skip = 0;//skip email check
@@ -59,13 +59,11 @@ public class NewCompanyEmployeeCFO {
 
 					String hintMessage = "";
 					if (!firm.isCustomer()) {
-						hintMessage = "Dear\r\n" + 
-								"谢谢接受我的邀请 \r\n" + 
-								"我是会计财务&金融领域猎头顾问Carol，服务各行业内外资该领域人才寻猎。\r\n" + 
-								"希望和您建立联系，持续与您迅速分享并探讨或许会对您有所提升的职业机会和最新市场信息。暂不看机会，可先认识并保持联络。\r\n" + 
-								"为方便联系，烦请互换手机号码or微信？（18317131734,微信suira-XU,欢迎添加）\r\n" + 
-								"谢谢您的时间，等待回复。\r\n" + 
-								"Carol";
+						hintMessage = "Dear, Nice to meet you here, I'm Lily，\r\n"
+								+ "I am focus on HRBP functions recruitment,and I'd like to share some good job opportunities with you, \r\n"
+								+ "May I have your phone number for a better communication.Thanks.\r\n" + 
+								"Please see My contact information as: Tel:15000729310(Link up with Wechat)\r\n" + 
+								"Lily";
 						} else {
 						hintMessage = "我是William，希望可以与您建立联系！";
 					}
@@ -112,7 +110,7 @@ public class NewCompanyEmployeeCFO {
 	public static void main(String[] args)
 			throws InterruptedException, JsonParseException, JsonMappingException, IOException {
 
-		File huntingFirmFile = new File("C://temp/CFOPureURL.txt");
+		File huntingFirmFile = new File("C://temp/LilyPureURL.txt");
 		ObjectMapper mapper = new ObjectMapper();
 		JavaType firmType = mapper.getTypeFactory().constructParametricType(List.class, HuntingCompany.class);
 		// new TypeReference<List<Cookie>>() {}
@@ -132,7 +130,7 @@ public class NewCompanyEmployeeCFO {
 		driver.manage().deleteAllCookies();
 		Thread.sleep(3000);
 
-		File cookieFile = new File("C://temp/CarolCookie.txt");
+		File cookieFile = new File("C://temp/LilyCookie.txt");
 		JavaType linkedinCookieType = mapper.getTypeFactory().constructParametricType(List.class, LinkedInCookie.class);
 		List<LinkedInCookie> cookieSet = (List<LinkedInCookie>) mapper.readValue(cookieFile, linkedinCookieType);
 		obj.sleep(1000);
