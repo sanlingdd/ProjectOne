@@ -16,7 +16,7 @@ public class LinkedinOperation {
 	public void login(WebDriver driver,String username, String key) throws JsonParseException, JsonMappingException, IOException {
 		PageOperation obj = new PageOperation();
 		
-		driver.manage().timeouts().pageLoadTimeout(10,TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(200,TimeUnit.SECONDS);
 		driver.navigate().to("https://www.linkedin.com");
 		
 		List<WebElement> loginButton = driver.findElements(By.xpath(".//a[text()='登录']"));

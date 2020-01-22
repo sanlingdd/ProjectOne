@@ -18,7 +18,7 @@ public class MyLinkedInSpider extends Spider {
 		if (!SpiderConstants.terminate) {
 			super.processRequest(request);
 		} else {
-			new SpecialKeeper().writeToExcelFile();
+			//new SpecialKeeper().writeToExcelFile();
 			this.close();
 		}
 

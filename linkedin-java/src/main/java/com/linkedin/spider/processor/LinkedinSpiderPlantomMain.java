@@ -182,8 +182,8 @@ public class LinkedinSpiderPlantomMain {
 
 		java.util.logging.Logger.getLogger(PhantomJSDriverService.class.getName()).setLevel(Level.OFF);
 
-		LinkedInOutputKeeper keeper = new LinkedInOutputKeeper();
-		keeper.start();
+		//LinkedInOutputKeeper keeper = new LinkedInOutputKeeper();
+		//keeper.start();
 		spider.addUrl(
 				"https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%222572611%22%5D&origin=FACETED_SEARCH");
 		// String url =
@@ -209,9 +209,9 @@ public class LinkedinSpiderPlantomMain {
 		spider.setDownloader(seleniumDownloader);
 		spider.setScheduler(new LinkedinPriorityScheduler())
 				// ����Pipeline���������json��ʽ���浽�ļ�
-				.addPipeline(new ExcelFilePipeLine())
+				//.addPipeline(new ExcelFilePipeLine())
 				// ����5���߳�ͬʱִ��
-				.thread(3)
+				.thread(1)
 				// ��������
 				.run();
 	}

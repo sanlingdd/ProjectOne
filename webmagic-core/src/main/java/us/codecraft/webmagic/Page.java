@@ -47,6 +47,7 @@ public class Page {
     private Set<Request> targetRequests = new HashSet<Request>();
 
     public Page() {
+    	
     }
 
     public Page setSkip(boolean skip) {

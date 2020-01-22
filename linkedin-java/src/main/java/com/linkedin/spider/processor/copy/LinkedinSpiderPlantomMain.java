@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.linkedin.automation.CommonSetting;
 import com.linkedin.jpa.service.CompanyService;
 import com.linkedin.spider.POIHelper;
 import com.linkedin.spider.SearchURL;
@@ -33,7 +34,7 @@ public class LinkedinSpiderPlantomMain {
 	public void startLinkedProfileSpider() {
 		Workbook workbook = null;
 		FileInputStream inputStream = null;
-		String tempFile = "C:/data/webmagic/www.linkedin.com/LinkedProfiles.xlsx";
+		String tempFile = "C:/Data/webmagic/LinkedProfiles.xlsx";
 		try {
 			inputStream = new FileInputStream(tempFile);
 			workbook = new XSSFWorkbook(inputStream);
@@ -182,8 +183,8 @@ public class LinkedinSpiderPlantomMain {
 
 		java.util.logging.Logger.getLogger(PhantomJSDriverService.class.getName()).setLevel(Level.OFF);
 
-		LinkedInOutputKeeper keeper = new LinkedInOutputKeeper();
-		keeper.start();
+		//LinkedInOutputKeeper keeper = new LinkedInOutputKeeper();
+		//keeper.start();
 		spider.addUrl(
 				"https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%222572611%22%5D&origin=FACETED_SEARCH");
 		// String url =
@@ -203,15 +204,15 @@ public class LinkedinSpiderPlantomMain {
 		// .addUrl("https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%226279%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetNetwork=%5B%22F%22%2C%22S%22%2C%22O%22%5D&origin=FACETED_SEARCH&page=1")
 		// ����Scheduler��ʹ��Redis������URL����
 
-		String chromeDriverPath = "/Users/i071944/chromedriver";
+		String chromeDriverPath =CommonSetting.chromeDrivePath;
 		LinkedSeleniumDownloader seleniumDownloader = new LinkedSeleniumDownloader(chromeDriverPath);
 
 		spider.setDownloader(seleniumDownloader);
 		spider.setScheduler(new LinkedinPriorityScheduler())
 				// ����Pipeline���������json��ʽ���浽�ļ�
-				.addPipeline(new ExcelFilePipeLine())
+				//.addPipeline(new ExcelFilePipeLine())
 				// ����5���߳�ͬʱִ��
-				.thread(3)
+				.thread(1)
 				// ��������
 				.run();
 	}

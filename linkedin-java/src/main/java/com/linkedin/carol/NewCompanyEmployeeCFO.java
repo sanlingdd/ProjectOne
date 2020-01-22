@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.linkedin.automation.CommonSetting;
 import com.linkedin.automation.HuntingCompany;
 import com.linkedin.automation.LinkedInCookie;
 import com.linkedin.automation.PageOperation;
@@ -52,8 +53,8 @@ public class NewCompanyEmployeeCFO {
 					skip++;
 					continue;
 				}
-
-				List<WebElement> sendbuttons = driver.findElements(By.xpath(".//button[text()='添加消息']"));
+//				List<WebElement> sendbuttons = driver.findElements(By.xpath(".//span[text()='添加消息']/parent::*"));
+				List<WebElement> sendbuttons = driver.findElements(By.xpath(".//span[text()='添加消息']/.."));
 				if (!sendbuttons.isEmpty()) {
 					sendbuttons.get(0).sendKeys(Keys.ENTER);
 
@@ -75,7 +76,7 @@ public class NewCompanyEmployeeCFO {
 					messageElement.sendKeys(hintMessage);
 					obj.sleep(3000);
 
-					List<WebElement> sendinvitationElements = driver.findElements(By.xpath(".//button[text()='发邀请']"));
+					List<WebElement> sendinvitationElements = driver.findElements(By.xpath(".//span[text()='发邀请']/.."));
 					if (!sendinvitationElements.isEmpty()) {
 						sendinvitationElements.get(0).sendKeys(Keys.ENTER);
 						obj.sleep(3000);
@@ -121,18 +122,18 @@ public class NewCompanyEmployeeCFO {
 		PageOperation obj = new PageOperation();
 		WebDriver driver;
 		// chrome
-		System.setProperty("webdriver.chrome.driver", "/temp/chromedriver_win32/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", CommonSetting.chromeDrivePath);
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		
 		driver.manage().timeouts().pageLoadTimeout(500,TimeUnit.SECONDS);
-		WebGet(driver,"https://www.linkedin.com");
+		WebGet(driver,"https://www.linkedin.com/in/kit-chiu-575005169/");
 		
 
 		driver.manage().deleteAllCookies();
 		Thread.sleep(3000);
 
-		File cookieFile = new File("C://temp/CarolCookie.txt");
+		File cookieFile = new File(CommonSetting.cookieFilePrefix+"CarolCookie.txt");
 		JavaType linkedinCookieType = mapper.getTypeFactory().constructParametricType(List.class, LinkedInCookie.class);
 		List<LinkedInCookie> cookieSet = (List<LinkedInCookie>) mapper.readValue(cookieFile, linkedinCookieType);
 		obj.sleep(1000);

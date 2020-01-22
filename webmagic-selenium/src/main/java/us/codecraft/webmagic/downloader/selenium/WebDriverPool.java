@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.downloader.selenium;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -10,10 +11,12 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -24,6 +27,12 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -49,7 +58,7 @@ public class WebDriverPool {
 	private WebDriver mDriver = null;
 	private boolean mAutoQuitDriver = true;
 
-	private static final String DEFAULT_CONFIG_FILE = "/data/webmagic/webmagic-selenium/config.ini";
+	private static final String DEFAULT_CONFIG_FILE = "C:/Data/config.ini";
 	private static final String DRIVER_FIREFOX = "firefox";
 	private static final String DRIVER_CHROME = "chrome";
 	private static final String DRIVER_PHANTOMJS = "phantomjs";
@@ -105,9 +114,9 @@ public class WebDriverPool {
 		cliArgsCap.add("--ssl-protocol=any");
 		cliArgsCap.add("--ignore-ssl-errors=true");
 		cliArgsCap.add("--webdriver-loglevel=NONE");
-		cliArgsCap.add("--proxy=proxy.sin.sap.corp:8080");
+		//cliArgsCap.add("--proxy=proxy.sin.sap.corp:8080");
 
-		//sCaps.setCapability(CapabilityType.ELEMENT_SCROLL_BEHAVIOR, ElementScrollBehavior.BOTTOM);
+		sCaps.setCapability(CapabilityType.ELEMENT_SCROLL_BEHAVIOR, ElementScrollBehavior.BOTTOM);
 		sCaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgsCap);
 
 		// Control LogLevel for GhostDriver, via CLI arguments
@@ -125,6 +134,22 @@ public class WebDriverPool {
 			mDriver = new FirefoxDriver(sCaps);
 		} else if (driver.equals(DRIVER_CHROME)) {
 			mDriver = new ChromeDriver(sCaps);
+			mDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+			mDriver.get("https://www.linkedin.com");
+			mDriver.manage().window().maximize();
+			mDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+			mDriver.manage().deleteAllCookies();
+			ObjectMapper mapper = new ObjectMapper();
+			File cookieFile = new File("D:/git/linkedin/projectone/linkedin-java/WilliamCookie.txt");
+			JavaType linkedinCookieType = mapper.getTypeFactory().constructParametricType(List.class, LinkedInCookie.class);
+			List<LinkedInCookie> cookieSet = (List<LinkedInCookie>) mapper.readValue(cookieFile, linkedinCookieType);
+			for (LinkedInCookie cook : cookieSet) {
+				Cookie coo = new Cookie(cook.getName(), cook.getValue(), cook.getDomain(), cook.getPath(), cook.getExpiry(),
+						cook.isSecure(), cook.isHttpOnly());
+				mDriver.manage().addCookie(coo);
+			}
+
+			
 		} else if (driver.equals(DRIVER_PHANTOMJS)) {
 			mDriver = new PhantomJSDriver(sCaps);
 			mDriver.get("http://www.linkedin.com");

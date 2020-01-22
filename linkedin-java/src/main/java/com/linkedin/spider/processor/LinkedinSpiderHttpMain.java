@@ -37,7 +37,7 @@ public class LinkedinSpiderHttpMain {
 	public void startLinkedProfileSpider() {
 		Workbook workbook = null;
 		FileInputStream inputStream = null;
-		String tempFile = "C:/data/webmagic/www.linkedin.com/LinkedProfiles.xlsx";
+		String tempFile = "C:/Data/webmagic/LinkedProfiles.xlsx";
 		try {
 			inputStream = new FileInputStream(tempFile);
 			workbook = new XSSFWorkbook(inputStream);
@@ -189,7 +189,7 @@ public class LinkedinSpiderHttpMain {
 		LinkedInOutputKeeper keeper = new LinkedInOutputKeeper();
 		keeper.start();
 		spider.addUrl(
-				"https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%222572611%22%5D&origin=FACETED_SEARCH");
+				"https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%22648493%22%2C%221800816%22%2C%223109426%22%5D&origin=FACETED_SEARCH");
 		// String url =
 		// "https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%2262435%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%5D&facetNetwork=%5B%22F%22%5D&facetPastCompany=%5B%22166244%22%5D&origin=FACETED_SEARCH&page=1";
 		// ��https://github.com/code4craft��ʼץ
@@ -207,14 +207,14 @@ public class LinkedinSpiderHttpMain {
 		// .addUrl("https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%226279%22%5D&facetGeoRegion=%5B%22cn%3A8909%22%2C%22cn%3A8883%22%5D&facetIndustry=%5B%22137%22%2C%22104%22%5D&facetNetwork=%5B%22F%22%2C%22S%22%2C%22O%22%5D&origin=FACETED_SEARCH&page=1")
 		// ����Scheduler��ʹ��Redis������URL����
 
-		String chromeDriverPath = "/Users/i071944/chromedriver";
+		String chromeDriverPath = "/temp/chromedriver_win32/chromedriver.exe";
 		LinkedSeleniumDownloader seleniumDownloader = new LinkedSeleniumDownloader(chromeDriverPath);
 
 		spider.setDownloader(seleniumDownloader);
 		spider.setDownloader(new HttpClientDownloader())
 				.setScheduler(new LinkedinPriorityScheduler())
 				// ����Pipeline���������json��ʽ���浽�ļ�
-				.addPipeline(new ExcelFilePipeLine())
+				//.addPipeline(new ExcelFilePipeLine())
 				// ����5���߳�ͬʱִ��
 				.thread(3)
 				// ��������

@@ -2,7 +2,6 @@ package us.codecraft.webmagic.main;
 
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.OOSpider;
-import us.codecraft.webmagic.model.samples.IteyeBlog;
 import us.codecraft.webmagic.model.samples.News163;
 import us.codecraft.webmagic.model.samples.OschinaBlog;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
@@ -24,7 +23,6 @@ public class QuickStarter {
     private static void init(){
         clazzMap = new LinkedHashMap<String, Class>();
         clazzMap.put("1", OschinaBlog.class);
-        clazzMap.put("2", IteyeBlog.class);
         clazzMap.put("3", News163.class);
         urlMap = new LinkedHashMap<String, String>();
         urlMap.put("1", "http://my.oschina.net/flashsword/blog");

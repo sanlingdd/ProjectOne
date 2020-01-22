@@ -204,7 +204,7 @@ public class LinkedinPeopleProfilePageProcessorWithoutPersist implements PagePro
 	}
 
 	private void getProfile(Page page, JSONArray jsonList) {
-		JSONObject partitionObj = this.getPartitionJson(jsonList, "com.linkedin.voyager.identity.profile.ProfileView");
+		JSONObject partitionObj = this.getPartitionJson(jsonList, "com.linkedin.voyager.dash.identity.profile.Profile");
 		if (partitionObj == null) {
 			return;
 		}
@@ -215,7 +215,7 @@ public class LinkedinPeopleProfilePageProcessorWithoutPersist implements PagePro
 		}
 
 		JSONObject profileElementObj = this.getElementInIncluded(included,
-				"com.linkedin.voyager.identity.profile.Profile");
+				"com.linkedin.voyager.dash.identity.profile.Profile");
 
 		// first name
 		page.putField("firstName", profileElementObj.getString("firstName"));
@@ -481,7 +481,7 @@ public class LinkedinPeopleProfilePageProcessorWithoutPersist implements PagePro
 		for (int iter = 0; iter < included.length(); iter++) {
 			JSONObject includeObj = included.getJSONObject(iter);
 			String proFileType = includeObj.getString("$type");
-			if ("com.linkedin.voyager.identity.profile.Position".equals(proFileType)) {
+			if ("com.linkedin.voyager.dash.identity.profile.Position".equals(proFileType)) {
 				experienceNumber++;
 				HashMap<String, Object> experiencePiece = new HashMap<String, Object>();
 				experiencePiece.put("title", includeObj.getString("title"));
@@ -554,7 +554,7 @@ public class LinkedinPeopleProfilePageProcessorWithoutPersist implements PagePro
 		for (int iter = 0; iter < included.length(); iter++) {
 			JSONObject includeObj = included.getJSONObject(iter);
 			String proFileType = includeObj.getString("$type");
-			if ("com.linkedin.voyager.identity.profile.Education".equals(proFileType)) {
+			if ("com.linkedin.voyager.dash.identity.profile.Education".equals(proFileType)) {
 
 				HashMap<String, Object> educationExperience = new HashMap<String, Object>();
 				educationExperience.put("degreeName", includeObj.getString("degreeName"));

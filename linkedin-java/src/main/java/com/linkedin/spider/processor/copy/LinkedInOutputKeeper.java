@@ -155,7 +155,7 @@ public class LinkedInOutputKeeper extends Thread {
 
 		String tempFile = null;
 		if (fileName == null) {
-			tempFile = "C:/data/webmagic/www.linkedin.com/LinkedProfiles.xlsx";
+			tempFile = "C:/Data/webmagic/LinkedProfiles.xlsx";
 		} else {
 			tempFile = fileName;
 		}

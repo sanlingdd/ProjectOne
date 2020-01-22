@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.linkedin.automation.CommonSetting;
 import com.linkedin.automation.LinkedinOperation;
 import com.linkedin.automation.PageOperation;
 
@@ -20,7 +21,7 @@ public class LinkedinCookie {
 		PageOperation obj = new PageOperation();
 		WebDriver driver;
 		// chrome
-		System.setProperty("webdriver.chrome.driver", "/temp/chromedriver_win32/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:/data/chromedriver_win32/chromedriver.exe");
 		driver = new ChromeDriver();
 
 
@@ -39,16 +40,18 @@ public class LinkedinCookie {
 		//Lily Rao
 		//lop.login(driver,"15000729310","rt135790");
 		
-
-		//Yulia ===Email Yulia170814
+		//William Huang
+		//lop.login(driver,"17612165703","Initial0");
+		
+		//Yulia===Email Yulia170814
 		//lop.login(driver,"13774278832@163.com","hx123888");
 		
-//		https://www.linkedin.com/search/results/people/?facetGeoRegion=%5B%22cn%3A8911%22%5D&facetIndustry=%5B%226%22%5D&keywords=HRBP&origin=FACETED_SEARCH
+		//https://www.linkedin.com/search/results/people/?facetGeoRegion=%5B%22cn%3A8911%22%5D&facetIndustry=%5B%226%22%5D&keywords=HRBP&origin=FACETED_SEARCH
 		
 		Set<org.openqa.selenium.Cookie> cookies = driver.manage().getCookies();
-		//File cookieFile = new File("C://temp/YaqiCookie.txt");
-		//File cookieFile = new File("C://temp/LilyCookie.txt");
-		File cookieFile = new File("C://temp/CarolCookie.txt");
+		//File cookieFile = new File("D:/git/linkedin/projectone/linkedin-java/YaqiCookie.txt");
+		File cookieFile = new File(CommonSetting.cookieFilePrefix+"CarolCookie.txt");
+		//File cookieFile = new File("D:/git/linkedin/projectone/linkedin-java/WilliamCookie.txt");
 		ObjectMapper mapper = new ObjectMapper(); 
 		mapper.writeValue(cookieFile, cookies);
 	}

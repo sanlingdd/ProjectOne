@@ -32,12 +32,12 @@ public class LinkedinSpiderHttpMain {
 	private CompanyService companyService;
 	
 	@Autowired
-	private DispatcherPageProcessor dispather;
+	private DispatcherPageProcessor dispather=new DispatcherPageProcessor();
 	
 	public void startLinkedProfileSpider() {
 		Workbook workbook = null;
 		FileInputStream inputStream = null;
-		String tempFile = "C:/data/webmagic/www.linkedin.com/LinkedProfiles.xlsx";
+		String tempFile = "C:/Data/webmagic/LinkedProfiles.xlsx";
 		try {
 			inputStream = new FileInputStream(tempFile);
 			workbook = new XSSFWorkbook(inputStream);
@@ -184,21 +184,22 @@ public class LinkedinSpiderHttpMain {
 
 		java.util.logging.Logger.getLogger(PhantomJSDriverService.class.getName()).setLevel(Level.OFF);
 
-		LinkedInOutputKeeper keeper = new LinkedInOutputKeeper();
-		keeper.start();
+		//LinkedInOutputKeeper keeper = new LinkedInOutputKeeper();
+		//keeper.start();
 		spider.addUrl(
-				"https://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B%222572611%22%5D&origin=FACETED_SEARCH");
-		String chromeDriverPath = "/Users/i071944/chromedriver";
+				"https://www.linkedin.com/in/dimon-li-1a8285162/");
+		String chromeDriverPath = "/temp/chromedriver_win32/chromedriver.exe";
+
 		LinkedSeleniumDownloader seleniumDownloader = new LinkedSeleniumDownloader(chromeDriverPath);
 
 		spider.setDownloader(seleniumDownloader);
 		spider.setDownloader(new HttpClientDownloader())
 				.setScheduler(new LinkedinPriorityScheduler())
-				// ����Pipeline���������json��ʽ���浽�ļ�
-				.addPipeline(new ExcelFilePipeLine())
-				// ����5���߳�ͬʱִ��
-				.thread(3)
-				// ��������
+				// Pipeline.json
+				//.addPipeline(new ExcelFilePipeLine())
+				// 5
+				.thread(1)
+				// 
 				.run();
 	}
 

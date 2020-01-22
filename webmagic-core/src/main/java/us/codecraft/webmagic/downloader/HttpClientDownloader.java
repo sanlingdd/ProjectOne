@@ -1,9 +1,6 @@
 package us.codecraft.webmagic.downloader;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +11,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.annotation.ThreadSafe;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -115,7 +113,11 @@ public class HttpClientDownloader extends AbstractDownloader {
 //            return page;
             
             HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers, proxyHost);
-            httpResponse = getHttpClient(site, proxy).execute(httpUriRequest);
+            CloseableHttpClient client = getHttpClient(site, proxy);  
+            
+            RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
+            requestConfigBuilder.setCircularRedirectsAllowed(true);
+            httpResponse = client.execute(httpUriRequest);
             statusCode = httpResponse.getStatusLine().getStatusCode();
             request.putExtra(Request.STATUS_CODE, statusCode);
             if (statusAccept(acceptStatCode, statusCode)) {

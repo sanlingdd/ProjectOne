@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -92,6 +93,7 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 			return null;
 		}
 		logger.info("downloading page " + request.getUrl());
+		webDriver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
 		webDriver.get(request.getUrl());
 		WebDriver.Options manage = webDriver.manage();
 		Site site = task.getSite();
@@ -105,20 +107,15 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 
 		LinkedinPage page = new LinkedinPage();
 		if (!request.getUrl().contains("facetNetwork") && StringUtils.containsIgnoreCase(request.getUrl(),"search")) {
-			WebElement webFirstCheckbookElement = null;
-			try {
-				webFirstCheckbookElement = webDriver.findElement(By.xpath("//input[@id='sf-facetNetwork-F']"));
-				page.setLinkedInLimitStarted(webFirstCheckbookElement.isSelected());
-			} catch (Exception e) {
-				logger.info(e.getMessage());
-			}
+//			WebElement webFirstCheckbookElement = null;
+//			try {
+//				webFirstCheckbookElement = webDriver.findElement(By.xpath("//input[@id='sf-facetNetwork-F']"));
+//				page.setLinkedInLimitStarted(webFirstCheckbookElement.isSelected());
+//			} catch (Exception e) {
+//				logger.info(e.getMessage());
+//			}
 		} else {
-			
-			this.sleep(1000);
-			webDriver.manage().window().maximize();
 			this.scrollThePage(webDriver);
-
-
 			while (true) {
 				WebElement moreSkills = null;
 				try {
@@ -175,7 +172,7 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 		// request.getUrl())));
 		page.setUrl(new PlainText(request.getUrl()));
 		page.setRequest(request);
-		// webDriverPool.returnToPool(webDriver);
+		webDriverPool.returnToPool(webDriver);
 		//this.print(((LinkedinPage)page).getWebDriver());
 		//this.takescreenShot(((LinkedinPage)page).getWebDriver());
 

@@ -105,20 +105,16 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 
 		LinkedinPage page = new LinkedinPage();
 		if (!request.getUrl().contains("facetNetwork") && StringUtils.containsIgnoreCase(request.getUrl(),"search")) {
-			WebElement webFirstCheckbookElement = null;
-			try {
-				webFirstCheckbookElement = webDriver.findElement(By.xpath("//input[@id='sf-facetNetwork-F']"));
-				page.setLinkedInLimitStarted(webFirstCheckbookElement.isSelected());
-			} catch (Exception e) {
-				logger.info(e.getMessage());
-			}
+//			WebElement webFirstCheckbookElement = null;
+//			try {
+//				webFirstCheckbookElement = webDriver.findElement(By.xpath("//input[@id='sf-facetNetwork-F']"));
+//				page.setLinkedInLimitStarted(webFirstCheckbookElement.isSelected());
+//			} catch (Exception e) {
+//				logger.info(e.getMessage());
+//			}
 		} else {
-			
-			this.sleep(1000);
-			webDriver.manage().window().maximize();
 			this.scrollThePage(webDriver);
-
-
+			
 			while (true) {
 				WebElement moreSkills = null;
 				try {
@@ -129,9 +125,6 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 					break;
 				} catch (Exception e) {
 					break;
-//					this.takescreenShot(webDriver);
-//					webDriver.navigate().refresh();
-//					this.scrollThePage(webDriver);
 				}
 
 			}
@@ -175,7 +168,7 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 		// request.getUrl())));
 		page.setUrl(new PlainText(request.getUrl()));
 		page.setRequest(request);
-		// webDriverPool.returnToPool(webDriver);
+		webDriverPool.returnToPool(webDriver);
 		//this.print(((LinkedinPage)page).getWebDriver());
 		//this.takescreenShot(((LinkedinPage)page).getWebDriver());
 

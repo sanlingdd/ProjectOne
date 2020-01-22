@@ -24,6 +24,7 @@ import org.apache.http.config.RegistryBuilder;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -61,7 +62,10 @@ public class HttpClientGenerator {
 
 	private SSLConnectionSocketFactory buildSSLConnectionSocketFactory() {
 		try {
-			return new SSLConnectionSocketFactory(createIgnoreVerifySSL()); // 优先绕过安全证书
+			return new SSLConnectionSocketFactory(createIgnoreVerifySSL(), new String[]{"SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"},
+                    null, new DefaultHostnameVerifier());
+					
+			//return new SSLConnectionSocketFactory(createIgnoreVerifySSL()); // 优先绕过安全证书
 		} catch (KeyManagementException e) {
             logger.error("ssl connection fail", e);
         } catch (NoSuchAlgorithmException e) {

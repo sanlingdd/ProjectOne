@@ -135,12 +135,12 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 		getSkills(page);
 		// get patent
 		getPatent(page);
-		if (page instanceof LinkedinPage) {
-			LinkedinPage lpage = (LinkedinPage) page;
-			lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
-		}
+//		if (page instanceof LinkedinPage) {
+//			LinkedinPage lpage = (LinkedinPage) page;
+//			lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
+//		}
 
-		userProfileService.saveOrUpdate(userProfile);
+		//userProfileService.saveOrUpdate(userProfile);
 
 	}
 
@@ -272,7 +272,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 	}
 
 	private void getProfile(Page page, JSONArray jsonList) {
-		JSONObject partitionObj = this.getPartitionJson(jsonList, "com.linkedin.voyager.identity.profile.ProfileView");
+		JSONObject partitionObj = this.getPartitionJson(jsonList, "com.linkedin.voyager.dash.identity.profile.Profile");																   
 		if (partitionObj == null) {
 			return;
 		}
@@ -625,7 +625,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 			try {
 				JSONObject includeObj = included.getJSONObject(iter);
 				String proFileType = includeObj.getString("$type");
-				if ("com.linkedin.voyager.identity.profile.Position".equals(proFileType)) {
+				if ("com.linkedin.voyager.dash.identity.profile.Position".equals(proFileType)) {
 					experienceNumber++;
 
 					Experience experience = new Experience();

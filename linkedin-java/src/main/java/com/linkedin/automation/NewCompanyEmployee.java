@@ -23,65 +23,65 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class NewCompanyEmployee {
 
 	public static void HandleAPage(PageOperation obj, WebDriver driver, HuntingCompany firm) {
-		int skip = 0;// skip email check
-		double current = 0.0;
 		obj.scrollThePageWithPercent(driver, Double.valueOf(0.75));
 		while (true) {
 			// scroll to get all the candidate in the page
 			// obj.scrollThePageWithPercent(driver, Double.valueOf(iter / elements.size()));
 
 			List<WebElement> elements = driver.findElements(By.xpath(".//button[text()='加为好友']"));
-			if (elements.size() <= skip) {
-				break;
-			}
+
 			try {
-				WebElement element = elements.get(0 + skip);
-				obj.scrollThePage(driver, element);
-				element.sendKeys(Keys.ENTER);
-				;
-				obj.sleep(5000);
+				for (WebElement element : elements) {
+					obj.scrollThePage(driver, element);
+					element.sendKeys(Keys.ENTER);
+					obj.sleep(5000);
 
-				List<WebElement> emails = driver.findElements(By.xpath(".//input[@id='email']"));
-				if (!emails.isEmpty()) {
+					List<WebElement> emails = driver.findElements(By.xpath(".//input[@id='email']"));
+					if (!emails.isEmpty()) {
+						List<WebElement> sendbuttons = driver.findElements(By.xpath(".//button[@name='cancel']"));
+						if (!sendbuttons.isEmpty()) {
+							sendbuttons.get(0).sendKeys(Keys.ENTER);
+						}
+						continue;
+					}
 
-					List<WebElement> sendbuttons = driver.findElements(By.xpath(".//button[@name='cancel']"));
+					List<WebElement> sendbuttons = driver.findElements(By.xpath(".//span[text()='添加消息']/.."));
 					if (!sendbuttons.isEmpty()) {
 						sendbuttons.get(0).sendKeys(Keys.ENTER);
-					}
-					skip++;
-					continue;
-				}
 
-				List<WebElement> sendbuttons = driver.findElements(By.xpath(".//span[text()='添加消息']/.."));
-				if (!sendbuttons.isEmpty()) {
-					sendbuttons.get(0).sendKeys(Keys.ENTER);
+						List<WebElement> nameelements = driver.findElements(By.xpath(".//h2[@id='send-invite-modal']"));
+						String name = "";
+						if (!nameelements.isEmpty()) {
+							name = nameelements.get(0).getText();
+							name = name.replace("邀请", "");
+							name = name.replace("成为好友", "");
+						}
+						String hintMessage = "";
+						if (!firm.isCustomer()) {
+							hintMessage = "Hi " + name + ",\r\n" + "我是William,工程师出身的R2R Consultant。\r\n"
+									+ "我在为一些Top的猎头公司招聘猎头顾问。\r\n" + "可以认识一下吗？\r\n" + "我的手机18601793121（微信同号）,可以进一步沟通。\r\n"
+									+ "希望与你认识，一起分享fancy的东西。\r\n";
+						} else {
+							hintMessage = "Hi " + name +"我是William，希望可以与您建立联系 ，！";
+						}
 
-					String hintMessage = "";
-					if (!firm.isCustomer()) {
-						hintMessage = "Dear" + "" + "\r\n" + "谢谢接受我的邀请 \r\n"
-								+ "我是R2R猎头顾问William，专注猎头行业，服务各行业内外资Top的一些猎头公司的职位招聘。\r\n"
-								+ "希望和您建立联系，持续与您迅速分享并探讨或许会对您有所提升的职业机会和最新的市场信息。暂不看机会，可先认识并保持联络。\r\n"
-								+ "为方便联系，烦请互换手机号码or微信？（18601793121,微信R2RWilliam,欢迎添加）\r\n" + "谢谢您的时间，等待回复。\r\n"
-								+ "William\r\n";
-					} else {
-						hintMessage = "我是William，希望可以与您建立联系！";
-					}
-
-					WebElement messageElement = driver.findElements(By.xpath(".//textarea[@id='custom-message']"))
-							.get(0);
-					messageElement.sendKeys(hintMessage);
-					obj.sleep(3000);
-
-					List<WebElement> sendinvitationElements = driver.findElements(By.xpath(".//span[text()='发邀请']/.."));
-					if (!sendinvitationElements.isEmpty()) {
-						sendinvitationElements.get(0).sendKeys(Keys.ENTER);
+						WebElement messageElement = driver.findElements(By.xpath(".//textarea[@id='custom-message']"))
+								.get(0);
+						messageElement.sendKeys(hintMessage);
 						obj.sleep(3000);
+
+						List<WebElement> sendinvitationElements = driver
+								.findElements(By.xpath(".//span[text()='发邀请']/.."));
+						if (!sendinvitationElements.isEmpty()) {
+							sendinvitationElements.get(0).sendKeys(Keys.ENTER);
+							obj.sleep(3000);
+						}
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 
-				obj.sleep(1000 * 60 * 20 * 1);
+				obj.sleep(1000*60*3);
 
 				String currentURL = driver.getCurrentUrl();
 				WebGet(driver, currentURL);
@@ -89,12 +89,13 @@ public class NewCompanyEmployee {
 				HandleAPage(obj, driver, firm);
 			}
 			obj.sleep(10000);
+			break;
 		}
 	}
 
 	public static void WebGet(WebDriver driver, String url) {
 		try {
-			driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+
 			driver.navigate().to(url);
 		} catch (TimeoutException e) {
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -109,18 +110,18 @@ public class NewCompanyEmployee {
 		ObjectMapper mapper = new ObjectMapper();
 		JavaType firmType = mapper.getTypeFactory().constructParametricType(List.class, HuntingCompany.class);
 		// chrome
-		System.setProperty("webdriver.chrome.driver", "/temp/chromedriver_win32/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", CommonSetting.chromeDrivePath);
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 
-		driver.manage().timeouts().pageLoadTimeout(200, TimeUnit.SECONDS);
-
+		driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
 		WebGet(driver, "https://www.linkedin.com");
+		driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
 
 		driver.manage().deleteAllCookies();
 		Thread.sleep(3000);
 
-		File cookieFile = new File("C://temp/cookie.txt");
+		File cookieFile = new File(CommonSetting.cookieFilePrefix + "WilliamCookie.txt");
 		JavaType linkedinCookieType = mapper.getTypeFactory().constructParametricType(List.class, LinkedInCookie.class);
 		List<LinkedInCookie> cookieSet = (List<LinkedInCookie>) mapper.readValue(cookieFile, linkedinCookieType);
 		obj.sleep(1000);
@@ -136,7 +137,7 @@ public class NewCompanyEmployee {
 	public static void main(String[] args)
 			throws InterruptedException, JsonParseException, JsonMappingException, IOException {
 
-		File huntingFirmFile = new File("C://temp/huntingfirmsPureCode.txt");
+		File huntingFirmFile = new File(CommonSetting.cookieFilePrefix + "huntingfirmsPureCode.txt");
 		ObjectMapper mapper = new ObjectMapper();
 		JavaType firmType = mapper.getTypeFactory().constructParametricType(List.class, HuntingCompany.class);
 		// new TypeReference<List<Cookie>>() {}
@@ -147,17 +148,25 @@ public class NewCompanyEmployee {
 
 		PageOperation obj = new PageOperation();
 		for (HuntingCompany firm : firmsSet) {
-			// if (StringUtils.isEmpty(firm.getName())) {
-			firm.setHasFinished(false);
-			// }
+			 if (!StringUtils.isEmpty(firm.getName())) {
+				 firm.setHasFinished(false);
+			 }
 		}
 
+		int iter = 0;
+		WebDriver driver = getNewDriver();
 		for (HuntingCompany firm : firmsSet) {
 			try {
+				iter++;
 				if (firm.isHasFinished()) {
 					continue;
 				}
-				WebDriver driver = getNewDriver();
+				if (iter != 0 && (iter % 9 == 0)) {
+					driver.close();
+					// driver.quit();
+					driver = getNewDriver();
+				}
+
 				String company = "";
 				if (firm.isLink()) {
 					company = firm.getUrl();
@@ -173,7 +182,7 @@ public class NewCompanyEmployee {
 					// ShangHai
 					company = "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B"
 							+ argsStr.toString()
-							+ "%5D&facetGeoRegion=%5B\"cn%3A8909\"%2C\"cn%3A8883\"%5D&facetNetwork=%5B\"S\"%5D&origin=FACETED_SEARCH&page=1";
+							+ "%5D&facetGeoRegion=%5B\"cn%3A8909\"%2C\"cn%3A8883\"%5D&facetNetwork=%5B\"S\"%2C\"O\"%5D&origin=FACETED_SEARCH&page=1";
 
 				}
 
@@ -200,14 +209,21 @@ public class NewCompanyEmployee {
 						// element.sendKeys(Keys.ENTER);
 						// obj.sleep(100);
 						// });
-						List<WebElement> nextPageElements = driver.findElements(By.xpath(
-								".//button[@class='artdeco-pagination__button artdeco-pagination__button--next artdeco-button artdeco-button--muted artdeco-button--icon-right artdeco-button--1 artdeco-button--tertiary ember-view']"));
+						List<WebElement> nextPageElements = driver.findElements(By.xpath(".//span[text()='下页']/.."));
 						if (nextPageElements.isEmpty()) {
 							firm.setHasFinished(true);
 							mapper.writeValue(huntingFirmFile, firmsSet);
 							break;
 						} else {
-							nextPageElements.get(0).sendKeys(Keys.ENTER);
+							WebElement element = nextPageElements.get(0);
+							obj.scrollThePage(driver, element);
+							if (element.isEnabled()) {
+								element.sendKeys(Keys.ENTER);
+							}else {
+								firm.setHasFinished(true);
+								mapper.writeValue(huntingFirmFile, firmsSet);
+								break;								
+							}
 							obj.sleep(10000);
 						}
 					} catch (Exception e) {
@@ -215,8 +231,6 @@ public class NewCompanyEmployee {
 						break;
 					}
 				}
-				driver.close();
-				driver.quit();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

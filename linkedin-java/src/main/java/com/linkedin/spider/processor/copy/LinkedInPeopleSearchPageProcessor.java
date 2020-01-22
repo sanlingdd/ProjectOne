@@ -91,41 +91,49 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 		}
 
 		JSONArray resultArray = new JSONArray(jsonList);
-		JSONArray included = this.getSearchPageInclude(resultArray);
+		JSONObject obj = getSearchPageNode(resultArray);
+		JSONArray included = this.getSearchPageInclude(obj);
 		if (included == null) {
 			url.setAllDownloaded(true);
 			return;
 		}
 		int count = 0;
-		Set<String> valuableNames = this.getTargetNames(included);
+		Set<String> valuableNames = this.getTargetNames(obj);
 		if (valuableNames.isEmpty()) {
 			url.setAllDownloaded(true);
 			return;
 		}
-		for (int iter = 0; iter < included.length(); iter++) {
-			JSONObject includeObj = included.getJSONObject(iter);
-			String typeString = includeObj.getString("$type");
-			if ("com.linkedin.voyager.identity.shared.MiniProfile".equals(typeString)) {
-				String firstName = includeObj.getString("firstName");
-				String lastName = includeObj.getString("lastName");
-				if (this.isTargetProfile(valuableNames, firstName, lastName)) {
-					String publicIdentifier = includeObj.getString("publicIdentifier");
-					String format = "https://www.linkedin.com/in/%s/";
-					String newURL = String.format(format, publicIdentifier);
-					if (!SpiderConstants.downloadLinks.contains(newURL)) {
-						Profile profile = userProfileService.getByBusinessKey(Profile.class, "publicIdentifier",
-								publicIdentifier);
-						if (profile != null) {
-							continue;
-						}
-						// page.addTargetRequest(newURL);
-						SpiderConstants.allProfileURLsThisExcution.put(newURL, false);
-					}
-				}
+		for (String element : valuableNames) {
+			String newURL = element;
+			if (!SpiderConstants.downloadLinks.contains(newURL)) {
+				page.addTargetRequest(newURL);
+				SpiderConstants.allProfileURLsThisExcution.put(newURL, false);
 			}
 		}
 
-		JSONObject totalNode = this.getElementInIncluded(included, "com.linkedin.voyager.search.SearchCluster");
+//		for (int iter = 0; iter < included.length(); iter++) {
+//			JSONObject includeObj = included.getJSONObject(iter);
+//			String typeString = includeObj.getString("$type");
+//			if ("com.linkedin.voyager.identity.shared.MiniProfile".equals(typeString)) {
+////				String firstName = includeObj.getString("firstName");
+////				String lastName = includeObj.getString("lastName");
+//				// if (this.isTargetProfile(valuableNames, firstName, lastName)) {
+//				String publicIdentifier = includeObj.getString("publicIdentifier");
+//				String format = "https://www.linkedin.com/in/%s/";
+//				String newURL = String.format(format, publicIdentifier);
+//				if (!SpiderConstants.downloadLinks.contains(newURL)) {
+////					Profile profile = userProfileService.getByBusinessKey(Profile.class, "publicIdentifier",
+////							publicIdentifier);
+////					if (profile != null) {
+////						continue;
+////					}
+//					page.addTargetRequest(newURL);
+//					SpiderConstants.allProfileURLsThisExcution.put(newURL, false);
+//				}
+//			}
+//		}
+
+		JSONObject totalNode = this.getElementInIncluded(obj);
 		int total = (Integer) totalNode.get("total");
 		int pages = total / 10;
 		int totalPage = pages + 1;
@@ -218,26 +226,40 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 		return false;
 	}
 
-	private Set<String> getTargetNames(JSONArray included) {
+	private Set<String> getTargetNames(JSONObject obj) {
+		JSONObject data = (JSONObject) obj.get("data");
 		Set<String> valuableNames = new HashSet<String>();
-		for (int iter = 0; iter < included.length(); iter++) {
-			JSONObject includeObj = included.getJSONObject(iter);
-			String typeString = includeObj.getString("$type");
-			if ("com.linkedin.voyager.identity.profile.actions.SaveToPdf".equals(typeString)) {
-				//
-				String pdfURLString = includeObj.getString("requestUrl");
-				int start = pdfURLString.indexOf("pdfFileName=");
-				int end = pdfURLString.indexOf("Profile&");
+		JSONArray includeObj = (JSONArray) data.get("elements");
+		JSONObject inElements = null;
+		if (includeObj.length() != 1) {
+			inElements = includeObj.getJSONObject(1);
+		} else {
+			inElements = includeObj.getJSONObject(0);
+		}
 
-				String name = pdfURLString.substring(start, end);
-				valuableNames.add(name);
-			}
+		JSONArray members = (JSONArray) inElements.get("elements");
+
+		for (int iter = 0; iter < members.length(); iter++) {
+			JSONObject memberObj = members.getJSONObject(iter);
+			String navigationUrl = memberObj.getString("navigationUrl");
+			valuableNames.add(navigationUrl);
+//			if ("com.linkedin.voyager.identity.profile.actions.SaveToPdf".equals(typeString)) {
+//				String pdfURLString = memberObj.getString("requestUrl");
+//				int start = pdfURLString.indexOf("pdfFileName=");
+//				int end = pdfURLString.indexOf("Profile&");
+//				String name = pdfURLString.substring(start, end);
+//				valuableNames.add(name);
+//			}
 		}
 
 		return valuableNames;
 	}
 
-	private JSONArray getSearchPageInclude(JSONArray resultArray) {
+	private JSONArray getSearchPageInclude(JSONObject jsonObj) {
+		return (JSONArray) jsonObj.get("included");
+	}
+
+	private JSONObject getSearchPageNode(JSONArray resultArray) {
 		for (int iter = 0; iter < resultArray.length(); iter++) {
 			try {
 				JSONObject jsonObj = resultArray.getJSONObject(iter);
@@ -246,7 +268,7 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 					JSONObject metadataObj = (JSONObject) dataObj.get("metadata");
 					if (metadataObj != null) {
 						if ((JSONArray) jsonObj.get("included") != null) {
-							return (JSONArray) jsonObj.get("included");
+							return jsonObj;
 						}
 					}
 				}
@@ -257,19 +279,10 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 		return null;
 	}
 
-	private JSONObject getElementInIncluded(JSONArray included, String elementTypeORIDToken) {
-		if (included == null || elementTypeORIDToken == null) {
-			return null;
-		}
-		for (int iter = 0; iter < included.length(); iter++) {
-			JSONObject includeObj = included.getJSONObject(iter);
-			String typeString = includeObj.getString("$type");
-			String idString = includeObj.getString("$id");
-			if (elementTypeORIDToken.equals(typeString) || elementTypeORIDToken.equals(idString)) {
-				return includeObj;
-			}
-		}
-		return null;
+	private JSONObject getElementInIncluded(JSONObject obj) {
+		JSONObject data = (JSONObject) obj.get("data");
+		JSONObject pagingObj = (JSONObject) data.get("paging");
+		return pagingObj;
 	}
 
 	@Override

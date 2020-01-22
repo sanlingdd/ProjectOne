@@ -55,7 +55,7 @@ public class CompanyMessageAllFriends {
 						continue;
 					}
 
-					List<WebElement> sendbuttons = driver.findElements(By.xpath(".//button[text()='添加消息']"));
+					List<WebElement> sendbuttons = driver.findElements(By.xpath(".//span[text()='添加消息'/..]"));
 					if (!sendbuttons.isEmpty()) {
 						sendbuttons.get(0).sendKeys(Keys.ENTER);
 
@@ -72,7 +72,7 @@ public class CompanyMessageAllFriends {
 						obj.sleep(3000);
 
 						List<WebElement> sendinvitationElements = driver
-								.findElements(By.xpath(".//button[text()='发邀请']"));
+								.findElements(By.xpath(".//span[text()='发邀请']/.."));
 						if (!sendinvitationElements.isEmpty()) {
 							sendinvitationElements.get(0).sendKeys(Keys.ENTER);
 							obj.sleep(3000);
