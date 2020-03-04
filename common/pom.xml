@@ -66,7 +66,7 @@
 		<httpcomponent.version>4.4.1</httpcomponent.version>
 		<hsqldb.version>2.2.8</hsqldb.version>
 		<jackson.version>1.9.3</jackson.version>
-		<fasterxml.version>2.9.3</fasterxml.version>
+		<fasterxml.version>2.10.3</fasterxml.version>
 		<javamelody.version>1.43.0</javamelody.version>
 		<javax.mail.version>1.4.7</javax.mail.version>
 		<javax.persistence.version>2.1.0</javax.persistence.version>
