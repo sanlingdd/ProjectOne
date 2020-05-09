@@ -53,8 +53,7 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 	/**
 	 * 新建
 	 *
-	 * @param chromeDriverPath
-	 *            chromeDriverPath
+	 * @param chromeDriverPath chromeDriverPath
 	 */
 	public LinkedSeleniumDownloader(String chromeDriverPath) {
 		System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
@@ -73,8 +72,7 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 	/**
 	 * set sleep time to wait until load success
 	 *
-	 * @param sleepTime
-	 *            sleepTime
+	 * @param sleepTime sleepTime
 	 * @return this
 	 */
 	public LinkedSeleniumDownloader setSleepTime(int sleepTime) {
@@ -93,7 +91,7 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 			return null;
 		}
 		logger.info("downloading page " + request.getUrl());
-		webDriver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
+		webDriver.manage().timeouts().pageLoadTimeout(1000, TimeUnit.SECONDS);
 		webDriver.get(request.getUrl());
 		WebDriver.Options manage = webDriver.manage();
 		Site site = task.getSite();
@@ -103,10 +101,9 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 				manage.addCookie(cookie);
 			}
 		}
-		
 
 		LinkedinPage page = new LinkedinPage();
-		if (!request.getUrl().contains("facetNetwork") && StringUtils.containsIgnoreCase(request.getUrl(),"search")) {
+		if (!request.getUrl().contains("facetNetwork") && StringUtils.containsIgnoreCase(request.getUrl(), "search")) {
 //			WebElement webFirstCheckbookElement = null;
 //			try {
 //				webFirstCheckbookElement = webDriver.findElement(By.xpath("//input[@id='sf-facetNetwork-F']"));
@@ -119,7 +116,10 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 			while (true) {
 				WebElement moreSkills = null;
 				try {
-					//new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class,'pv-profile-section__card-action-bar artdeco-container-card-action-bar pv-skills-section__additional-skills')]")));					
+					// new WebDriverWait(webDriver,
+					// 30).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class,'pv-profile-section__card-action-bar
+					// artdeco-container-card-action-bar
+					// pv-skills-section__additional-skills')]")));
 					moreSkills = webDriver.findElement(By.xpath(
 							"//button[contains(@class,'pv-profile-section__card-action-bar artdeco-container-card-action-bar pv-skills-section__additional-skills')]"));
 					moreSkills.click();
@@ -172,10 +172,11 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 		// request.getUrl())));
 		page.setUrl(new PlainText(request.getUrl()));
 		page.setRequest(request);
-		webDriverPool.returnToPool(webDriver);
-		//this.print(((LinkedinPage)page).getWebDriver());
-		//this.takescreenShot(((LinkedinPage)page).getWebDriver());
+		// webDriverPool.returnToPool(webDriver);
+		// this.print(((LinkedinPage)page).getWebDriver());
+		// this.takescreenShot(((LinkedinPage)page).getWebDriver());
 
+		this.sleep(10000);
 		return page;
 	}
 
@@ -195,12 +196,11 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 		printWriter.close();
 	}
 
-	
 	public void takescreenShot(WebDriver webDriver) {
 		try {
 			TakesScreenshot ts = (TakesScreenshot) webDriver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(source, new File("C:\\Selenium_Shubham\\"+UUID.randomUUID().toString()+".jpg"));
+			FileUtils.copyFile(source, new File("C:\\Selenium_Shubham\\" + UUID.randomUUID().toString() + ".jpg"));
 
 			System.out.println("Screenshot is printed");
 		} catch (Exception e) {
@@ -216,19 +216,18 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 			}
 		}
 	}
-	
-	private void scrollThePage(WebDriver webDriver)
-	{
+
+	private void scrollThePage(WebDriver webDriver) {
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;
 		js.executeScript("window.scrollTo(0, (document.body.scrollHeight)/5)");
 		sleep(sleepTime);
-		
+
 		js.executeScript("window.scrollTo(0, (document.body.scrollHeight)/4)");
 		sleep(sleepTime);
-		
+
 		js.executeScript("window.scrollTo(0, (document.body.scrollHeight)/3)");
 		sleep(sleepTime);
-		
+
 		js.executeScript("window.scrollTo(0, (document.body.scrollHeight)/2)");
 		sleep(sleepTime);
 
@@ -256,6 +255,8 @@ public class LinkedSeleniumDownloader implements Downloader, Closeable {
 
 	@Override
 	public void close() throws IOException {
-		webDriverPool.closeAll();
+		if (webDriverPool != null) {
+			webDriverPool.closeAll();
+		}
 	}
 }

@@ -61,6 +61,12 @@ public class Profile {
 	private String summary;
 	@Column
 	private DateTime updateTime;
+	
+	@Column
+	private String industryUrn;
+	
+	@Column
+	private String headline;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "location_id")
@@ -344,5 +350,21 @@ public class Profile {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
+
+	public String getIndustryUrn() {
+		return industryUrn;
+	}
+
+	public void setIndustryUrn(String industryUrn) {
+		this.industryUrn = industryUrn;
+	}
+
+	public String getHeadline() {
+		return headline;
+	}
+
+	public void setHeadline(String headline) {
+		this.headline = headline;
+	}	
 
 }

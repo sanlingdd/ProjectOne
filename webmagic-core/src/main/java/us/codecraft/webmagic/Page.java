@@ -14,12 +14,14 @@ import us.codecraft.webmagic.utils.UrlUtils;
 /**
  * Object storing extracted result and urls to fetch.<br>
  * Not thread safe.<br>
- * Main method：                                               <br>
- * {@link #getUrl()} get url of current page                   <br>
- * {@link #getHtml()}  get content of current page                 <br>
- * {@link #putField(String, Object)}  save extracted result            <br>
- * {@link #getResultItems()} get extract results to be used in {@link us.codecraft.webmagic.pipeline.Pipeline}<br>
- * {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} add urls to fetch                 <br>
+ * Main method： <br>
+ * {@link #getUrl()} get url of current page <br>
+ * {@link #getHtml()} get content of current page <br>
+ * {@link #putField(String, Object)} save extracted result <br>
+ * {@link #getResultItems()} get extract results to be used in
+ * {@link us.codecraft.webmagic.pipeline.Pipeline}<br>
+ * {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)}
+ * add urls to fetch <br>
  *
  * @author code4crafter@gmail.com <br>
  * @see us.codecraft.webmagic.downloader.Downloader
@@ -28,200 +30,195 @@ import us.codecraft.webmagic.utils.UrlUtils;
  */
 public class Page {
 
-    private Request request;
+	private Request request;
 
-    private ResultItems resultItems = new ResultItems();
+	private ResultItems resultItems = new ResultItems();
 
-    private Html html;
+	private Html html;
 
-    private Json json;
+	private Json json;
 
-    private String rawText;
+	private String rawText;
 
-    private Selectable url;
+	private Selectable url;
 
-    private int statusCode;
+	private int statusCode;
 
-    private boolean needCycleRetry;
+	private boolean needCycleRetry;
 
-    private Set<Request> targetRequests = new HashSet<Request>();
+	private Set<Request> targetRequests = new HashSet<Request>();
 
-    public Page() {
-    	
-    }
+	public Page() {
 
-    public Page setSkip(boolean skip) {
-        resultItems.setSkip(skip);
-        return this;
+	}
 
-    }
+	public Page setSkip(boolean skip) {
+		resultItems.setSkip(skip);
+		return this;
 
-    /**
-     * store extract results
-     *
-     * @param key key
-     * @param field field
-     */
-    public void putField(String key, Object field) {
-        resultItems.put(key, field);
-    }
+	}
 
-    /**
-     * get html content of page
-     *
-     * @return html
-     */
-    public Html getHtml() {
-        if (html == null) {
-            html = new Html(UrlUtils.fixAllRelativeHrefs(rawText, request.getUrl()));
-        }
-        return html;
-    }
+	/**
+	 * store extract results
+	 *
+	 * @param key   key
+	 * @param field field
+	 */
+	public void putField(String key, Object field) {
+		resultItems.put(key, field);
+	}
 
-    /**
-     * get json content of page
-     *
-     * @return json
-     * @since 0.5.0
-     */
-    public Json getJson() {
-        if (json == null) {
-            json = new Json(rawText);
-        }
-        return json;
-    }
+	/**
+	 * get html content of page
+	 *
+	 * @return html
+	 */
+	public Html getHtml() {
+		if (html == null) {
+			html = new Html(UrlUtils.fixAllRelativeHrefs(rawText, request.getUrl()));
+		}
+		return html;
+	}
 
-    /**
-     * @param html html
-     * @deprecated since 0.4.0
-     * The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
-     */
-    public void setHtml(Html html) {
-        this.html = html;
-    }
+	/**
+	 * get json content of page
+	 *
+	 * @return json
+	 * @since 0.5.0
+	 */
+	public Json getJson() {
+		if (json == null) {
+			json = new Json(rawText);
+		}
+		return json;
+	}
 
-    public Set<Request> getTargetRequests() {
-        return targetRequests;
-    }
+	/**
+	 * @param html html
+	 * @deprecated since 0.4.0 The html is parse just when first time of calling
+	 *             {@link #getHtml()}, so use {@link #setRawText(String)} instead.
+	 */
+	public void setHtml(Html html) {
 
-    /**
-     * add urls to fetch
-     *
-     * @param requests requests
-     */
-    public void addTargetRequests(List<String> requests) {
-        for (String s : requests) {
-            if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
-                continue;
-            }
-            s = UrlUtils.canonicalizeUrl(s, url.toString());
-            targetRequests.add(new Request(s));
-        }
-    }
+		this.html = html;
+	}
 
-    /**
-     * add urls to fetch
-     *
-     * @param requests requests
-     * @param priority priority
-     */
-    public void addTargetRequests(List<String> requests, long priority) {
-        for (String s : requests) {
-            if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
-                continue;
-            }
-            s = UrlUtils.canonicalizeUrl(s, url.toString());
-            targetRequests.add(new Request(s).setPriority(priority));
-        }
-    }
+	public Set<Request> getTargetRequests() {
+		return targetRequests;
+	}
 
-    /**
-     * add url to fetch
-     *
-     * @param requestString requestString
-     */
-    public void addTargetRequest(String requestString) {
-        if (StringUtils.isBlank(requestString) || requestString.equals("#")) {
-            return;
-        }
-        requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());
-        targetRequests.add(new Request(requestString));
-    }
+	/**
+	 * add urls to fetch
+	 *
+	 * @param requests requests
+	 */
+	public void addTargetRequests(List<String> requests) {
+		for (String s : requests) {
+			if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
+				continue;
+			}
+			s = UrlUtils.canonicalizeUrl(s, url.toString());
+			targetRequests.add(new Request(s));
+		}
+	}
 
-    /**
-     * add requests to fetch
-     *
-     * @param request request
-     */
-    public void addTargetRequest(Request request) {
-        targetRequests.add(request);
-    }
+	/**
+	 * add urls to fetch
+	 *
+	 * @param requests requests
+	 * @param priority priority
+	 */
+	public void addTargetRequests(List<String> requests, long priority) {
+		for (String s : requests) {
+			if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
+				continue;
+			}
+			s = UrlUtils.canonicalizeUrl(s, url.toString());
+			targetRequests.add(new Request(s).setPriority(priority));
+		}
+	}
 
-    /**
-     * get url of current page
-     *
-     * @return url of current page
-     */
-    public Selectable getUrl() {
-        return url;
-    }
+	/**
+	 * add url to fetch
+	 *
+	 * @param requestString requestString
+	 */
+	public void addTargetRequest(String requestString) {
+		if (StringUtils.isBlank(requestString) || requestString.equals("#")) {
+			return;
+		}
+		requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());
+		targetRequests.add(new Request(requestString));
+	}
 
-    public void setUrl(Selectable url) {
-        this.url = url;
-    }
+	/**
+	 * add requests to fetch
+	 *
+	 * @param request request
+	 */
+	public void addTargetRequest(Request request) {
+		targetRequests.add(request);
+	}
 
-    /**
-     * get request of current page
-     *
-     * @return request
-     */
-    public Request getRequest() {
-        return request;
-    }
+	/**
+	 * get url of current page
+	 *
+	 * @return url of current page
+	 */
+	public Selectable getUrl() {
+		return url;
+	}
 
-    public boolean isNeedCycleRetry() {
-        return needCycleRetry;
-    }
+	public void setUrl(Selectable url) {
+		this.url = url;
+	}
 
-    public void setNeedCycleRetry(boolean needCycleRetry) {
-        this.needCycleRetry = needCycleRetry;
-    }
+	/**
+	 * get request of current page
+	 *
+	 * @return request
+	 */
+	public Request getRequest() {
+		return request;
+	}
 
-    public void setRequest(Request request) {
-        this.request = request;
-        this.resultItems.setRequest(request);
-    }
+	public boolean isNeedCycleRetry() {
+		return needCycleRetry;
+	}
 
-    public ResultItems getResultItems() {
-        return resultItems;
-    }
+	public void setNeedCycleRetry(boolean needCycleRetry) {
+		this.needCycleRetry = needCycleRetry;
+	}
 
-    public int getStatusCode() {
-        return statusCode;
-    }
+	public void setRequest(Request request) {
+		this.request = request;
+		this.resultItems.setRequest(request);
+	}
 
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
+	public ResultItems getResultItems() {
+		return resultItems;
+	}
 
-    public String getRawText() {
-        return rawText;
-    }
+	public int getStatusCode() {
+		return statusCode;
+	}
 
-    public Page setRawText(String rawText) {
-        this.rawText = rawText;
-        return this;
-    }
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
+	}
+
+	public String getRawText() {
+		return rawText;
+	}
+
+	public Page setRawText(String rawText) {
+		this.rawText = rawText;
+		return this;
+	}
 
 	@Override
-    public String toString() {
-        return "Page{" +
-                "request=" + request +
-                ", resultItems=" + resultItems +
-                ", rawText='" + rawText + '\'' +
-                ", url=" + url +
-                ", statusCode=" + statusCode +
-                ", targetRequests=" + targetRequests +
-                '}';
-    }
+	public String toString() {
+		return "Page{" + "request=" + request + ", resultItems=" + resultItems + ", rawText='" + rawText + '\''
+				+ ", url=" + url + ", statusCode=" + statusCode + ", targetRequests=" + targetRequests + '}';
+	}
 }

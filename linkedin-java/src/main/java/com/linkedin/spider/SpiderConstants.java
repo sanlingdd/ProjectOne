@@ -8,6 +8,10 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.linkedin.jpa.entity.Profile;
+
+import redis.clients.jedis.Jedis;
+
 public class SpiderConstants {
 	public static Vector<HashMap<String, Object>> profilesAccessedVector = new Vector<HashMap<String, Object>>();
 	public static ConcurrentHashMap<String, Object> schools = new ConcurrentHashMap<String, Object>();
@@ -24,4 +28,8 @@ public class SpiderConstants {
 	
 	public static Map<String,Boolean> allProfileURLsThisExcution = new ConcurrentHashMap<String,Boolean>();
 	public static Set<String> downloadLinks = new HashSet<String>();
+	
+	public static Map<String,Profile> profiles = new HashMap<String,Profile>();
+	public static Jedis jedis_master = new Jedis("127.0.0.1",6379);
+	public static Set<String> allPublicIdentifiers = new HashSet<String>();
 }

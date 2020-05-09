@@ -212,7 +212,7 @@ public class LinkedinSpiderPlantomMain {
 				// ����Pipeline���������json��ʽ���浽�ļ�
 				//.addPipeline(new ExcelFilePipeLine())
 				// ����5���߳�ͬʱִ��
-				.thread(1)
+				.thread(2)
 				// ��������
 				.run();
 	}

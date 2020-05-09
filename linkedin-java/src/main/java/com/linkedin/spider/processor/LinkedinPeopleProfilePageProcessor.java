@@ -673,7 +673,7 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 						}
 						if (location == null) {
 							location = new Location();
-							location.setLocationId(Long.valueOf(regionId));
+							//location.setLocationId(Long.valueOf(regionId));
 							location.setLocationName(includeObj.getString("locationName"));
 							location = locationService.saveOrUpdate(location);
 						}

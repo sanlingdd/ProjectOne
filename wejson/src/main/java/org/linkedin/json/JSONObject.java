@@ -604,7 +604,7 @@ public class JSONObject {
 		if (object instanceof JSONArray) {
 			return (JSONArray) object;
 		}
-		throw new JSONException("JSONObject[" + quote(key) + "] is not a JSONArray.");
+		return null;
 	}
 
 	/**
@@ -620,8 +620,10 @@ public class JSONObject {
 		Object object = this.get(key);
 		if (object instanceof JSONObject) {
 			return (JSONObject) object;
+		}else {
+			return null;
 		}
-		throw new JSONException("JSONObject[" + quote(key) + "] is not a JSONObject.");
+//		throw new JSONException("JSONObject[" + quote(key) + "] is not a JSONObject.");
 	}
 
 	/**

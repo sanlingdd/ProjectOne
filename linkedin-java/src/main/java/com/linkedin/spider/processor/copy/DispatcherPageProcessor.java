@@ -55,7 +55,7 @@ public class DispatcherPageProcessor implements PageProcessor {
 		// site.addCookie("_ga","GA1.2.1251577009.1475482809");
 		// site.addCookie("_gat","1");
 		// site.addCookie("_lipt","CwEAAAFbXGVECaXZHkOnD84CqQIer2KE9Hgcl88GfHx4zPKz4-Vg8f9QDzvtv34kSjnOJqL5JB7HNWMenSap9xx0QbRNUfKiaeTZ7YHjBvwraY5RbsVPfYD-H-TjKHged8vJhHjg3UTv0T8h2jUxzVlKsFgBdbDG4rRGdIh_D4CD9ZehHFwIXxxZkxL11vucYd4LLr9AwoUHhSGKw6Q-WKYKYOfLBfl6SPsaIPVaudQbCcYsemUnPaHpyKNjfoEBkz_ApHwV-z-ZYOSLAa47gsSI3RZw8byRirNFhQYDXrLhHirGJv0ULR8wl6Etl2WSRaj4TtsdRKWasbDlmcKWzK03rDFSrDa4gVn-AgWAhnB7QEsWuEbwJkyfI4mNoAvUyLR3jEMkQzwbLcikgH4gMDttp-fqfa8dm4NuE7rTsFbHVsWb6aFf4PUYnE9fZeTz91MgnSJlt_nvVa3HfILmIsnaOvKlZezItuwMdYikfEMIz3xuWGeauBQfO5h9wSsRvebxqo5qzDI_ALdy49rfX2GPrQGs8XbwgALhoj5fWOXZZxJG-SV_kjkPN4ewrSTClJC6-fmRFUugezDWzRffHB6rVGN98zja4o5LpSV8tDyPMzCOczMj-3OVv2dBuZ0");
-		//site.setHttpProxy(new HttpHost("proxy.pal.sap.corp", 8080));
+		// site.setHttpProxy(new HttpHost("proxy.pal.sap.corp", 8080));
 		// site.setHttpProxy(new HttpHost("proxy.sin.sap.corp", 8080));
 		// site.setHttpProxy(new HttpHost("proxy.sha.sap.corp", 8080));
 		// site.setHttpProxy(new HttpHost("proxy.fra.sap.corp", 8080));
@@ -67,12 +67,16 @@ public class DispatcherPageProcessor implements PageProcessor {
 			profileProcessor = new LinkedinPeopleProfilePageProcessorWithoutPersist();
 			searchProcessor = new LinkedInPeopleSearchPageProcessor();
 		}
+		
 		if (page.getUrl().toString().matches("\\w+://www.linkedin.com/in/[^/]+/")
 				|| page.getUrl().toString().matches("\\w+://www.linkedin.com/in/[^/]+")) {
 			profileProcessor.process(page);
 		} else {
 			searchProcessor.process(page);
 		}
+		
+		LinkedinPage lpage = (LinkedinPage) page;
+		lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
 	}
 
 	@Override

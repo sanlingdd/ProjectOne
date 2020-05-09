@@ -155,7 +155,8 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 
 		// this.print(page);
 		// this.takescreenShot(((LinkedinPage)page).getWebDriver());
-
+		
+		SpiderConstants.jedis_master.set(page.getUrl().toString(), "true");
 	}
 
 	private void print(Page page) {

@@ -45,9 +45,9 @@ public class NewCompanyEmployee {
 						continue;
 					}
 
-					List<WebElement> sendbuttons = driver.findElements(By.xpath(".//span[text()='添加消息']/.."));
-					if (!sendbuttons.isEmpty()) {
-						sendbuttons.get(0).sendKeys(Keys.ENTER);
+//					List<WebElement> sendbuttons = driver.findElements(By.xpath(".//span[text()='添加消息']/.."));
+//					if (!sendbuttons.isEmpty()) {
+//						sendbuttons.get(0).sendKeys(Keys.ENTER);
 
 						List<WebElement> nameelements = driver.findElements(By.xpath(".//h2[@id='send-invite-modal']"));
 						String name = "";
@@ -60,9 +60,9 @@ public class NewCompanyEmployee {
 						if (!firm.isCustomer()) {
 							hintMessage = "Hi " + name + ",\r\n" + "我是William,工程师出身的R2R Consultant。\r\n"
 									+ "我在为一些Top的猎头公司招聘猎头顾问。\r\n" + "可以认识一下吗？\r\n" + "我的手机18601793121（微信同号）,可以进一步沟通。\r\n"
-									+ "希望与你认识，一起分享fancy的东西。\r\n";
+									+ "希望与你认识，一起分享fancy的Story。\r\n";
 						} else {
-							hintMessage = "Hi " + name +"我是William，希望可以与您建立联系 ，！";
+							hintMessage = "Hi " + name +"我是William，希望可以与您建立联系 ！";
 						}
 
 						WebElement messageElement = driver.findElements(By.xpath(".//textarea[@id='custom-message']"))
@@ -77,7 +77,7 @@ public class NewCompanyEmployee {
 							obj.sleep(3000);
 						}
 					}
-				}
+				//}
 			} catch (Exception e) {
 				e.printStackTrace();
 

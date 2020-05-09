@@ -88,7 +88,7 @@ public class LinkedinPeopleProfilePageProcessorWithoutPersist implements PagePro
 			LinkedinPage lpage = (LinkedinPage) page;
 			if (lpage.getWebDriver() != null) { // get skills
 				getSkills(page);
-				lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
+				//lpage.getWebDriverPool().returnToPool(lpage.getWebDriver());
 			}
 		}
 	}

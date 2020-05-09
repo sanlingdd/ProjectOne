@@ -43,12 +43,12 @@ public class DateString {
 			result += year;
 		}
 		if (year != null && month != null) {
-			result += "-" + month;
+			result += "." + month;
 		} else if (month != null) {
 			result += month;
 		}
 		if (month != null && day != null) {
-			result += "-" + day;
+			result += "." + day;
 		}
 		return result;
 	}

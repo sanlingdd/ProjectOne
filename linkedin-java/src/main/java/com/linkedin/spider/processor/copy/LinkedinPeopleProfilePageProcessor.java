@@ -659,30 +659,30 @@ public class LinkedinPeopleProfilePageProcessor implements PageProcessor {
 					experience.setProfile(this.userProfile);
 					userProfile.getExperiences().add(experience);
 
-					if (includeObj.getString("region") != null) {
-						// urn:li:fs_region:(cn,8909)
-						Location location = null;
-						String region = includeObj.getString("region");
-						Pattern p = Pattern.compile("\\D+(\\d+)\\D+");
-						Matcher m = p.matcher(region);
-						String regionId = null;
-						if (m.find()) {
-							regionId = m.group(1);
-							location = locationService.getByBusinessKey(Location.class, "locationId",
-									Long.valueOf(regionId));
-						}
-						if (location == null) {
-							location = new Location();
-							location.setLocationId(Long.valueOf(regionId));
-							location.setLocationName(includeObj.getString("locationName"));
-							location = locationService.saveOrUpdate(location);
-						}
-						if (location != null) {
-							experience.setLocation(location);
-						} else {
-							experience.setLocation(null);
-						}
-					}
+//					if (includeObj.getString("region") != null) {
+//						// urn:li:fs_region:(cn,8909)
+//						Location location = null;
+//						String region = includeObj.getString("region");
+//						Pattern p = Pattern.compile("\\D+(\\d+)\\D+");
+//						Matcher m = p.matcher(region);
+//						String regionId = null;
+//						if (m.find()) {
+//							regionId = m.group(1);
+//							location = locationService.getByBusinessKey(Location.class, "locationId",
+//									Long.valueOf(regionId));
+//						}
+//						if (location == null) {
+//							location = new Location();
+//							location.setLocationId(Long.valueOf(regionId));
+//							location.setLocationName(includeObj.getString("locationName"));
+//							location = locationService.saveOrUpdate(location);
+//						}
+//						if (location != null) {
+//							experience.setLocation(location);
+//						} else {
+//							experience.setLocation(null);
+//						}
+//					}
 
 					// company
 					if (includeObj.getString("companyName") != null && includeObj.getString("companyUrn") != null) {

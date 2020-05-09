@@ -21,7 +21,7 @@ public class LinkedinCookie {
 		PageOperation obj = new PageOperation();
 		WebDriver driver;
 		// chrome
-		System.setProperty("webdriver.chrome.driver", "C:/data/chromedriver_win32/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "/temp/chromedriver_win32/chromedriver.exe");
 		driver = new ChromeDriver();
 
 
@@ -35,13 +35,16 @@ public class LinkedinCookie {
 		//lop.login(driver,"yaqichenhappy@163.com","AaBCD525");
 		
 		//Carol Xu
-		lop.login(driver,"478267107@qq.com","Xu234567");
+		//lop.login(driver,"478267107@qq.com","Xu234567");
 		
 		//Lily Rao
 		//lop.login(driver,"15000729310","rt135790");
 		
 		//William Huang
-		//lop.login(driver,"17612165703","Initial0");
+		lop.login(driver,"17612165703@163.com","Initial0");
+		
+		//Ada Zhi
+		//lop.login(driver,"zljwenlue@126.com","zhilijuan148628");
 		
 		//Yulia===Email Yulia170814
 		//lop.login(driver,"13774278832@163.com","hx123888");
@@ -50,8 +53,8 @@ public class LinkedinCookie {
 		
 		Set<org.openqa.selenium.Cookie> cookies = driver.manage().getCookies();
 		//File cookieFile = new File("D:/git/linkedin/projectone/linkedin-java/YaqiCookie.txt");
-		File cookieFile = new File(CommonSetting.cookieFilePrefix+"CarolCookie.txt");
-		//File cookieFile = new File("D:/git/linkedin/projectone/linkedin-java/WilliamCookie.txt");
+		File cookieFile = new File(CommonSetting.cookieFilePrefix+"WilliamCookie.txt");
+		//File cookieFile = new File(CommonSetting.cookieFilePrefix+"AdaCookie.txt");
 		ObjectMapper mapper = new ObjectMapper(); 
 		mapper.writeValue(cookieFile, cookies);
 	}

@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.linkedin.jpa.entity.Profile;
+import com.alibaba.fastjson.JSON;
 import com.linkedin.jpa.service.ProfileService;
 import com.linkedin.spider.SearchURL;
 import com.linkedin.spider.SpiderConstants;
@@ -57,19 +59,41 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 	}
 
 	private void processSearch(Page page) {
+		LinkedinPage lpage = (LinkedinPage) page;
+
+		List<WebElement> contributorElements = lpage.getWebDriver().findElements(By.xpath(".//h1[text()='已达到搜索上限。']"));
+
+		if (!contributorElements.isEmpty()) {
+			try {
+				Thread.sleep(1000 * 60 * 60 * 24 * 24);
+				System.out.println();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
 		// page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/[\\w\\-]+/[\\w\\-]+)").all());
 		// page.putField("html", page.getHtml());
 		// page.getHtml().links();
 		// https://www.linkedin.com/in/jessicajia/#
 
-		String baseURL = page.getUrl().toString().substring(0, page.getUrl().toString().lastIndexOf("&"));
+		String baseURL = null;
 		int last = org.apache.commons.lang3.StringUtils.lastIndexOf(page.getUrl().toString(), "page=");
 		int currentPageNumber = 0;
 		if (last != -1) {
 			currentPageNumber = Integer.valueOf(page.getUrl().toString().substring(last + 5));
+			baseURL = page.getUrl().toString().substring(0, last - 1);
 		} else {
 			currentPageNumber = 1;
+			baseURL = page.getUrl().toString();
 		}
+
+		contributorElements = lpage.getWebDriver().findElements(By.xpath(".//h1[text()='未找到相关结果。']"));
+		if (!contributorElements.isEmpty()) {
+			SpiderConstants.jedis_master.set(page.getUrl().toString(), "0:0");
+			return;
+		}
+
 		if (SpiderConstants.searchURLs.get(baseURL) == null) {
 			SearchURL url = new SearchURL();
 			url.setBaseURL(baseURL);
@@ -92,46 +116,46 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 
 		JSONArray resultArray = new JSONArray(jsonList);
 		JSONObject obj = getSearchPageNode(resultArray);
+		if (obj == null) {
+			//SpiderConstants.jedis_master.set(baseURL, "-1:-1");
+			return;
+		}
 		JSONArray included = this.getSearchPageInclude(obj);
 		if (included == null) {
 			url.setAllDownloaded(true);
+			//SpiderConstants.jedis_master.set(baseURL, "-1:-1");
 			return;
 		}
 		int count = 0;
 		Set<String> valuableNames = this.getTargetNames(obj);
 		if (valuableNames.isEmpty()) {
 			url.setAllDownloaded(true);
+			//SpiderConstants.jedis_master.set(baseURL, "-1:-1");
 			return;
 		}
 		for (String element : valuableNames) {
 			String newURL = element;
-			if (!SpiderConstants.downloadLinks.contains(newURL)) {
-				page.addTargetRequest(newURL);
-				SpiderConstants.allProfileURLsThisExcution.put(newURL, false);
+			// if (!SpiderConstants.downloadLinks.contains(newURL))
+			{
+				// pure publicIdentifier
+				String[] pubs = newURL.trim().split("/");
+				String publicIdentifier = pubs[pubs.length - 1];
+				String urlDecodedPI = null;
+				try {
+					urlDecodedPI = java.net.URLDecoder.decode(publicIdentifier, "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				if (SpiderConstants.profiles.get(urlDecodedPI) == null) {
+					page.addTargetRequest(newURL);
+					SpiderConstants.allPublicIdentifiers.add(urlDecodedPI);
+					SpiderConstants.allProfileURLsThisExcution.put(newURL, false);
+				}
+
 			}
 		}
-
-//		for (int iter = 0; iter < included.length(); iter++) {
-//			JSONObject includeObj = included.getJSONObject(iter);
-//			String typeString = includeObj.getString("$type");
-//			if ("com.linkedin.voyager.identity.shared.MiniProfile".equals(typeString)) {
-////				String firstName = includeObj.getString("firstName");
-////				String lastName = includeObj.getString("lastName");
-//				// if (this.isTargetProfile(valuableNames, firstName, lastName)) {
-//				String publicIdentifier = includeObj.getString("publicIdentifier");
-//				String format = "https://www.linkedin.com/in/%s/";
-//				String newURL = String.format(format, publicIdentifier);
-//				if (!SpiderConstants.downloadLinks.contains(newURL)) {
-////					Profile profile = userProfileService.getByBusinessKey(Profile.class, "publicIdentifier",
-////							publicIdentifier);
-////					if (profile != null) {
-////						continue;
-////					}
-//					page.addTargetRequest(newURL);
-//					SpiderConstants.allProfileURLsThisExcution.put(newURL, false);
-//				}
-//			}
-//		}
 
 		JSONObject totalNode = this.getElementInIncluded(obj);
 		int total = (Integer) totalNode.get("total");
@@ -142,7 +166,11 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 				&& !url.isAllDownloaded()) {
 			url.setCurrentPageNumber(currentPageNumber + 1);
 			if (!SpiderConstants.downloadLinks.contains(url.getTargetURL())) {
-				page.addTargetRequest(url.getTargetURL());
+				String[] pubs = url.getTargetURL().trim().split("/");
+				if (SpiderConstants.profiles.get(pubs[pubs.length - 1]) == null) {
+					page.addTargetRequest(url.getTargetURL());
+
+				}
 				// SpiderConstants.allProfileURLsThisExcution.add(url.getTargetURL());
 			}
 		} else if (total <= 10) {
@@ -154,7 +182,12 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 		if (SpiderConstants.stop) {
 			SpiderConstants.allProfileURLsThisExcution.keySet().forEach((profile) -> {
 				if (!SpiderConstants.allProfileURLsThisExcution.get(profile)) {
-					page.addTargetRequest(profile);
+					// pure publicIdentifier
+					String[] pubs = url.getTargetURL().trim().split("/");
+					if (SpiderConstants.profiles.get(pubs[pubs.length - 1]) == null) {
+						page.addTargetRequest(url.getTargetURL());
+
+					}
 				}
 			});
 		}
@@ -163,6 +196,14 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 
 		// this.print(page);
 		// this.takescreenShot(((LinkedinPage)page).getWebDriver());
+
+		if (currentPageNumber < totalPage) {
+			currentPageNumber += 1;
+		}
+		SpiderConstants.jedis_master.set(baseURL,
+				String.valueOf(currentPageNumber) + ":" + String.valueOf(totalPage));
+		SpiderConstants.jedis_master.set("allPublicIdentifiers",
+				JSON.toJSONString(SpiderConstants.allPublicIdentifiers));
 
 	}
 

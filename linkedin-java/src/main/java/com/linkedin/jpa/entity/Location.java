@@ -21,12 +21,7 @@ public class Location {
 	private long id;
 
 	@Column
-	private Long locationid;
-	@Column
 	private String locationName;
-	
-	@OneToMany(mappedBy="location",fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	private List<Experience> experience;
 	
 	public long getId() {
 		return id;
@@ -34,12 +29,7 @@ public class Location {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public Long getLocationId() {
-		return locationid;
-	}
-	public void setLocationId(Long locationId) {
-		this.locationid = locationId;
-	}
+	
 	public String getLocationName() {
 		return locationName;
 	}
@@ -48,12 +38,6 @@ public class Location {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-	public List<Experience> getExperience() {
-		return experience;
-	}
-	public void setExperience(List<Experience> experience) {
-		this.experience = experience;
 	}
 
 }
