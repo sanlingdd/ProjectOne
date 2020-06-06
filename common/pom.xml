@@ -67,7 +67,7 @@
 		<hsqldb.version>2.2.8</hsqldb.version>
 		<jackson.version>1.9.3</jackson.version>
 		<fasterxml.version>2.9.3</fasterxml.version>
-		<javamelody.version>1.43.0</javamelody.version>
+		<javamelody.version>1.74.0</javamelody.version>
 		<javax.mail.version>1.4.7</javax.mail.version>
 		<javax.persistence.version>2.1.0</javax.persistence.version>
 		<jetty.server.version>7.6.3.v20120416</jetty.server.version>
