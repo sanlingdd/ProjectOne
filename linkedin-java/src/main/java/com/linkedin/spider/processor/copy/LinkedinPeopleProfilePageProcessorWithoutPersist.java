@@ -34,6 +34,7 @@ import com.linkedin.jpa.entity.Company;
 import com.linkedin.jpa.entity.Education;
 import com.linkedin.jpa.entity.Experience;
 import com.linkedin.jpa.entity.Location;
+import com.linkedin.jpa.entity.Phone;
 import com.linkedin.jpa.entity.Profile;
 import com.linkedin.jpa.entity.School;
 import com.linkedin.spider.DateString;
@@ -302,13 +303,27 @@ public class LinkedinPeopleProfilePageProcessorWithoutPersist implements PagePro
 
 		// emailAddress
 		page.putField("emailAddress", dataObj.getString("emailAddress"));
+		
+		pf.setAddress(dataObj.getString("emailAddress"));
 		// address
 		page.putField("address", dataObj.getString("address"));
+		pf.setAddress(dataObj.getString("address"));
 		// phone
 		JSONArray phoneNumbersURLs = dataObj.getJSONArray("phoneNumbers");
 		if (phoneNumbersURLs != null) {
 			List<HashMap<String, Object>> phones = this.getPhoneNumbers(phoneNumbersURLs, includeObj);
 			page.putField("phones", phones);
+			
+			for(HashMap<String, Object> phone : phones)
+			{
+				Phone pphone = new Phone();
+				pphone.setProfile(pf);
+				pphone.setType(phone.get("type").toString());
+				pphone.setNumber(phone.get("number").toString());
+
+				pf.getPhones().add(pphone);
+			}
+			
 		}
 
 		// birthday//
@@ -317,6 +332,7 @@ public class LinkedinPeopleProfilePageProcessorWithoutPersist implements PagePro
 
 			DateString birthDay = this.getDateString(birthDateOn);
 			page.putField("birthday", birthDay.toString());
+			pf.setBirthday( birthDay.toString());
 		}
 		// website
 		JSONArray websitesURLs = dataObj.getJSONArray("websites");

@@ -1,9 +1,11 @@
 package com.linkedin.spider.processor.copy;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.linkedin.automation.CommonSetting;
+import com.linkedin.jpa.entity.Phone;
 import com.linkedin.jpa.entity.Profile;
 import com.linkedin.jpa.service.CompanyService;
 import com.linkedin.spider.POIHelper;
@@ -245,6 +248,32 @@ public class LinkedinSpiderHttpMain {
 						});
 				SpiderConstants.profiles.putAll(profiles);
 				bos.close();
+				
+				
+				for(String publicidentifier : profiles.keySet())
+				{
+					Profile pro = profiles.get(publicidentifier);
+					File publicFile = new File("C:\\CVS\\" + pro.getPublicIdentifier() + "CV.txt");
+					FileReader fr = new FileReader(publicFile);
+					BufferedReader br = new BufferedReader(fr);
+					String line = "";
+		            while ((line = br.readLine()) != null) {
+		            	if(line.startsWith("电话")) {
+		            		//
+		            		String phone = line.split(":")[1];
+		            		Phone ph = new Phone();
+		            		ph.setType("手机");
+		            		ph.setNumber(phone);
+		            		pro.getPhones().add(ph);
+		            	}
+		            	if(line.startsWith("邮箱")) {
+		            		//
+		            		String email = line.split(":")[1];
+		            		pro.setEmailAddress(email);
+		            	}
+		            }  
+
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

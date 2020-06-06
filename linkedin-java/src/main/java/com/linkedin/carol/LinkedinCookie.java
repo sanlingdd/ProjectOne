@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -21,9 +22,26 @@ public class LinkedinCookie {
 		PageOperation obj = new PageOperation();
 		WebDriver driver;
 		// chrome
-		System.setProperty("webdriver.chrome.driver", "/temp/chromedriver_win32/chromedriver.exe");
-		driver = new ChromeDriver();
+		System.setProperty("webdriver.chrome.driver", CommonSetting.chromeDrivePath);
+		//System.setProperty("webdriver.chrome.driver", "D:\\360Chrome\\chromedriver.exe");		
+		//driver = new ChromeDriver();
 
+		
+		ChromeOptions options = new ChromeOptions();
+		
+		options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");//.binary_location = "/usr/bin/chromium-browser"
+		//options.setBinary("C:\\Users\\Michael\\AppData\\Local\\360Chrome\\Chrome\\Application\\360chrome.exe");
+		
+		//options.addArguments("start-maximized"); // open Browser in maximized mode
+//		options.addArguments("disable-infobars"); // disabling infobars
+//		options.addArguments("--disable-extensions"); // disabling extensions
+//		options.addArguments("--disable-gpu"); // applicable to windows os only
+//		options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+//		options.addArguments("--no-sandbox"); // Bypass OS security model
+		//options.addArguments("--enable-logging"); // Bypass OS security model
+		
+		driver = new ChromeDriver(options);
+		
 
 		LinkedinOperation lop = new LinkedinOperation();
 		driver.manage().window().maximize();
