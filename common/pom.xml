@@ -42,7 +42,7 @@
 		<assembly.version>2.4</assembly.version>
 
 		<!-- Dependency version control -->
-		<ant.version>1.7.0</ant.version>
+		<ant.version>1.9.15</ant.version>
 		<aopalliance.version>1.0</aopalliance.version>
 		<apache.mime4j.version>0.7.2</apache.mime4j.version>
 		<aspectj.version>1.8.10</aspectj.version>
