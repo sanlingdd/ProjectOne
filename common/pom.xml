@@ -48,7 +48,7 @@
 		<aspectj.version>1.8.10</aspectj.version>
 		<cglib.version>3.2.4</cglib.version>
 		<cometd.version>2.4.2</cometd.version>
-		<commons.beanutils.version>1.9.2</commons.beanutils.version>
+		<commons.beanutils.version>1.9.4</commons.beanutils.version>
 		<commons.codec.version>1.6</commons.codec.version>
 		<commons.collections.version>3.2.2</commons.collections.version>
 		<commons.dbcp.version>1.4</commons.dbcp.version>
