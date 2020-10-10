@@ -1,10 +1,12 @@
 package com.linkedin.spider.processor.copy;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,7 +47,7 @@ public class LinkedinSpiderHttpMain {
 	@Autowired
 	private DispatcherPageProcessor dispather = new DispatcherPageProcessor();
 
-	public void startLinkedProfileSpider() {
+	public void startLinkedProfileSpider() throws IOException {
 		Workbook workbook = null;
 		FileInputStream inputStream = null;
 		String tempFile = "C:/Data/webmagic/LinkedProfilesFresh.xlsx";
@@ -226,8 +228,7 @@ public class LinkedinSpiderHttpMain {
 						spider.addUrl(url + "&page=" + currentPage);
 					}
 
-					if(totalPage.equalsIgnoreCase("-1"))
-					{	
+					if (totalPage.equalsIgnoreCase("-1")) {
 						SpiderConstants.jedis_master.del(url);
 					}
 				}
@@ -248,37 +249,67 @@ public class LinkedinSpiderHttpMain {
 						});
 				SpiderConstants.profiles.putAll(profiles);
 				bos.close();
-				
-				
-				for(String publicidentifier : profiles.keySet())
-				{
+
+				for (String publicidentifier : profiles.keySet()) {
 					Profile pro = profiles.get(publicidentifier);
 					File publicFile = new File("C:\\CVS\\" + pro.getPublicIdentifier() + "CV.txt");
+					if (!publicFile.exists()) {
+						continue;
+					}
 					FileReader fr = new FileReader(publicFile);
 					BufferedReader br = new BufferedReader(fr);
 					String line = "";
-		            while ((line = br.readLine()) != null) {
-		            	if(line.startsWith("电话")) {
-		            		//
-		            		String phone = line.split(":")[1];
-		            		Phone ph = new Phone();
-		            		ph.setType("手机");
-		            		ph.setNumber(phone);
-		            		pro.getPhones().add(ph);
-		            	}
-		            	if(line.startsWith("邮箱")) {
-		            		//
-		            		String email = line.split(":")[1];
-		            		pro.setEmailAddress(email);
-		            	}
-		            }  
+					while ((line = br.readLine()) != null) {
+						if (line.startsWith("电话：")) {
+							//
+							String phone = line.split("：")[1];
+							if (!phone.contentEquals("null ")) {
+								Phone ph = new Phone();
+								ph.setType("手机");
+								ph.setNumber(phone);
+								pro.getPhones().add(ph);
+							}
+						}
+						if (line.startsWith("邮箱：")) {
+							//
+							String email = line.split("：")[1];
+							if (!email.contentEquals("null ")) {
+								pro.setEmailAddress(email);
+							}
+						}
+					}
+					br.close();
+					fr.close();
 
 				}
+
+				System.out.print("\r\n");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
+		String longStr = JSON.toJSONString(SpiderConstants.profiles);
+//		String longStr = JSON.toJSONString(SpiderConstants.profiles,
+//				SerializerFeature.DisableCircularReferenceDetect);
+		File profilesFile = new File("C:\\Profiles\\profiles.txt");
+
+		File fileParent = profilesFile.getParentFile();
+		if (!fileParent.exists()) {
+			fileParent.mkdirs();
+		}
+
+		if (profilesFile.exists()) {
+			profilesFile.delete();
+		}
+
+		profilesFile.createNewFile();
+		FileOutputStream fos = new FileOutputStream(profilesFile);
+		BufferedOutputStream bos = new BufferedOutputStream(fos);
+		bos.write(longStr.getBytes(), 0, longStr.getBytes().length);
+		bos.flush();
+		bos.close();
 
 		if (SpiderConstants.jedis_master.get("allPublicIdentifiers") != null) {
 			SpiderConstants.allPublicIdentifiers.addAll(JSON.parseObject(
@@ -292,20 +323,21 @@ public class LinkedinSpiderHttpMain {
 //				spider.addUrl("https://www.linkedin.com/in/" + publicIdentifer);
 //			}
 //		}
-		
+
 		for (String pub : SpiderConstants.profiles.keySet()) {
 			if (!SpiderConstants.allPublicIdentifiers.contains(pub)) {
 				SpiderConstants.allPublicIdentifiers.add(pub);
 			}
 
 		}
-		
-		SpiderConstants.jedis_master.set("allPublicIdentifiers",JSON.toJSONString(SpiderConstants.allPublicIdentifiers));		
+
+		SpiderConstants.jedis_master.set("allPublicIdentifiers",
+				JSON.toJSONString(SpiderConstants.allPublicIdentifiers));
 
 //		spider.addUrl(
 //				"https://www.linkedin.com/search/results/people/?facetIndustry=%5B%2220%22%5D&facetNetwork=%5B%22F%22%5D&keywords=c&origin=GLOBAL_SEARCH_HEADER");
-		
-		String chromeDriverPath =CommonSetting.chromeDrivePath;
+
+		String chromeDriverPath = CommonSetting.chromeDrivePath;
 		LinkedSeleniumDownloader seleniumDownloader = new LinkedSeleniumDownloader(chromeDriverPath);
 		spider.setDownloader(seleniumDownloader);
 		// spider.setDownloader(new HttpClientDownloader())
@@ -318,7 +350,7 @@ public class LinkedinSpiderHttpMain {
 				.run();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		new LinkedinSpiderHttpMain().startLinkedProfileSpider();
 
 	}

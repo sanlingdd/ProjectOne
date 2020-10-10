@@ -16,6 +16,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -53,15 +54,17 @@ public class PinPinAdd {
 		PageOperation obj = new PageOperation();
 		WebDriver driver;
 		// chrome
-		System.setProperty("webdriver.chrome.driver", CommonSetting.chromeDrivePath);
-		driver = new ChromeDriver();
+		System.setProperty("webdriver.chrome.driver", CommonSetting.Chrome360DriverPath);
+		ChromeOptions options = new ChromeOptions();
+		options.setBinary("C:\\Users\\Michael\\AppData\\Local\\360Chrome\\Chrome\\Application\\360chrome.exe");
+		driver = new ChromeDriver(options);
 		driver.manage().window().maximize();
 
 		driver.manage().timeouts().pageLoadTimeout(500, TimeUnit.SECONDS);
 		WebGet(driver, "http://39.98.32.38:5678/webapp/#/login");
 
 		driver.manage().deleteAllCookies();
-		Thread.sleep(3000);
+		Thread.sleep(10000);
 
 		File cookieFile = new File(CommonSetting.cookieFilePrefix + "PinPinWilliamCookie.txt");
 		JavaType linkedinCookieType = mapper.getTypeFactory().constructParametricType(List.class, LinkedInCookie.class);

@@ -55,17 +55,19 @@ public class NewCompanyEmployeeEX {
 						continue;
 					}
 
+					List<WebElement> nameelements = driver.findElements(By.xpath(".//li-icon[@type='success-pebble-icon']/../span/strong"));
+					String name = "";
+					if (!nameelements.isEmpty()) {
+						name = nameelements.get(0).getText();
+//						name = name.replace("邀请", "");
+//						name = name.replace("成为好友", "");
+						name = name.split(" ")[0];
+					}					
+
 					List<WebElement> sendbuttons = driver.findElements(By.xpath(".//span[text()='添加消息']/.."));
 					if (!sendbuttons.isEmpty()) {
 						sendbuttons.get(0).sendKeys(Keys.ENTER);
 
-						List<WebElement> nameelements = driver.findElements(By.xpath(".//h2[@id='send-invite-modal']"));
-						String name = "";
-						if (!nameelements.isEmpty()) {
-							name = nameelements.get(0).getText();
-							name = name.replace("邀请", "");
-							name = name.replace("成为好友", "");
-						}
 						String hintMessage = "";
 						if (!firm.isCustomer()) {
 							hintMessage = "Dear " + name + ",\r\n" + "I'm Carol from a global headhunting firm."
@@ -82,7 +84,7 @@ public class NewCompanyEmployeeEX {
 						obj.sleep(3000);
 
 						List<WebElement> sendinvitationElements = driver
-								.findElements(By.xpath(".//span[text()='发邀请']/.."));
+								.findElements(By.xpath(".//span[text()='完成']/.."));
 						if (!sendinvitationElements.isEmpty()) {
 							sendinvitationElements.get(0).sendKeys(Keys.ENTER);
 							obj.sleep(3000);

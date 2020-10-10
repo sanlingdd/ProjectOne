@@ -12,8 +12,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import redis.clients.jedis.Jedis;
-
 public class Main {
 
 	public static void main(String[] args) throws JsonGenerationException, JsonMappingException, IOException {
@@ -43,25 +41,25 @@ public class Main {
 		
 		JavaType firmTypeList = mapper.getTypeFactory().constructParametricType(ArrayList.class, HuntingCompany.class);		
 		List<HuntingCompany> huntingFirmList = (ArrayList<HuntingCompany>) mapper.readValue(huntingFirmFile, firmTypeList);
-		codesString = CommonSetting.cookieFilePrefix+"CFOPureURL.txt";
-		huntingFirmList.clear();
-		String[] keywords = { "HRD", "人力资源总监","HR BP", "HRBP", "HR AD", "HR Head", "HP VP", "HR GM ", "招聘负责人", "招聘总经理",
-				"招聘副总监", "招聘总监", "Associate HRD", "Human Resources Head", "GM Human Resources", "Human Resources VP",
-				"Human resources Associate Director", "Human resources Director", "Talent Acquisition VP",
-				"Talent Acquisition Director", "Talent Acquisition AD", "Talent Acquisition Associate Director" };
-		String[] industries = { "6", "7", "12", "15", "17", "18", "19", "20", "24", "25", "27", "41", "42", "43", "44",
-				"45", "46", "47", "106", "112", "116", "118", "119", "128", "129", "132" };
-		for (String keyword : keywords) {
-			for (String industry : industries) {
-				HuntingCompany hc = new HuntingCompany();
-				hc.setCode(keyword);
-				hc.setName(industry);
-				hc.setLink(false);
-				hc.setHasFinished(false);
-				huntingFirmList.add(hc);
-			}
-		}
-		mapper.writeValue(new File(codesString), huntingFirmList);
+//		codesString = CommonSetting.cookieFilePrefix+"CFOPureURL.txt";
+//		huntingFirmList.clear();
+//		String[] keywords = { "HRD", "人力资源总监","HR BP", "HRBP", "HR AD", "HR Head", "HP VP", "HR GM ", "招聘负责人", "招聘总经理",
+//				"招聘副总监", "招聘总监", "Associate HRD", "Human Resources Head", "GM Human Resources", "Human Resources VP",
+//				"Human resources Associate Director", "Human resources Director", "Talent Acquisition VP",
+//				"Talent Acquisition Director", "Talent Acquisition AD", "Talent Acquisition Associate Director" };
+//		String[] industries = { "6", "7", "12", "15", "17", "18", "19", "20", "24", "25", "27", "41", "42", "43", "44",
+//				"45", "46", "47", "106", "112", "116", "118", "119", "128", "129", "132" };
+//		for (String keyword : keywords) {
+//			for (String industry : industries) {
+//				HuntingCompany hc = new HuntingCompany();
+//				hc.setCode(keyword);
+//				hc.setName(industry);
+//				hc.setLink(false);
+//				hc.setHasFinished(false);
+//				huntingFirmList.add(hc);
+//			}
+//		}
+//		mapper.writeValue(new File(codesString), huntingFirmList);
 
 		String[] codes = { "32424387", "6659868", "33194776", "7985", "78268", "10841320", "19939", "6418642", "12585",
 				"32298592", "3504639", "1274011", "14721294", "2572611", "3169190", "13423147", "77505", "18877505",
@@ -77,7 +75,8 @@ public class Main {
 				"14468318", "4850608", "3505194", "13323712", "6436157", "2835920", "165722", "165757", "879045",
 				"256372", "164587", "28934", "3538965", "3538965", "12662333", "341192", "13742978", "10005088",
 				"13340231", "3079347", "3515143", "3586308", "1707118", "3505194", "228650", "14699735", "13271464",
-				"13463825", "30908419", "107990", "202782", "9461493", "10844327", "6616713", "3497068", "2882987" };
+				"13463825", "30908419", "107990", "202782", "9461493", "10844327", "6616713", "3497068", "2882987" ,"31549139","32596357","1069520"
+				,"1404985","14705855","31549139","305794","20548466","1274011"};
 //		 String[]
 //		 codes={"17977312","18273293","4826488","935469","4856382","13704739","9452261","32065130","13699091","3658476","18877505","134354","30060022","14432597","29962401","1620350","1069520","1069520","793329","29127437","332701","32451689","3530418","2695939","32202590","2095757","29832517","29422456","7934647","3326104","13713659","208554","29181483","13380267","13282868","308813","3282638","1695643","1695643","1386443","78268","10852261","4788574"};
 		// String[]

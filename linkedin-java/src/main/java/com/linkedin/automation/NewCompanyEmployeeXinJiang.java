@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class NewCompanyEmployee {
+public class NewCompanyEmployeeXinJiang {
 
 	public static void HandleAPage(PageOperation obj, WebDriver driver, HuntingCompany firm) {
 		obj.scrollThePageWithPercent(driver, Double.valueOf(0.75));
@@ -45,28 +45,25 @@ public class NewCompanyEmployee {
 						}
 						continue;
 					}
-					
-					List<WebElement> nameelements = driver.findElements(By.xpath(".//li-icon[@type='success-pebble-icon']/../span/strong"));
-					String name = "";
-					if (!nameelements.isEmpty()) {
-						name = nameelements.get(0).getText();
-//						name = name.replace("邀请", "");
-//						name = name.replace("成为好友", "");
-						name = name.split(" ")[0];
-					}
 
 					List<WebElement> sendbuttons = driver.findElements(By.xpath(".//span[text()='添加消息']/.."));
 					if (!sendbuttons.isEmpty()) {
 						sendbuttons.get(0).sendKeys(Keys.ENTER);
 
-
+						List<WebElement> nameelements = driver.findElements(By.xpath(".//h2[@id='send-invite-modal']"));
+						String name = "";
+						if (!nameelements.isEmpty()) {
+							name = nameelements.get(0).getText();
+							name = name.replace("邀请", "");
+							name = name.replace("成为好友", "");
+						}
 						String hintMessage = "";
 						if (!firm.isCustomer()) {
 							hintMessage = "Hi " + name + ",\r\n" + "我是William,工程师出身的R2R Consultant。\r\n"
-									+ "我在为一些Top的猎头公司招聘猎头顾问。\r\n" + "可以认识一下吗？\r\n" + "我的手机18601793121（微信同号）,可以进一步沟通。\r\n"
+									+ "我在为一家专业的猎头公司乌鲁木齐Office招聘猎头顾问。\r\n" + "可以认识一下吗？\r\n" + "我的手机18601793121（微信同号）,可以进一步沟通。\r\n"
 									+ "希望与你认识，一起分享fancy的Story。\r\n";
 						} else {
-							hintMessage = "Hi " + name +",我是William，希望可以与您建立联系 ！";
+							hintMessage = "Hi " + name +"我是William，希望可以与您建立联系 ！";
 						}
 
 						WebElement messageElement = driver.findElements(By.xpath(".//textarea[@id='custom-message']"))
@@ -75,7 +72,7 @@ public class NewCompanyEmployee {
 						obj.sleep(3000);
 
 						List<WebElement> sendinvitationElements = driver
-								.findElements(By.xpath(".//span[text()='完成']/.."));
+								.findElements(By.xpath(".//span[text()='发邀请']/.."));
 						if (!sendinvitationElements.isEmpty()) {
 							sendinvitationElements.get(0).sendKeys(Keys.ENTER);
 							obj.sleep(3000);
@@ -153,9 +150,9 @@ public class NewCompanyEmployee {
 		JavaType firmType = mapper.getTypeFactory().constructParametricType(List.class, HuntingCompany.class);
 		// new TypeReference<List<Cookie>>() {}
 		List<HuntingCompany> firmsSet = (List<HuntingCompany>) mapper.readValue(huntingFirmFile, firmType);
-		for (HuntingCompany firm : firmsSet) {
-			firm.setHasFinished(false);
-		}
+		// for (HuntingCompany firm : firmsSet) {
+		// firm.setHasFinished(false);
+		// }
 
 		PageOperation obj = new PageOperation();
 		for (HuntingCompany firm : firmsSet) {
@@ -172,11 +169,8 @@ public class NewCompanyEmployee {
 				if (firm.isHasFinished()) {
 					continue;
 				}
-				if(StringUtils.isEmpty(firm.getCode())){
-					continue;
-				}
 //				if (iter != 0 && (iter % 9 == 0)) {
-//					driver.close();
+//					//driver.close();
 //					// driver.quit();
 //					driver = getNewDriver();
 //				}
@@ -184,7 +178,9 @@ public class NewCompanyEmployee {
 				String company = "";
 				if (firm.isLink()) {
 					company = firm.getUrl();
-				} else {
+				} else if(StringUtils.isEmpty(firm.getCode())){
+					continue;
+				}else{
 					StringBuilder argsStr = new StringBuilder("");
 					argsStr.append("\"").append(firm.getCode()).append("\"");
 					// BeiJing
@@ -196,7 +192,7 @@ public class NewCompanyEmployee {
 					// ShangHai
 					company = "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B"
 							+ argsStr.toString()
-							+ "%5D&facetGeoRegion=%5B\"cn%3A8909\"%2C\"cn%3A8883\"%5D&origin=FACETED_SEARCH&page=1";
+							+ "%5D&facetGeoRegion=%5B\"cn%3A8911\"%2C\"cn%3A8905\"%5D&origin=FACETED_SEARCH&page=1";
 
 				}
 
@@ -253,8 +249,6 @@ public class NewCompanyEmployee {
 		System.out.println("Batch Finished!");
 
 		// finished
-		// driver.close();
-
 	}
 
 }

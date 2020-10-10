@@ -11,6 +11,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -25,8 +26,11 @@ public class PinPinCookie {
 		PageOperation obj = new PageOperation();
 		WebDriver driver;
 		// chrome
-		System.setProperty("webdriver.chrome.driver", CommonSetting.chromeDrivePath);
-		driver = new ChromeDriver();
+		// chrome
+		System.setProperty("webdriver.chrome.driver", CommonSetting.Chrome360DriverPath);
+		ChromeOptions options = new ChromeOptions();
+		options.setBinary("C:\\Users\\Michael\\AppData\\Local\\360Chrome\\Chrome\\Application\\360chrome.exe");
+		driver = new ChromeDriver(options);
 
 
 		LinkedinOperation lop = new LinkedinOperation();
@@ -35,7 +39,7 @@ public class PinPinCookie {
 		driver.manage().timeouts().pageLoadTimeout(200,TimeUnit.SECONDS);
 		driver.navigate().to("http://39.98.32.38:5678/webapp/#/login");
 		String username = "williambin";
-		String password = "123";
+		String password = "Initial0";
 		
 		WebElement account = driver.findElements(By.xpath(".//input[@name='email']")).get(0);
 		account.sendKeys(username);

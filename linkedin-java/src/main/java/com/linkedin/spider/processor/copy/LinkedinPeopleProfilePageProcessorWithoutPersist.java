@@ -89,7 +89,7 @@ public class LinkedinPeopleProfilePageProcessorWithoutPersist implements PagePro
 		List<HashMap<String, Object>> phones = (List<HashMap<String, Object>>) result.get("phones");
 		if (phones != null) {
 			for (HashMap<String, Object> phone : phones) {
-				resume = resume + String.format("%s： \r\n", "电话：" + phone.get("number"));
+				resume = resume + String.format("%s \r\n", "电话：" + phone.get("number"));
 			}
 		}
 
