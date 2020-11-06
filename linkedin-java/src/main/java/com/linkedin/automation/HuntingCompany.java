@@ -3,6 +3,7 @@ public class HuntingCompany {
 	private String code;
 	private String name;
 	private String url;
+	private Integer currentPage = 0;
 	private boolean isCustomer;
 	private boolean hasFinished;
 	private boolean isLink;
@@ -45,6 +46,14 @@ public class HuntingCompany {
 	}
 	public void setCustomer(boolean isCustomer) {
 		this.isCustomer = isCustomer;
+	}	
+	
+	
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
 	}
 	@Override
 	public int hashCode() {

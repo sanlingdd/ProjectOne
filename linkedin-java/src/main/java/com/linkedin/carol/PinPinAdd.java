@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
@@ -85,8 +86,7 @@ public class PinPinAdd {
 			try {
 				fos = new FileInputStream(file);
 				BufferedInputStream bos = new BufferedInputStream(fos);
-				byte[] bytes = bos.readAllBytes();
-				String profilesStr = new String(bytes);
+				String profilesStr = IOUtils.toString(bos);;
 				profiles = JSON.parseObject(profilesStr, new TypeReference<HashMap<String, Profile>>() {
 				});
 				SpiderConstants.profiles.putAll(profiles);

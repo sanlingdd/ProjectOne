@@ -26,6 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.linkedin.automation.CommonSetting;
+import com.linkedin.automation.HuntingCompany;
 import com.linkedin.jpa.service.ProfileService;
 import com.linkedin.spider.SearchURL;
 import com.linkedin.spider.SpiderConstants;
@@ -200,6 +204,22 @@ public class LinkedInPeopleSearchPageProcessor implements PageProcessor {
 		if (currentPageNumber < totalPage) {
 			currentPageNumber += 1;
 		}
+		
+		
+		url.getBaseURL();
+		
+		File huntingFirmFile = new File(CommonSetting.cookieFilePrefix + "huntingfirmsPureCode.txt");
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			mapper.writeValue(huntingFirmFile, SpiderConstants.firmsSet);
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
 		SpiderConstants.jedis_master.set(baseURL,
 				String.valueOf(currentPageNumber) + ":" + String.valueOf(totalPage));
 		SpiderConstants.jedis_master.set("allPublicIdentifiers",
