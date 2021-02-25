@@ -75,7 +75,7 @@
 		<jsoup.version>1.7.2</jsoup.version>
 		<jsp.api.version>2.1</jsp.api.version>
 		<jstl.version>1.2</jstl.version>
-		<junit.version>4.11</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<kaptcha.version>2.3.2</kaptcha.version>
 		<logback.version>1.2.0</logback.version>
 		<janino.version>2.6.1</janino.version>
