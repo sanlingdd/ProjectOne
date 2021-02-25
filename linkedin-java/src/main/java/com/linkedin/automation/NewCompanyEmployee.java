@@ -62,9 +62,8 @@ public class NewCompanyEmployee {
 
 						String hintMessage = "";
 						if (!firm.isCustomer()) {
-							hintMessage = "Hi " + name + ",\r\n" + "我是William,工程师出身的R2R Consultant。\r\n"
-									+ "我在为一些Top的猎头公司招聘猎头顾问。\r\n" + "可以认识一下吗？\r\n" + "我的手机18601793121（微信同号）,可以进一步沟通。\r\n"
-									+ "希望与你认识，一起分享fancy的Story。\r\n";
+							hintMessage = "Hi " + name + ",\r\n" + "我是William\r\n"
+									+ "可以认识一下吗? \r\n" + "我的手机:18601793121（微信同号）,可以进一步沟通。\r\n";
 						} else {
 							hintMessage = "Hi " + name +",我是William，希望可以与您建立联系 ！";
 						}

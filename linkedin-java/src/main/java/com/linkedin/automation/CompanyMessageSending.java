@@ -27,9 +27,9 @@ public class CompanyMessageSending {
 			Map<String, MessageSendRecord> records, File messageRecordFile) {
 		ObjectMapper mapper = new ObjectMapper();
 		obj.scrollThePageWithPercent(driver, Double.valueOf(0.75));
-		List<WebElement> elementsSendMessage = driver.findElements(By.xpath(".//button[text()='发消息']"));
+		List<WebElement> elementsSendMessage = driver.findElements(By.xpath(".//span[text()='Message']/.."));
 		for (WebElement elementSentButton : elementsSendMessage) {
-			WebElement linkedProfileElement = elementSentButton.findElement(By.xpath("../../../../div[2]/a"));
+			WebElement linkedProfileElement = elementSentButton.findElement(By.xpath("../../div[2]/.//a"));
 			String linkedProfile = linkedProfileElement.getAttribute("href");
 			MessageSendRecord rec = records.get(linkedProfile);
 			if (rec != null) {
@@ -39,11 +39,11 @@ public class CompanyMessageSending {
 				}
 			}
 
-			String name = linkedProfileElement.findElement(By.xpath(".//h3/span/span/span")).getText().split(" ")[0];
+			String name = linkedProfileElement.findElement(By.xpath(".//span/span")).getText().split(" ")[0];
 			try {
 				obj.scrollThePage(driver, elementSentButton);
 				// send exist message
-				List<WebElement> sendMessageElements = driver.findElements(By.xpath(".//button[text()='发送']"));
+				List<WebElement> sendMessageElements = driver.findElements(By.xpath(".//span[text()='Send']/.."));
 				if (!sendMessageElements.isEmpty()) {
 					WebElement ele = sendMessageElements.get(0);
 					obj.scrollThePage(driver, ele);
@@ -63,11 +63,11 @@ public class CompanyMessageSending {
 //					name = namespans.get(0).getText().split(" ")[0];
 //				}
 
-				String hintMessage[] = { "Hi " + name + ",\r\n" + "我是William,工程师出身的R2R Consultant。\r\n"
-						+ "我在帮一些专业的猎头公司招聘猎头顾问。\r\n" + "最近怎么样呀？\r\n" + "我的手机18601793121（微信同号）,可以认识一下，互帮互助。\r\n" };
+				String hintMessage[] = { "Hi " + name + ",\r\n" + "最近怎么样呀？\r\n"
+						+  "最近有没有想法动一动呀？\r\n" };
 
-				WebElement messageElement = driver.findElements(By.xpath(".//div[@aria-label='写消息…']/p/..")).get(0);
-				WebElement sendMessageElement = driver.findElements(By.xpath(".//button[text()='发送']")).get(0);
+				WebElement messageElement = driver.findElements(By.xpath(".//div[@aria-label='Write a message…']/p/..")).get(0);
+				WebElement sendMessageElement = driver.findElements(By.xpath(".//Button[text()='Send']")).get(0);
 
 				for (String hint : hintMessage) {
 					obj.sleep(10000);					
@@ -106,7 +106,7 @@ public class CompanyMessageSending {
 			}
 		}
 
-		List<WebElement> nextPageElements = driver.findElements(By.xpath(".//span[text()='删除']/.."));
+		List<WebElement> nextPageElements = driver.findElements(By.xpath(".//span[text()='Discard']/.."));
 		if (!nextPageElements.isEmpty()) {
 			for (WebElement element : nextPageElements) {
 				element.sendKeys(Keys.ENTER);
