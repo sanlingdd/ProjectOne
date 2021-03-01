@@ -3,6 +3,7 @@ package com.linkedin.automation;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.jadira.usertype.spi.utils.lang.StringUtils;
@@ -22,14 +23,16 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class NewCompanyEmployee {
+	public static int count = 0;
+	public static final int maxCount = 1 + (new Random()).nextInt(50);
 
-	public static void HandleAPage(PageOperation obj, WebDriver driver, HuntingCompany firm) {
+	public static boolean HandleAPage(PageOperation obj, WebDriver driver, HuntingCompany firm) {
 		obj.scrollThePageWithPercent(driver, Double.valueOf(0.75));
 		while (true) {
 			// scroll to get all the candidate in the page
 			// obj.scrollThePageWithPercent(driver, Double.valueOf(iter / elements.size()));
 
-			List<WebElement> elements = driver.findElements(By.xpath(".//button[text()='加为好友']"));
+			List<WebElement> elements = driver.findElements(By.xpath(".//span[text()='加为好友']/.."));
 
 			try {
 				for (WebElement element : elements) {
@@ -45,8 +48,9 @@ public class NewCompanyEmployee {
 						}
 						continue;
 					}
-					
-					List<WebElement> nameelements = driver.findElements(By.xpath(".//li-icon[@type='success-pebble-icon']/../span/strong"));
+
+					List<WebElement> nameelements = driver
+							.findElements(By.xpath(".//li-icon[@type='success-pebble-icon']/../span/strong"));
 					String name = "";
 					if (!nameelements.isEmpty()) {
 						name = nameelements.get(0).getText();
@@ -59,13 +63,13 @@ public class NewCompanyEmployee {
 					if (!sendbuttons.isEmpty()) {
 						sendbuttons.get(0).sendKeys(Keys.ENTER);
 
-
 						String hintMessage = "";
 						if (!firm.isCustomer()) {
 							hintMessage = "Hi " + name + ",\r\n" + "我是William\r\n"
 									+ "可以认识一下吗? \r\n" + "我的手机:18601793121（微信同号）,可以进一步沟通。\r\n";
+
 						} else {
-							hintMessage = "Hi " + name +",我是William，希望可以与您建立联系 ！";
+							hintMessage = "Hi " + name + ",我是William，希望可以与您建立联系 ！";
 						}
 
 						WebElement messageElement = driver.findElements(By.xpath(".//textarea[@id='custom-message']"))
@@ -74,17 +78,22 @@ public class NewCompanyEmployee {
 						obj.sleep(3000);
 
 						List<WebElement> sendinvitationElements = driver
-								.findElements(By.xpath(".//span[text()='完成']/.."));
+								.findElements(By.xpath(".//span[text()='发送']/.."));
 						if (!sendinvitationElements.isEmpty()) {
 							sendinvitationElements.get(0).sendKeys(Keys.ENTER);
 							obj.sleep(3000);
 						}
+
+						if (count < maxCount) {
+							return true;
+						}
+						count++;
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 
-				obj.sleep(1000*60*3);
+				obj.sleep(1000 * 60 * 3);
 
 				String currentURL = driver.getCurrentUrl();
 				WebGet(driver, currentURL);
@@ -94,6 +103,8 @@ public class NewCompanyEmployee {
 			obj.sleep(10000);
 			break;
 		}
+
+		return false;
 	}
 
 	public static void WebGet(WebDriver driver, String url) {
@@ -115,13 +126,12 @@ public class NewCompanyEmployee {
 		// chrome
 //		System.setProperty("webdriver.chrome.driver", CommonSetting.chromeDrivePath);
 //		driver = new ChromeDriver();
-		
-		
-		System.setProperty("webdriver.chrome.driver", CommonSetting.Chrome360DriverPath);
+
+		System.setProperty("webdriver.chrome.driver", CommonSetting.chromeDrivePath);
 		ChromeOptions options = new ChromeOptions();
-		options.setBinary("C:\\Users\\Michael\\AppData\\Local\\360Chrome\\Chrome\\Application\\360chrome.exe");
+		// options.setBinary("C:\\Users\\Michael\\AppData\\Local\\360Chrome\\Chrome\\Application\\360chrome.exe");
 		driver = new ChromeDriver(options);
-		
+
 		driver.manage().window().maximize();
 
 		driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
@@ -152,15 +162,15 @@ public class NewCompanyEmployee {
 		JavaType firmType = mapper.getTypeFactory().constructParametricType(List.class, HuntingCompany.class);
 		// new TypeReference<List<Cookie>>() {}
 		List<HuntingCompany> firmsSet = (List<HuntingCompany>) mapper.readValue(huntingFirmFile, firmType);
-		for (HuntingCompany firm : firmsSet) {
-			firm.setHasFinished(false);
-		}
+//		for (HuntingCompany firm : firmsSet) {
+//			firm.setHasFinished(false);
+//		}
 
 		PageOperation obj = new PageOperation();
 		for (HuntingCompany firm : firmsSet) {
-			 if (!StringUtils.isEmpty(firm.getName())) {
-				 firm.setHasFinished(false);
-			 }
+			if (!StringUtils.isEmpty(firm.getName())) {
+				firm.setHasFinished(false);
+			}
 		}
 
 		int iter = 0;
@@ -171,7 +181,7 @@ public class NewCompanyEmployee {
 				if (firm.isHasFinished()) {
 					continue;
 				}
-				if(StringUtils.isEmpty(firm.getCode())){
+				if (StringUtils.isEmpty(firm.getCode())) {
 					continue;
 				}
 //				if (iter != 0 && (iter % 9 == 0)) {
@@ -195,7 +205,7 @@ public class NewCompanyEmployee {
 					// ShangHai
 					company = "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B"
 							+ argsStr.toString()
-							+ "%5D&facetGeoRegion=%5B\"cn%3A8909\"%2C\"cn%3A8883\"%5D&origin=FACETED_SEARCH&page=1";
+							+ "%5D&facetGeoRegion=%5B\"cn%3A8909\"%2C\"cn%3A8883\"%5D&geoUrn=%5B\"102890883\"%5D&origin=FACETED_SEARCH&page=1";
 
 				}
 
@@ -217,7 +227,9 @@ public class NewCompanyEmployee {
 				while (true) {
 					try {
 
-						HandleAPage(obj, driver, firm);
+						if (HandleAPage(obj, driver, firm)) {
+							break;
+						}
 						// elements.forEach((element) -> {
 						// element.sendKeys(Keys.ENTER);
 						// obj.sleep(100);
@@ -232,10 +244,10 @@ public class NewCompanyEmployee {
 							obj.scrollThePage(driver, element);
 							if (element.isEnabled()) {
 								element.sendKeys(Keys.ENTER);
-							}else {
+							} else {
 								firm.setHasFinished(true);
 								mapper.writeValue(huntingFirmFile, firmsSet);
-								break;								
+								break;
 							}
 							obj.sleep(10000);
 						}
