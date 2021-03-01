@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.jadira.usertype.spi.utils.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -23,6 +24,9 @@ import com.fasterxml.jackson.databind.type.MapType;
 
 public class CompanyMessageSending {
 
+	public static int count = 0;
+	public static final int maxCount = 100 + (new Random()).nextInt(50);
+	
 	public static void HandleAPage(PageOperation obj, WebDriver driver, HuntingCompany firm,
 			Map<String, MessageSendRecord> records, File messageRecordFile) {
 		ObjectMapper mapper = new ObjectMapper();
