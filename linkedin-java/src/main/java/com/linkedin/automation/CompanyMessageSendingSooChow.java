@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 
-public class CompanyMessageSending {
+public class CompanyMessageSendingSooChow {
 
 	public static int count = 0;
 	public static final int maxCount = 500 + (new Random()).nextInt(50);
@@ -69,7 +69,7 @@ public class CompanyMessageSending {
 //				}
 
 				String hintMessage[] = { "Hi " + name + ",\r\n" + "最近怎么样呀,\r\n" + "有没有想法动一动呀 ^-^ ？\r\n" };
-				//obj.sleep(1000);
+				// obj.sleep(1000);
 				List<WebElement> elements = driver
 						.findElements(By.xpath(".//div[@aria-label='Write a message…']/p/.."));
 				int tmp = 0;
@@ -173,73 +173,46 @@ public class CompanyMessageSending {
 			driver.manage().addCookie(coo);
 		}
 
-		for (HuntingCompany firm : firmsSet) {
-			if (firm.isHasFinished()) {
-				continue;
-			}
 //			if (firm.isCustomer()) {
 //				continue;
 //			}
-			String company = "";
-			if (firm.isLink()) {
-				company = firm.getUrl();
-			} else {
-				StringBuilder argsStr = new StringBuilder("");
-				argsStr.append("\"").append(firm.getCode()).append("\"");
-				company = "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B" + argsStr.toString()
-						+ "%5D&facetGeoRegion=%5B\"cn%3A0\"%5D&facetNetwork=%5B\"F\"%5D&origin=FACETED_SEARCH&page=1";
+		String company = "";
+		company = "https://www.linkedin.com/search/results/people/?geoUrn=%5B%22104536353%22%5D&network=%5B%22F%22%5D&origin=FACETED_SEARCH&page=1";
 
-			}
+		obj.sleep(1000);
+		driver.get(company);
+		obj.sleep(3000);// get company name
 
-			obj.sleep(1000);
-			driver.get(company);
-			obj.sleep(3000);// get company name
-			if (StringUtils.isEmpty(firm.getName())) {
-				List<WebElement> firmNameElments = driver
-						.findElements(By.xpath(".//div[@class='search-s-facet__name']"));
-				if (firmNameElments.size() != 0) {
-					WebElement firmNameElement = firmNameElments.get(0);
-					String firmName = firmNameElement.getText();
-					if (firm.getName() == null && (!StringUtils.isEmpty(firmName))) {
-						firm.setName(firmName);
-					}
-				}
-			}
+		while (true) {
+			try {
 
-			while (true) {
-				try {
-
-					boolean result = HandleAPage(obj, driver, firm, records, messageRecordFile);
-					if (!result) {
-						break;
-					}
-					// elements.forEach((element) -> {
-					// element.sendKeys(Keys.ENTER);
-					// obj.sleep(100);
-					// });
-					List<WebElement> nextPageElements = driver.findElements(By.xpath(".//span[text()='Next']/.."));
-					if (nextPageElements.isEmpty()) {
-						firm.setHasFinished(true);
-						mapper.writeValue(huntingFirmFile, firmsSet);
-						break;
-					} else {
-						WebElement ele = nextPageElements.get(0);
-						if (ele.isEnabled()) {
-							nextPageElements.get(0).sendKeys(Keys.ENTER);
-							obj.sleep(10000);
-						} else {
-							firm.setHasFinished(true);
-							mapper.writeValue(huntingFirmFile, firmsSet);
-							break;
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				boolean result = HandleAPage(obj, driver, null, records, messageRecordFile);
+				if (!result) {
 					break;
 				}
-			}
+				// elements.forEach((element) -> {
+				// element.sendKeys(Keys.ENTER);
+				// obj.sleep(100);
+				// });
+				List<WebElement> nextPageElements = driver.findElements(By.xpath(".//span[text()='Next']/.."));
+				if (nextPageElements.isEmpty()) {
 
+					break;
+				} else {
+					WebElement ele = nextPageElements.get(0);
+					if (ele.isEnabled()) {
+						nextPageElements.get(0).sendKeys(Keys.ENTER);
+						obj.sleep(10000);
+					} else {
+						break;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				break;
+			}
 		}
+
 		// finished
 		// driver.close();
 

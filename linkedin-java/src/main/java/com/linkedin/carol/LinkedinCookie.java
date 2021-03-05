@@ -22,15 +22,15 @@ public class LinkedinCookie {
 		PageOperation obj = new PageOperation();
 		WebDriver driver;
 		// chrome
-		//System.setProperty("webdriver.chrome.driver", CommonSetting.chromeDrivePath);
-		System.setProperty("webdriver.chrome.driver", "D:\\360Chrome\\chromedriver.exe");		
+		System.setProperty("webdriver.chrome.driver", CommonSetting.chromeDrivePath);
+		//System.setProperty("webdriver.chrome.driver", "D:\\360Chrome\\chromedriver.exe");		
 		//driver = new ChromeDriver();
 
 		
 		ChromeOptions options = new ChromeOptions();
 		
 		//options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");//.binary_location = "/usr/bin/chromium-browser"
-		options.setBinary("C:\\Users\\Michael\\AppData\\Local\\360Chrome\\Chrome\\Application\\360chrome.exe");
+		//options.setBinary("C:\\Users\\Michael\\AppData\\Local\\360Chrome\\Chrome\\Application\\360chrome.exe");
 		
 		//options.addArguments("start-maximized"); // open Browser in maximized mode
 //		options.addArguments("disable-infobars"); // disabling infobars
@@ -68,7 +68,7 @@ public class LinkedinCookie {
 		//lop.login(driver,"zljwenlue@126.com","zhilijuan148628");
 		
 		//Yulia===Email Yulia170814
-		lop.login(driver,"13774278832@163.com","jwg110583");
+		lop.login(driver,"13774278832@163.com","Dd202134");
 		
 		//https://www.linkedin.com/search/results/people/?facetGeoRegion=%5B%22cn%3A8911%22%5D&facetIndustry=%5B%226%22%5D&keywords=HRBP&origin=FACETED_SEARCH
 		

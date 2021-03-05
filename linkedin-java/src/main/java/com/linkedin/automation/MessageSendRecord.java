@@ -4,6 +4,14 @@ public class MessageSendRecord {
 	private String profile;
 	private Long lastMessageSendTime;
 	
+	private boolean partner; 
+	
+	public boolean isPartner() {
+		return partner;
+	}
+	public void setPartner(boolean partner) {
+		this.partner = partner;
+	}
 	public String getProfile() {
 		return profile;
 	}
@@ -13,9 +21,13 @@ public class MessageSendRecord {
 	public Long getLastMessageSendTime() {
 		return lastMessageSendTime;
 	}
+	
 	public void setLastMessageSendTime(Long lastMessageSendTime) {
 		this.lastMessageSendTime = lastMessageSendTime;
 	}
+	
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

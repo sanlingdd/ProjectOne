@@ -84,7 +84,7 @@ public class NewCompanyEmployee {
 							obj.sleep(3000);
 						}
 
-						if (count < maxCount) {
+						if (count > maxCount) {
 							return true;
 						}
 						count++;
