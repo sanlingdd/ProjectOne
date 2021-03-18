@@ -22,10 +22,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 
-public class CompanyMessageSending {
+public class CompanyMessageSendingYuliaBeiJing {
 
 	public static int count = 0;
-	public static final int maxCount = 500 + (new Random()).nextInt(50);
+	public static final int maxCount = 200 + (new Random()).nextInt(50);
 
 	public static boolean HandleAPage(PageOperation obj, WebDriver driver, HuntingCompany firm,
 			Map<String, MessageSendRecord> records, File messageRecordFile) {
@@ -68,8 +68,10 @@ public class CompanyMessageSending {
 //					name = namespans.get(0).getText().split(" ")[0];
 //				}
 
-				String hintMessage[] = { "Hi " + name + ",\r\n" + "最近怎么样呀,\r\n" + "有没有想法动一动呀 ^-^ ？\r\n" };
-				//obj.sleep(1000);
+				String hintMessage[] = { "Hi " + name + ",\r\n" + "我是connectus的HR，我们在招聘猎头leader、MC、SC、C、AC等级别。\r\n"
+						+ "也在招聘我们北京公司的内部HR（internal HR）。感兴趣可以加个微信认识一下，我的13774278832" 
+						};
+				// obj.sleep(1000);
 				List<WebElement> elements = driver
 						.findElements(By.xpath(".//div[@aria-label='Write a message…']/p/.."));
 				int tmp = 0;
@@ -138,7 +140,7 @@ public class CompanyMessageSending {
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
 
 		File huntingFirmFile = new File(CommonSetting.cookieFilePrefix + "huntingfirmsPureCodeMessing.txt");
-		File messageRecordFile = new File(CommonSetting.cookieFilePrefix + "messageRecord.txt");
+		File messageRecordFile = new File(CommonSetting.cookieFilePrefix + "yuliaMessageRecord.txt");
 		ObjectMapper mapper = new ObjectMapper();
 		JavaType firmType = mapper.getTypeFactory().constructParametricType(List.class, HuntingCompany.class);
 		MapType recordType = mapper.getTypeFactory().constructMapType(Map.class, String.class, MessageSendRecord.class);
@@ -148,9 +150,9 @@ public class CompanyMessageSending {
 		HashMap<String, MessageSendRecord> records = (HashMap<String, MessageSendRecord>) mapper
 				.readValue(messageRecordFile, recordType);
 
-//		for (HuntingCompany firm : firmsSet) {
-//			firm.setHasFinished(false);
-//		}
+		for (HuntingCompany firm : firmsSet) {
+			firm.setHasFinished(false);
+		}
 
 		PageOperation obj = new PageOperation();
 		WebDriver driver;
@@ -163,7 +165,7 @@ public class CompanyMessageSending {
 
 		driver.manage().deleteAllCookies();
 
-		File cookieFile = new File(CommonSetting.cookieFilePrefix + "WilliamCookie.txt");
+		File cookieFile = new File(CommonSetting.cookieFilePrefix + "YuliaCookie.txt");
 		JavaType linkedinCookieType = mapper.getTypeFactory().constructParametricType(List.class, LinkedInCookie.class);
 		List<LinkedInCookie> cookieSet = (List<LinkedInCookie>) mapper.readValue(cookieFile, linkedinCookieType);
 		obj.sleep(1000);
@@ -173,73 +175,45 @@ public class CompanyMessageSending {
 			driver.manage().addCookie(coo);
 		}
 
-		for (HuntingCompany firm : firmsSet) {
-			if (firm.isHasFinished()) {
-				continue;
-			}
 //			if (firm.isCustomer()) {
 //				continue;
 //			}
-			String company = "";
-			if (firm.isLink()) {
-				company = firm.getUrl();
-			} else {
-				StringBuilder argsStr = new StringBuilder("");
-				argsStr.append("\"").append(firm.getCode()).append("\"");
-				company = "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B" + argsStr.toString()
-						+ "%5D&facetGeoRegion=%5B\"cn%3A0\"%5D&facetNetwork=%5B\"F\"%5D&origin=FACETED_SEARCH&page=1";
+		String company = "https://www.linkedin.com/search/results/people/?geoUrn=%5B%22103873152%22%5D&keywords=%E7%8C%8E%E5%A4%B4&network=%5B%22F%22%5D&origin=GLOBAL_SEARCH_HEADER&page=1";
 
-			}
+		obj.sleep(1000);
+		driver.get(company);
+		obj.sleep(3000);// get company name
 
-			obj.sleep(1000);
-			driver.get(company);
-			obj.sleep(3000);// get company name
-			if (StringUtils.isEmpty(firm.getName())) {
-				List<WebElement> firmNameElments = driver
-						.findElements(By.xpath(".//div[@class='search-s-facet__name']"));
-				if (firmNameElments.size() != 0) {
-					WebElement firmNameElement = firmNameElments.get(0);
-					String firmName = firmNameElement.getText();
-					if (firm.getName() == null && (!StringUtils.isEmpty(firmName))) {
-						firm.setName(firmName);
-					}
-				}
-			}
+		while (true) {
+			try {
 
-			while (true) {
-				try {
-
-					boolean result = HandleAPage(obj, driver, firm, records, messageRecordFile);
-					if (!result) {
-						break;
-					}
-					// elements.forEach((element) -> {
-					// element.sendKeys(Keys.ENTER);
-					// obj.sleep(100);
-					// });
-					List<WebElement> nextPageElements = driver.findElements(By.xpath(".//span[text()='Next']/.."));
-					if (nextPageElements.isEmpty()) {
-						firm.setHasFinished(true);
-						mapper.writeValue(huntingFirmFile, firmsSet);
-						break;
-					} else {
-						WebElement ele = nextPageElements.get(0);
-						if (ele.isEnabled()) {
-							nextPageElements.get(0).sendKeys(Keys.ENTER);
-							obj.sleep(10000);
-						} else {
-							firm.setHasFinished(true);
-							mapper.writeValue(huntingFirmFile, firmsSet);
-							break;
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				boolean result = HandleAPage(obj, driver, null, records, messageRecordFile);
+				if (!result) {
 					break;
 				}
-			}
+				// elements.forEach((element) -> {
+				// element.sendKeys(Keys.ENTER);
+				// obj.sleep(100);
+				// });
+				List<WebElement> nextPageElements = driver.findElements(By.xpath(".//span[text()='Next']/.."));
+				if (nextPageElements.isEmpty()) {
 
+					break;
+				} else {
+					WebElement ele = nextPageElements.get(0);
+					if (ele.isEnabled()) {
+						nextPageElements.get(0).sendKeys(Keys.ENTER);
+						obj.sleep(10000);
+					} else {
+						break;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				break;
+			}
 		}
+
 		// finished
 		// driver.close();
 

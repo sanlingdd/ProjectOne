@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 
-public class CompanyMessageSendingBeiJing {
+public class CompanyEmployeeWithDraw {
 
 	public static int count = 0;
 	public static final int maxCount = 500 + (new Random()).nextInt(50);
@@ -138,7 +138,7 @@ public class CompanyMessageSendingBeiJing {
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
 
 		File huntingFirmFile = new File(CommonSetting.cookieFilePrefix + "huntingfirmsPureCodeMessing.txt");
-		File messageRecordFile = new File(CommonSetting.cookieFilePrefix + "yuliaMessageRecord.txt");
+		File messageRecordFile = new File(CommonSetting.cookieFilePrefix + "messageRecord.txt");
 		ObjectMapper mapper = new ObjectMapper();
 		JavaType firmType = mapper.getTypeFactory().constructParametricType(List.class, HuntingCompany.class);
 		MapType recordType = mapper.getTypeFactory().constructMapType(Map.class, String.class, MessageSendRecord.class);
@@ -163,7 +163,7 @@ public class CompanyMessageSendingBeiJing {
 
 		driver.manage().deleteAllCookies();
 
-		File cookieFile = new File(CommonSetting.cookieFilePrefix + "YuliaCookie.txt");
+		File cookieFile = new File(CommonSetting.cookieFilePrefix + "WilliamCookie.txt");
 		JavaType linkedinCookieType = mapper.getTypeFactory().constructParametricType(List.class, LinkedInCookie.class);
 		List<LinkedInCookie> cookieSet = (List<LinkedInCookie>) mapper.readValue(cookieFile, linkedinCookieType);
 		obj.sleep(1000);
@@ -177,7 +177,7 @@ public class CompanyMessageSendingBeiJing {
 //				continue;
 //			}
 		String company = "";
-		company = "https://www.linkedin.com/search/results/people/?geoUrn=%5B%22103873152%22%5D&network=%5B%22F%22%5D&origin=FACETED_SEARCH&page=1";
+		company = "https://www.linkedin.com/search/results/people/?geoUrn=%5B%22104536353%22%5D&network=%5B%22F%22%5D&origin=FACETED_SEARCH&page=1";
 
 		obj.sleep(1000);
 		driver.get(company);
