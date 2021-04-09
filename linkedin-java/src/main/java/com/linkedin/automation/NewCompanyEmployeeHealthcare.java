@@ -65,8 +65,8 @@ public class NewCompanyEmployeeHealthcare {
 
 						String hintMessage = "";
 						if (!firm.isCustomer()) {
-							hintMessage = "Hi " + name + ",\r\n" + "我是William\r\n"
-									+ "可以认识一下吗? \r\n" + "我的手机:18601793121（微信同号）,可以进一步沟通。\r\n";
+							hintMessage = "Hi " + name + ",\r\n" + "我是William\r\n" + "可以认识一下吗? \r\n"
+									+ "我的手机:18601793121（微信同号）,可以进一步沟通。\r\n";
 
 						} else {
 							hintMessage = "Hi " + name + ",我是William，希望可以与您建立联系 ！";
@@ -203,59 +203,67 @@ public class NewCompanyEmployeeHealthcare {
 					// +
 					// "%5D&facetGeoRegion=%5B\"cn%3A8911\"%2C\"cn%3A8905\"%5D&facetNetwork=%5B\"S\"%5D&origin=FACETED_SEARCH&page=1";
 					// ShangHai
-					company = "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B"
-							+ argsStr.toString()
-							+ "%5D&facetGeoRegion=%5B\"cn%3A8909\"%2C\"cn%3A8883\"%5D&geoUrn=%5B\"102890883\"%5D&keywords=医&network=%5B\"S\"%2C\"O\"%5D&origin=FACETED_SEARCH&page=1";
+					String[] keywords = { "医", "healthcare", "life", "健康" };
+					for (String key : keywords) {
 
-				}
-
-				obj.sleep(1000);
-				WebGet(driver, company);
-				obj.sleep(3000);// get company name
-				if (StringUtils.isEmpty(firm.getName())) {
-					List<WebElement> firmNameElments = driver.findElements(By.xpath(
-							".//button[@class='search-s-facet__button artdeco-button artdeco-button--icon-right artdeco-button--2 artdeco-button--primary ember-view']//span[@class='artdeco-button__text']"));
-					if (firmNameElments.size() != 0) {
-						WebElement firmNameElement = firmNameElments.get(0);
-						String firmName = firmNameElement.getText();
-						if (firm.getName() == null && (!StringUtils.isEmpty(firmName))) {
-							firm.setName(firmName);
+						company = "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B"
+								+ argsStr.toString()
+								+ "%5D&facetGeoRegion=%5B\"cn%3A8909\"%2C\"cn%3A8883\"%5D&geoUrn=%5B\"102890883\"%5D&keywords="
+								+ key + "&network=%5B\"S\"%2C\"O\"%5D&origin=FACETED_SEARCH&page=1";
+						// --------------------------------------------------------------------------
+						obj.sleep(1000);
+						WebGet(driver, company);
+						obj.sleep(3000);// get company name
+						if (StringUtils.isEmpty(firm.getName())) {
+							List<WebElement> firmNameElments = driver.findElements(By.xpath(
+									".//button[@class='search-s-facet__button artdeco-button artdeco-button--icon-right artdeco-button--2 artdeco-button--primary ember-view']//span[@class='artdeco-button__text']"));
+							if (firmNameElments.size() != 0) {
+								WebElement firmNameElement = firmNameElments.get(0);
+								String firmName = firmNameElement.getText();
+								if (firm.getName() == null && (!StringUtils.isEmpty(firmName))) {
+									firm.setName(firmName);
+								}
+							}
 						}
-					}
-				}
 
-				while (true) {
-					try {
+						while (true) {
+							try {
 
-						if (HandleAPage(obj, driver, firm)) {
-							break;
-						}
-						// elements.forEach((element) -> {
-						// element.sendKeys(Keys.ENTER);
-						// obj.sleep(100);
-						// });
-						List<WebElement> nextPageElements = driver.findElements(By.xpath(".//span[text()='下页']/.."));
-						if (nextPageElements.isEmpty()) {
-							firm.setHasFinished(true);
-							mapper.writeValue(huntingFirmFile, firmsSet);
-							break;
-						} else {
-							WebElement element = nextPageElements.get(0);
-							obj.scrollThePage(driver, element);
-							if (element.isEnabled()) {
-								element.sendKeys(Keys.ENTER);
-							} else {
-								firm.setHasFinished(true);
-								mapper.writeValue(huntingFirmFile, firmsSet);
+								if (HandleAPage(obj, driver, firm)) {
+									break;
+								}
+								// elements.forEach((element) -> {
+								// element.sendKeys(Keys.ENTER);
+								// obj.sleep(100);
+								// });
+								List<WebElement> nextPageElements = driver
+										.findElements(By.xpath(".//span[text()='下页']/.."));
+								if (nextPageElements.isEmpty()) {
+									firm.setHasFinished(true);
+									mapper.writeValue(huntingFirmFile, firmsSet);
+									break;
+								} else {
+									WebElement element = nextPageElements.get(0);
+									obj.scrollThePage(driver, element);
+									if (element.isEnabled()) {
+										element.sendKeys(Keys.ENTER);
+									} else {
+										firm.setHasFinished(true);
+										mapper.writeValue(huntingFirmFile, firmsSet);
+										break;
+									}
+									obj.sleep(10000);
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
 								break;
 							}
-							obj.sleep(10000);
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						break;
+						// --------------------------------------------------------------------------
 					}
+
 				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
