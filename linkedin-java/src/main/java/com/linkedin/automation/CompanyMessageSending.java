@@ -39,7 +39,7 @@ public class CompanyMessageSending {
 			MessageSendRecord rec = records.get(linkedProfile);
 			if (rec != null) {
 				// less than a month, don't send message again
-				if (DateTime.now().getMillis() - rec.getLastMessageSendTime() < 30 * 24 * 60 * 60 * 1000L) {
+				if (DateTime.now().getMillis() - rec.getLastMessageSendTime() < 45 * 24 * 60 * 60 * 1000L) {
 					continue;
 				}
 			}
