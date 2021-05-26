@@ -22,10 +22,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 
-public class CompanyMessageSending {
+public class CompanyGLAll {
 
 	public static int count = 0;
-	public static final int maxCount = 500 + (new Random()).nextInt(50);
+	public static final int maxCount = 200 + (new Random()).nextInt(50);
 
 	public static boolean HandleAPage(PageOperation obj, WebDriver driver, HuntingCompany firm,
 			Map<String, MessageSendRecord> records, File messageRecordFile) {
@@ -39,7 +39,7 @@ public class CompanyMessageSending {
 			MessageSendRecord rec = records.get(linkedProfile);
 			if (rec != null) {
 				// less than a month, don't send message again
-				if (DateTime.now().getMillis() - rec.getLastMessageSendTime() < 90 * 24 * 60 * 60 * 1000L) {
+				if (DateTime.now().getMillis() - rec.getLastMessageSendTime() < 30 * 24 * 60 * 60 * 1000L) {
 					continue;
 				}
 			}
@@ -68,8 +68,9 @@ public class CompanyMessageSending {
 //					name = namespans.get(0).getText().split(" ")[0];
 //				}
 
-				String hintMessage[] = { "Hi " + name + ",\r\n" + "最近怎么样呀,\r\n" + "有没有想法动一动呀 ^-^ ？\r\n" };
-				//obj.sleep(1000);
+				String hintMessage[] = { "Hi " + name + ",\r\n" + "最近怎么样呀, "+" \r\n" + "有没有想法动一动呀 ^-^ ？\r\n" };
+
+				// obj.sleep(1000);
 				List<WebElement> elements = driver
 						.findElements(By.xpath(".//div[@aria-label='Write a message…']/p/.."));
 				int tmp = 0;
@@ -148,9 +149,6 @@ public class CompanyMessageSending {
 		HashMap<String, MessageSendRecord> records = (HashMap<String, MessageSendRecord>) mapper
 				.readValue(messageRecordFile, recordType);
 
-		for (HuntingCompany firm : firmsSet) {
-			firm.setHasFinished(false);
-		}
 
 		PageOperation obj = new PageOperation();
 		WebDriver driver;
@@ -162,8 +160,8 @@ public class CompanyMessageSending {
 		driver.manage().window().maximize();
 
 		driver.manage().deleteAllCookies();
-
-		File cookieFile = new File(CommonSetting.cookieFilePrefix + "WilliamCookie.txt");
+		
+		File cookieFile = new File(CommonSetting.cookieFilePrefix + "WilliamGllueCookie.txt");
 		JavaType linkedinCookieType = mapper.getTypeFactory().constructParametricType(List.class, LinkedInCookie.class);
 		List<LinkedInCookie> cookieSet = (List<LinkedInCookie>) mapper.readValue(cookieFile, linkedinCookieType);
 		obj.sleep(1000);
@@ -171,75 +169,54 @@ public class CompanyMessageSending {
 			Cookie coo = new Cookie(cook.getName(), cook.getValue(), cook.getDomain(), cook.getPath(), cook.getExpiry(),
 					cook.isSecure(), cook.isHttpOnly());
 			driver.manage().addCookie(coo);
+		}		
+				
+
+		String company = "https://connectus.gllue.com/crm/candidate/list?gql=owner__eq%3D1%26source%3Dgllue";
+
+		obj.sleep(1000);
+		driver.get(company);
+		obj.sleep(3000);// get company name
+		
+
+		List<WebElement> elements =  driver.findElements(By.xpath(".//*[@class='slds-icon slds-icon_g-small']/.."));
+		for(WebElement ele:elements)
+		{
+			if(ele.isEnabled()&&ele.isDisplayed()) {
+				ele.click();
+			}
 		}
 
-		for (HuntingCompany firm : firmsSet) {
-			if (firm.isHasFinished()) {
-				continue;
-			}
-//			if (firm.isCustomer()) {
-//				continue;
-//			}
-			String company = "";
-			if (firm.isLink()) {
-				company = firm.getUrl();
-			} else {
-				StringBuilder argsStr = new StringBuilder("");
-				argsStr.append("\"").append(firm.getCode()).append("\"");
-				company = "http://www.linkedin.com/search/results/people/?facetCurrentCompany=%5B" + argsStr.toString()
-						+ "%5D&facetGeoRegion=%5B\"cn%3A0\"%5D&facetNetwork=%5B\"F\"%5D&origin=FACETED_SEARCH&page=1";
+		while (true) {
+			try {
 
-			}
-
-			obj.sleep(1000);
-			driver.get(company);
-			obj.sleep(3000);// get company name
-			if (StringUtils.isEmpty(firm.getName())) {
-				List<WebElement> firmNameElments = driver
-						.findElements(By.xpath(".//div[@class='search-s-facet__name']"));
-				if (firmNameElments.size() != 0) {
-					WebElement firmNameElement = firmNameElments.get(0);
-					String firmName = firmNameElement.getText();
-					if (firm.getName() == null && (!StringUtils.isEmpty(firmName))) {
-						firm.setName(firmName);
-					}
-				}
-			}
-
-			while (true) {
-				try {
-
-					boolean result = HandleAPage(obj, driver, firm, records, messageRecordFile);
-					if (!result) {
-						break;
-					}
-					// elements.forEach((element) -> {
-					// element.sendKeys(Keys.ENTER);
-					// obj.sleep(100);
-					// });
-					List<WebElement> nextPageElements = driver.findElements(By.xpath(".//span[text()='Next']/.."));
-					if (nextPageElements.isEmpty()) {
-						firm.setHasFinished(true);
-						mapper.writeValue(huntingFirmFile, firmsSet);
-						break;
-					} else {
-						WebElement ele = nextPageElements.get(0);
-						if (ele.isEnabled()) {
-							nextPageElements.get(0).sendKeys(Keys.ENTER);
-							obj.sleep(10000);
-						} else {
-							firm.setHasFinished(true);
-							mapper.writeValue(huntingFirmFile, firmsSet);
-							break;
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				boolean result = HandleAPage(obj, driver, null, records, messageRecordFile);
+				if (!result) {
 					break;
 				}
-			}
+				// elements.forEach((element) -> {
+				// element.sendKeys(Keys.ENTER);
+				// obj.sleep(100);
+				// });
+				List<WebElement> nextPageElements = driver.findElements(By.xpath(".//span[text()='Next']/.."));
+				if (nextPageElements.isEmpty()) {
 
+					break;
+				} else {
+					WebElement ele = nextPageElements.get(0);
+					if (ele.isEnabled()) {
+						nextPageElements.get(0).sendKeys(Keys.ENTER);
+						obj.sleep(10000);
+					} else {
+						break;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				break;
+			}
 		}
+
 		// finished
 		// driver.close();
 

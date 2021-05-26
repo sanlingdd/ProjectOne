@@ -89,7 +89,7 @@ public class WithdrawRequest {
 		//System.out.println("Batch Finished!");
 
 		WebGet(driver, "https://www.linkedin.com/mynetwork/invitation-manager/sent/");
-
+		obj.sleep(5000);
 		List<WebElement> elements = driver.findElements(By.xpath(".//span[text()='撤回']/.."));
 		while (!elements.isEmpty()) {
 			for (WebElement element : elements) {

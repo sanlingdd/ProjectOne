@@ -68,15 +68,16 @@ public class LinkedinCookie {
 		//lop.login(driver,"zljwenlue@126.com","zhilijuan148628");
 		
 		//Yulia===Email Yulia170814
-		lop.login(driver,"13774278832@163.com","Dd202134");
-		
+		//lop.login(driver,"13774278832@163.com","Dd202134");
+		driver.get("https://connectus.gllue.com/crm/candidate/list?gql=owner__eq%3D1%26source%3Dgllue");
+
 		//https://www.linkedin.com/search/results/people/?facetGeoRegion=%5B%22cn%3A8911%22%5D&facetIndustry=%5B%226%22%5D&keywords=HRBP&origin=FACETED_SEARCH
 		
 		Set<org.openqa.selenium.Cookie> cookies = driver.manage().getCookies();
 		//File cookieFile = new File("D:/git/linkedin/projectone/linkedin-java/YaqiCookie.txt");
 		//File cookieFile = new File(CommonSetting.cookieFilePrefix+"KaylaCookie.txt");
 		//File cookieFile = new File(CommonSetting.cookieFilePrefix+"WilliamCookie.txt");
-		File cookieFile = new File(CommonSetting.cookieFilePrefix+"YuliaCookie.txt");
+		File cookieFile = new File(CommonSetting.cookieFilePrefix+"WilliamGllueCookie.txt");
 		//File cookieFile = new File(CommonSetting.cookieFilePrefix+"AdaCookie.txt");
 		ObjectMapper mapper = new ObjectMapper(); 
 		mapper.writeValue(cookieFile, cookies);
