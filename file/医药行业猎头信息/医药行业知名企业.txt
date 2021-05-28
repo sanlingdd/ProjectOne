@@ -1,0 +1,13 @@
+Pfizer  辉瑞
+MSD   默沙东
+Novartis   诺华
+Sanofi   赛诺菲
+GSK   葛兰素史克
+AstraZeneca   阿斯利康
+Bayer   拜耳
+Abbott   雅培
+Eli Lilly   礼来
+Janssen   杨森
+BMS   施贵宝
+Merck Serono   默克雪兰诺
+Takeda   武田

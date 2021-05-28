@@ -1,0 +1,78 @@
+CMO：CMO，药物生产外包的，贯穿于临床阶段的中间药。
+	http://www.360doc.com/content/18/0907/09/56763856_784569055.shtml
+
+CDMO:https://baijiahao.baidu.com/s?id=1672805465110597792&wfr=spider&for=pc
+
+CRO：Contract Research Ognization：做医药临床外包的
+
+CSO：药物销售外包
+
+IND：Investigated New Drug Application，找到有效成分化合物or有机物
+
+NDA：New Drug Application，临床3期做完，准备新药上市申请，需要2年
+
+Physician方向：
+Physician：医师，医生和医院以外的医师，临床早期阶段，可以转MA，MA也可以转Physician，一般在北京/上海等大城市
+CRP：临床研究医生/Clinical Research Physician（CRP）
+
+Biometrics：临床数据清理，收集，分析。
+
+
+Clinical Operation方向：
+CRC是Clinical Research Coordinator，需要常驻医院,协助医生完成临床试验的各个方面,如数据收集和文件整理,类似于文员一样的工作,还要与患者家属及时做好沟通。CRC一般固定在一个地方（医院）。CRC月平均工资为10036元。CRC后期可以转CRA。
+
+CRA：Clinical Research Associate 临床分析员，指定临床计划，监控收集临床数据，安排临床计划等。临床监查员,临床监查员主要负责参与产品临床试验方案的制定、确保临床试验方案的执行;保障试验中受试者的权益;对原始数据进行溯源核查,确保临床数据的准确性与完整性等工作。CRA一般在多个城市奔波。
+
+CTA（clinical Trial assistant）,：为临床试验的顺利进行提供重要的辅助性工作。要求英语好,兼具医药背景及文秘类工作经验者优先,学历要求相对低,无需经常出差。多外企有自己较为固定的CTA。主要是文职工作。门槛较低。
+
+CRC护理专业就可以胜任，CRA还是最好临床。
+CRO公司如泰格或者外企：应届毕业生一般只能进去做CRC，做个一两年，再转CRA。他们招聘一般需要有经验。国内药企：进去直接做CRA。
+
+crc需要常驻医院，做一些文档的整理和crf的填写（这里又说到CRF（） ，这个是临床试验观察表）。而cra负责的是申办方和研究者之间的联系。当然现在cra承担着crc的职责。一般来说，CRO公司里的CRA接到的项目种类比较全面，锻炼比较全方位，今后跳槽到外企或者国企都比较容易，而医药公司的CRA一般都比较擅长该公司的特色项目，比如恒瑞擅长抗肿瘤和内分泌的药物，相应的，该公司的CRA也比较擅长这类，从医药公司跳槽到CRO可能比较难一点。
+
+CRC/CTA转CRA都不如直接去做CRA，即使公司内部愿意给你机会，都有可能因为各种原因不能按你预期的规划来，外部（公司有没有机会/人头）或者内部（自己觉得待遇不满意）因素。
+
+
+
+属于医学事务方向：
+MSL：Medical Science Liaison：医学联络员，又医学顾问。
+	他们擅长向不同的利益相关者传达复杂的科学和医学信息。医学顾问的首要任务是与相同治疗领域（如肿瘤、中枢神经、心血管等）的学术领导者（KOL）保持密切的关系。此外，医学顾问还是各自制药公司内部的专家，负责开发教学材料并为项目提供支持。一般在多个城市奔波
+         分上市前和上市后
+
+MA：medical advisor，MSL做的是执行层面工作，MA更多的做的是战略层面的工作。相比于MSL，MA的优点在于收入会有一定提高，出差频率减少等。但缺点在于MA的职位集中于北京上海，如果未来你不愿意换到这两大超级大城市，那么你可能永远没有这样机会。那么如果不在这两个城市怎么办呢？MSL manager是一个不错的选择。一般常驻大城市。
+
+
+MA/MSL：分上市前和上市后，
+
+MA 全名为medical advisor。这个职位具体职责，大家可以百度。MSL做的是执行层面工作，MA更多的做的是战略层面的工作。相比于MSL，MA的优点在于收入会有一定提高，出差频率减少等。但缺点在于MA的职位集中于北京上海，如果未来你不愿意换到这两大超级大城市，那么你可能永远没有这样机会。那么如果不在这两个城市怎么办呢？MSL manager是一个不错的选择。
+
+MSL某种程度上说是不带指标的销售，因为你要去跑医院，参加学术会议，这也是销售人员做的。 MSL大部分都是临床出身，这就决定了他们的专业程度远非销售可比。MSL要扮演的就是专业人士，转业到可以跟医生深入探讨并影响科室主任对于某种药看法的人。
+
+刚才说的MA其实和MSL是属于一个级别的工作，就好像sales和marketing，MSL 转MA属于转岗，MSL带人做manager就属于纵向提升。目前来看，很多药厂不一定会把某个疾病领域的MSL manager的职位固定在北京上海。很多的manager会在广州，成都，济南，南京，深圳。所以来说，这个职位也是一个不错的选择。
+
+MA可以看看药厂的physician职位，这就是属于临床比较早阶段的职位，收入可观，属于科研岗位，当然也是在北上才有。MSL manager呢，可以从一个领域提升到全产品领域。这个时候你需要来北京上海，但是不要担心，收入已经可以让你在上海站稳脚跟了。
+
+这就是我目前所知道的的MSL发展路线。希望对您有所帮助。MSL的发展路线虽然不多，但肯定有前途。
+
+
+CDM：Clinical Data Management临床数 据管里， CDA：Clinical Data Analyst临床数据分析
+
+BioMetrics方向：
+Data Management，BioStatistics，SAS开发，Coding
+
+
+
+RA：Regulatory Affairs，注册事务，就是新药上市的注册人准备和谈判
+
+
+生产方向
+CMC：Chemical, Manufacturing and Control, 
+https://www.linkedin.com/pulse/cmc%E7%9A%84%E7%90%86%E8%A7%A3-%E4%BC%9F-%E5%BD%AD/
+药品的化学、制造和控制，简称CMC，主要是生产工艺、杂质研究、质量研究，稳定性研究等药学研究资料，是药品申报资料中非常重要的部分。CMC是产品成功开发并注册上市的关键要素之一，CMC申报是药品申报资料中非常重要的部分。IND中CMC的信息一般包括原料药、制剂的组成、生产工艺、稳定性和生产控制、安慰剂的信息（特别是在临床期）、药品的外标签、环境评估信息，其目的是充分证明生产商可以连续生产和提供质量稳定和统一的测试样品。
+
+一个早期的CMC project team会有起码7个成员，包括：project lead，project manager，process lead/工艺专业负责人，formulation lead/制剂处方负责人，analytical分析、analytical lead/分析负责人，QA lead/质量负责人，和regulatory affairs lead/监管事务领导。当然，这些成员中的一些可能同时在几个项目上，身兼数职。而每个lead身后，都有或大或小的团队来支持。当项目进行到后期，project team可能会加入新的成员，例如outsourcing/外包，clinical supply临床研究服务，packaging and device/包装和设计等等。
+
+
+
+
+
