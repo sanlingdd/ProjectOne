@@ -179,13 +179,13 @@ public class CompanyGLAll {
 		obj.sleep(3000);// get company name
 		
 
-		List<WebElement> elements =  driver.findElements(By.xpath(".//*[@class='slds-icon slds-icon_g-small']/.."));
-		for(WebElement ele:elements)
-		{
-			if(ele.isEnabled()&&ele.isDisplayed()) {
-				ele.click();
-			}
-		}
+//		List<WebElement> elements =  driver.findElements(By.xpath(".//*[@class='slds-icon slds-icon_g-small']/.."));
+//		for(WebElement ele:elements)
+//		{
+//			if(ele.isEnabled()&&ele.isDisplayed()) {
+//				ele.click();
+//			}
+//		}
 
 		while (true) {
 			try {
