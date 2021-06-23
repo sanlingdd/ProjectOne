@@ -70,7 +70,7 @@
 		<javamelody.version>1.43.0</javamelody.version>
 		<javax.mail.version>1.4.7</javax.mail.version>
 		<javax.persistence.version>2.1.0</javax.persistence.version>
-		<jetty.server.version>7.6.3.v20120416</jetty.server.version>
+		<jetty.server.version>9.4.41.v20210516</jetty.server.version>
 		<joda.time.version>2.8.2</joda.time.version>
 		<jsoup.version>1.7.2</jsoup.version>
 		<jsp.api.version>2.1</jsp.api.version>
